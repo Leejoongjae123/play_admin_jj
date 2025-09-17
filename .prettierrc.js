@@ -7,6 +7,7 @@ const config = {
   tabWidth: 2,
   endOfLine: 'lf',
   arrowParens: 'always',
+  plugins: ['prettier-plugin-tailwindcss'],
 };
 
 export default config;
