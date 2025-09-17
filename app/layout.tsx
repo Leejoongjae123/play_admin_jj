@@ -16,7 +16,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body className="overflow-hidden">{children}</body>
+      <body className="max-w-[1920px] overflow-hidden">{children}</body>
     </html>
   );
 }
