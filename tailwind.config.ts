@@ -18,7 +18,11 @@ export default {
         foreground: 'var(--foreground)',
         primary: {
           DEFAULT: 'var(--primary)',
-          foreground: 'var(--foreground)',
+          foreground: 'var(--white)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--primary)',
         },
         black: 'var(--black)',
         red: {

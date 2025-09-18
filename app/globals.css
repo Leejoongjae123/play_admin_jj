@@ -22,7 +22,9 @@
     --background: #faf8f6;
     --foreground: var(--gray-01);
     --primary: #911a00;
+    --accent: var(--red-03);
     --black: #0e0e0e;
+    --white: #ffffff;
   }
 }
 
@@ -33,4 +35,8 @@
   body {
     @apply bg-background font-pretendard text-foreground antialiased;
   }
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
