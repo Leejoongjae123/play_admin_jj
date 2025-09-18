@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Alert, ChevronDown, Close, Mail, Profile } from '../Icons';
+import { Alert, ChevronDown, Close, Mail, Profile } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
 interface NavigationProps {
@@ -10,7 +10,7 @@ interface NavigationProps {
   onClose: () => void;
 }
 
-export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
+export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationProps) {
   const [isProgramExpanded, setIsProgramExpanded] = useState(false);
   const [isCommunityExpanded, setIsCommunityExpanded] = useState(false);
 
@@ -58,17 +58,17 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
         {/* Navigation Menu */}
         <nav className="flex flex-1 flex-col gap-0.5">
           {/* 희곡 DB */}
-          <Link href="/play" className="py-2.5" onClick={onClose}>
+          <Link href="/play" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">희곡 DB</span>
           </Link>
 
           {/* 작가 DB */}
-          <Link href="/writer" className="py-2.5" onClick={onClose}>
+          <Link href="/writer" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">작가 DB</span>
           </Link>
 
           {/* 멤버십 */}
-          <Link href="/membership" className="py-2.5" onClick={onClose}>
+          <Link href="/membership" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">멤버십</span>
           </Link>
 
@@ -76,7 +76,7 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
           <div className="flex flex-col">
             <button
               onClick={() => setIsProgramExpanded(!isProgramExpanded)}
-              className="flex items-center gap-2.5 py-2.5"
+              className="flex w-fit items-center gap-2.5 py-2.5"
             >
               <span className="text-2xl font-semibold leading-8 text-white">프로그램</span>
               <ChevronDown
@@ -89,14 +89,14 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
               <div className="flex flex-col">
                 <Link
                   href="/program/monthly"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">이달의 프로그램</span>
                 </Link>
                 <Link
                   href="/program/calendar"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">
@@ -111,7 +111,7 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
           <div className="flex flex-col">
             <button
               onClick={() => setIsCommunityExpanded(!isCommunityExpanded)}
-              className="flex items-center gap-2.5 py-2.5"
+              className="flex w-fit items-center gap-2.5 py-2.5"
             >
               <span className="text-2xl font-semibold leading-8 text-white">커뮤니티</span>
               <ChevronDown
@@ -124,21 +124,21 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
               <div className="flex flex-col">
                 <Link
                   href="/community/colleagues"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">동료찾기</span>
                 </Link>
                 <Link
                   href="/community/trade"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">거래</span>
                 </Link>
                 <Link
                   href="/community/questions"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">
@@ -147,14 +147,14 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
                 </Link>
                 <Link
                   href="/community/promotion"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">공연 홍보</span>
                 </Link>
                 <Link
                   href="/community/writers"
-                  className="flex items-center py-2 pl-[14px]"
+                  className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">작가 커뮤니티</span>
@@ -164,17 +164,17 @@ export default function MobileNavigation({ isOpen, onClose }: NavigationProps) {
           </div>
 
           {/* 공지사항 */}
-          <Link href="/announcements" className="py-2.5" onClick={onClose}>
+          <Link href="/announcements" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">공지사항</span>
           </Link>
 
           {/* 인스크립트 */}
-          <Link href="/about" className="py-2.5" onClick={onClose}>
+          <Link href="/about" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">인스크립트</span>
           </Link>
 
           {/* 문의 */}
-          <Link href="/contact" className="py-2.5" onClick={onClose}>
+          <Link href="/contact" className="w-fit py-2.5" onClick={onClose}>
             <span className="text-2xl font-semibold leading-8 text-white">문의</span>
           </Link>
         </nav>

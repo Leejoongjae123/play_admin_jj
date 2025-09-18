@@ -3,11 +3,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HamburgerMenu, Alert, Mail, Profile } from '../Icons';
-import MobileNavigation from './navigation';
-import { cn } from '@/lib/utils';
+import { Hamburger, Alert, Mail, Profile } from '@/components/icons';
+import { ClientSideNavigationBar } from '@/components/layout';
 
-export function Header() {
+export default function Header() {
   const [programDropdownOpen, setProgramDropdownOpen] = useState(false);
   const [communityDropdownOpen, setCommunityDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -151,11 +150,11 @@ export function Header() {
       </div>
 
       <button type="button" className="lg:hidden" onClick={handleMobileMenuOpen}>
-        <HamburgerMenu />
+        <Hamburger />
       </button>
 
       {/* Mobile Navigation */}
-      <MobileNavigation isOpen={mobileMenuOpen} onClose={handleMobileMenuClose} />
+      <ClientSideNavigationBar isOpen={mobileMenuOpen} onClose={handleMobileMenuClose} />
     </header>
   );
 }
