@@ -36,7 +36,7 @@ export default function ClientGlobalNavigationBar() {
       {/* 프로그램 */}
       <Popover open={programDropdownOpen} onOpenChange={setProgramDropdownOpen}>
         <PopoverTrigger
-          className="group flex h-full w-fit cursor-pointer items-center gap-2.5"
+          className="group flex h-full w-fit cursor-pointer items-center gap-2.5 outline-none"
           onMouseEnter={() => setProgramDropdownOpen(true)}
           onMouseLeave={() => setProgramDropdownOpen(false)}
         >
@@ -50,7 +50,7 @@ export default function ClientGlobalNavigationBar() {
           </span>
           <ChevronDown
             className={cn(
-              'rotate-180 text-gray-3 transition-all group-hover:text-primary',
+              'rotate-180 text-gray-3 outline-none transition-all group-hover:text-primary',
               programDropdownOpen && 'rotate-0 text-primary',
             )}
           />
