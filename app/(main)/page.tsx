@@ -1,3 +1,9 @@
+import { MainBannerCarousel } from '@/components/features/Banner';
+
 export default function MainPage() {
-  return <section className="w-full flex-1">MainPage</section>;
+  return (
+    <section className="w-full flex-1">
+      <MainBannerCarousel />
+    </section>
+  );
 }
