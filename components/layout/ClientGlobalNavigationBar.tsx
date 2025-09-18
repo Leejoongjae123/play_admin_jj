@@ -1,0 +1,142 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { ChevronDown } from '../icons';
+
+export default function ClientGlobalNavigationBar() {
+  const [programDropdownOpen, setProgramDropdownOpen] = useState(false);
+  const [communityDropdownOpen, setCommunityDropdownOpen] = useState(false);
+
+  return (
+    <nav className="relative hidden h-full max-w-[627px] flex-shrink-0 items-center justify-around lg:flex lg:flex-1">
+      {/* 희곡 DB */}
+      <Link href="/play" className="group flex h-full w-fit items-center">
+        <span className="font-semibold text-gray-3 transition-colors group-hover:text-primary">
+          희곡 DB
+        </span>
+      </Link>
+
+      {/* 작가 DB */}
+      <Link href="/writer" className="group flex h-full w-fit items-center">
+        <span className="font-semibold text-gray-3 transition-colors group-hover:text-primary">
+          작가 DB
+        </span>
+      </Link>
+
+      {/* 멤버십 */}
+      <Link href="/membership" className="group flex h-full w-fit items-center">
+        <span className="font-semibold text-gray-3 transition-colors group-hover:text-primary">
+          멤버십
+        </span>
+      </Link>
+
+      {/* 프로그램 */}
+      <Popover open={programDropdownOpen} onOpenChange={setProgramDropdownOpen}>
+        <PopoverTrigger
+          className="group flex h-full w-fit cursor-pointer items-center gap-2.5"
+          onMouseEnter={() => setProgramDropdownOpen(true)}
+          onMouseLeave={() => setProgramDropdownOpen(false)}
+        >
+          <span
+            className={cn(
+              'font-semibold text-gray-3 transition-colors group-hover:text-primary',
+              programDropdownOpen && 'text-primary',
+            )}
+          >
+            프로그램
+          </span>
+          <ChevronDown
+            className={cn(
+              'rotate-180 text-gray-3 transition-all group-hover:text-primary',
+              programDropdownOpen && 'rotate-0 text-primary',
+            )}
+          />
+        </PopoverTrigger>
+
+        <PopoverContent
+          className="flex w-fit flex-col gap-2.5 p-5 shadow-[0_4px_10px_-5px_rgba(0,0,0,0.25)]"
+          sideOffset={0}
+          onMouseEnter={() => setProgramDropdownOpen(true)}
+          onMouseLeave={() => setProgramDropdownOpen(false)}
+        >
+          <Link href="/program" className="font-medium transition-colors hover:text-primary">
+            지금 참여하기
+          </Link>
+          <Link
+            href="/program?view=calendar"
+            className="font-medium transition-colors hover:text-primary"
+          >
+            지난 프로그램
+          </Link>
+        </PopoverContent>
+      </Popover>
+
+      {/* 커뮤니티 */}
+      <Popover open={communityDropdownOpen} onOpenChange={setCommunityDropdownOpen}>
+        <PopoverTrigger
+          className="group flex h-full w-fit cursor-pointer items-center gap-2.5"
+          onMouseEnter={() => setCommunityDropdownOpen(true)}
+          onMouseLeave={() => setCommunityDropdownOpen(false)}
+        >
+          <span
+            className={cn(
+              'font-semibold text-gray-3 transition-colors group-hover:text-primary',
+              communityDropdownOpen && 'text-primary',
+            )}
+          >
+            커뮤니티
+          </span>
+          <ChevronDown
+            className={cn(
+              'rotate-180 text-gray-3 transition-all group-hover:text-primary',
+              communityDropdownOpen && 'rotate-0 text-primary',
+            )}
+          />
+        </PopoverTrigger>
+
+        <PopoverContent
+          className="flex w-fit flex-col gap-2.5 p-5 shadow-[0_4px_10px_-5px_rgba(0,0,0,0.25)]"
+          sideOffset={0}
+          onMouseEnter={() => setCommunityDropdownOpen(true)}
+          onMouseLeave={() => setCommunityDropdownOpen(false)}
+        >
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            공지사항
+          </Link>
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            동료 찾기
+          </Link>
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            장터
+          </Link>
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            무엇이든 물어보세요
+          </Link>
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            홍보
+          </Link>
+          <Link href="/community" className="font-medium transition-colors hover:text-primary">
+            작가 커뮤니티
+          </Link>
+        </PopoverContent>
+      </Popover>
+
+      {/* 인스크립트 */}
+      <Link href="/about" className="group flex h-full w-fit items-center">
+        <span className="font-semibold text-gray-3 transition-colors group-hover:text-primary">
+          인스크립트
+        </span>
+      </Link>
+
+      {/* 문의 */}
+      <Link href="/contact" className="group flex h-full w-fit items-center">
+        <span className="font-semibold text-gray-3 transition-colors group-hover:text-primary">
+          문의
+        </span>
+      </Link>
+    </nav>
+  );
+}

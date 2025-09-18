@@ -25,7 +25,7 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
     <div
       className={cn(
         'z-999 fixed inset-0 bg-primary transition-transform duration-300 ease-in-out',
-        isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0',
+        isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full',
       )}
     >
       <div className="flex h-full w-full flex-col p-8">
@@ -74,6 +74,7 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
           </Link>
 
           {/* 프로그램 */}
+          {/* FIXME: 프로그램 하위 네비게이션 구체화 필요 */}
           <Collapsible
             className="flex flex-col"
             open={isProgramExpanded}
@@ -95,16 +96,14 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
-                  <span className="text-lg font-medium leading-5 text-white">이달의 프로그램</span>
+                  <span className="text-lg font-medium leading-5 text-white">지금 참여하기</span>
                 </Link>
                 <Link
                   href="/program?view=calendar"
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
-                  <span className="text-lg font-medium leading-5 text-white">
-                    지난 프로그램 - 달력
-                  </span>
+                  <span className="text-lg font-medium leading-5 text-white">지난 프로그램</span>
                 </Link>
               </div>
             </CollapsibleContent>
@@ -136,6 +135,13 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
+                  <span className="text-lg font-medium leading-5 text-white">공지사항</span>
+                </Link>
+                <Link
+                  href="/community/colleagues"
+                  className="flex w-fit items-center py-2 pl-[14px]"
+                  onClick={onClose}
+                >
                   <span className="text-lg font-medium leading-5 text-white">동료찾기</span>
                 </Link>
                 <Link
@@ -159,7 +165,7 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
-                  <span className="text-lg font-medium leading-5 text-white">공연 홍보</span>
+                  <span className="text-lg font-medium leading-5 text-white">홍보</span>
                 </Link>
                 <Link
                   href="/community/writers"
@@ -171,11 +177,6 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
               </div>
             </CollapsibleContent>
           </Collapsible>
-
-          {/* 공지사항 */}
-          <Link href="/announcements" className="w-fit py-2.5" onClick={onClose}>
-            <span className="text-2xl font-semibold leading-8 text-white">공지사항</span>
-          </Link>
 
           {/* 인스크립트 */}
           <Link href="/about" className="w-fit py-2.5" onClick={onClose}>
