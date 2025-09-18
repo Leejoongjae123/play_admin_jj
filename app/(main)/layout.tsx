@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header } from '@/components/layout';
+import { Header, Footer } from '@/components/layout';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -10,6 +10,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <main className="flex min-h-screen flex-col items-center">
       <Header />
       {children}
+      <Footer />
     </main>
   );
 }
