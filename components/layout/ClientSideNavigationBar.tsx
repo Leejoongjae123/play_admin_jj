@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Alert, ChevronDown, Close, Mail, Profile } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 
 interface NavigationProps {
   isOpen: boolean;
@@ -73,29 +74,31 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
           </Link>
 
           {/* 프로그램 */}
-          <div className="flex flex-col">
-            <button
-              onClick={() => setIsProgramExpanded(!isProgramExpanded)}
-              className="flex w-fit items-center gap-2.5 py-2.5"
-            >
-              <span className="text-2xl font-semibold leading-8 text-white">프로그램</span>
-              <ChevronDown
-                color="white"
-                className={cn('rotate-180 transition-transform', isProgramExpanded && 'rotate-0')}
-              />
-            </button>
-
-            {isProgramExpanded && (
+          <Collapsible
+            className="flex flex-col"
+            open={isProgramExpanded}
+            onOpenChange={setIsProgramExpanded}
+          >
+            <CollapsibleTrigger asChild>
+              <div className="flex w-fit cursor-pointer items-center gap-2.5 py-2.5">
+                <span className="text-2xl font-semibold leading-8 text-white">프로그램</span>
+                <ChevronDown
+                  color="white"
+                  className={cn('rotate-180 transition-transform', isProgramExpanded && 'rotate-0')}
+                />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
               <div className="flex flex-col">
                 <Link
-                  href="/program/monthly"
+                  href="/program"
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
                   <span className="text-lg font-medium leading-5 text-white">이달의 프로그램</span>
                 </Link>
                 <Link
-                  href="/program/calendar"
+                  href="/program?view=calendar"
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
@@ -104,23 +107,29 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   </span>
                 </Link>
               </div>
-            )}
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* 커뮤니티 */}
-          <div className="flex flex-col">
-            <button
-              onClick={() => setIsCommunityExpanded(!isCommunityExpanded)}
-              className="flex w-fit items-center gap-2.5 py-2.5"
-            >
-              <span className="text-2xl font-semibold leading-8 text-white">커뮤니티</span>
-              <ChevronDown
-                color="white"
-                className={cn('rotate-180 transition-transform', isCommunityExpanded && 'rotate-0')}
-              />
-            </button>
-
-            {isCommunityExpanded && (
+          {/* FIXME: 커뮤니티 하위 네비게이션 구체화 필요 */}
+          <Collapsible
+            className="flex flex-col"
+            open={isCommunityExpanded}
+            onOpenChange={setIsCommunityExpanded}
+          >
+            <CollapsibleTrigger asChild>
+              <div className="flex w-fit cursor-pointer items-center gap-2.5 py-2.5">
+                <span className="text-2xl font-semibold leading-8 text-white">커뮤니티</span>
+                <ChevronDown
+                  color="white"
+                  className={cn(
+                    'rotate-180 transition-transform',
+                    isCommunityExpanded && 'rotate-0',
+                  )}
+                />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
               <div className="flex flex-col">
                 <Link
                   href="/community/colleagues"
@@ -134,7 +143,7 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   className="flex w-fit items-center py-2 pl-[14px]"
                   onClick={onClose}
                 >
-                  <span className="text-lg font-medium leading-5 text-white">거래</span>
+                  <span className="text-lg font-medium leading-5 text-white">장터</span>
                 </Link>
                 <Link
                   href="/community/questions"
@@ -160,8 +169,8 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
                   <span className="text-lg font-medium leading-5 text-white">작가 커뮤니티</span>
                 </Link>
               </div>
-            )}
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* 공지사항 */}
           <Link href="/announcements" className="w-fit py-2.5" onClick={onClose}>
