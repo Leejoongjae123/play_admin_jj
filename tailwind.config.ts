@@ -28,10 +28,10 @@ export default {
           3: 'var(--red-03)',
         },
         orange: {
-          1: 'var(--ornage-01)',
-          2: 'var(--ornage-02)',
-          3: 'var(--ornage-03)',
-          4: 'var(--ornage-04)',
+          1: 'var(--orange-01)',
+          2: 'var(--orange-02)',
+          3: 'var(--orange-03)',
+          4: 'var(--orange-04)',
         },
         gray: {
           1: 'var(--gray-01)',
