@@ -20,16 +20,15 @@ export default function Header() {
   return (
     <header className="sticky left-0 top-0 z-50 flex h-[68px] w-full items-center justify-between bg-background px-5 lg:h-[84px] lg:px-[60px]">
       {/* Logo */}
-      <div className="h-[22px] w-[97px] flex-shrink-0 lg:h-[36px] lg:w-[160px]">
+      <Link href="/" className="h-[22px] w-[97px] flex-shrink-0 lg:h-[36px] lg:w-[160px]">
         <Image
           src="/images/header-logo.webp"
           alt="header-logo"
           width={97}
           height={22}
           className="h-full w-full object-contain"
-          priority
         />
-      </div>
+      </Link>
 
       {/* PC Navigation */}
       <ClientGlobalNavigationBar />

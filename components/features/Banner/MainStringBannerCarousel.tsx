@@ -19,15 +19,17 @@ export default function MainStringBannerCarousel() {
       ]}
     >
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <CarouselItem key={`text-banner-${i}`} className="relative basis-auto pl-4">
-            <Image
-              src="/images/main-string-banner.webp"
-              alt="Main String Banner"
-              width={976}
-              height={44}
-              className="h-[44px] w-full object-contain lg:h-[76px]"
-            />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <CarouselItem key={`text-banner-${i}`} className="relative max-w-[976px] pl-4">
+            <div className="relative h-[44px] w-full lg:h-[76px]">
+              <Image
+                src="/images/main-string-banner.webp"
+                alt="Main String Banner"
+                className="object-contain"
+                priority
+                fill
+              />
+            </div>
           </CarouselItem>
         ))}
       </CarouselContent>
