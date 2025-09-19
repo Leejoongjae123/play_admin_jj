@@ -63,7 +63,7 @@ export default function MainBannerCarousel() {
         ))}
       </CarouselContent>
 
-      <div className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-[calc(100%+15px)] lg:-translate-y-[calc(100%+20px)]">
+      <div className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-[calc(100%+10px)] lg:-translate-y-[calc(100%+20px)]">
         <div className="relative flex h-[18px] w-[88px] items-center justify-center gap-2.5 lg:h-[34px] lg:w-[136px]">
           <CarouselPrevious
             variant="ghost"
