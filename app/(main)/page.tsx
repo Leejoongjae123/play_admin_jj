@@ -1,5 +1,8 @@
-import { MainBannerCarousel, MainStringBannerCarousel } from '@/components/features/Banner';
-import { MainSearchSection } from '@/components/features/Search';
+import {
+  MainBannerCarousel,
+  MainStringBannerCarousel,
+  MainSearchSection,
+} from '@/components/features/main';
 
 export default function MainPage() {
   return (
