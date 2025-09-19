@@ -18,8 +18,13 @@ export default function Search({ className, size = 24, color = '#D65856' }: Icon
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <circle cx="11.5" cy="11.5" r="9.5" stroke={color} strokeWidth="2" />
-      <path d="M18.5 18.5L22 22" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <circle cx="11.5" cy="11.5" r="9.5" stroke={color || 'currentColor'} strokeWidth="2" />
+      <path
+        d="M18.5 18.5L22 22"
+        stroke={color || 'currentColor'}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

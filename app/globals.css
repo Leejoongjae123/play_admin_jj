@@ -4,30 +4,32 @@
 
 @layer base {
   :root {
-    --red: #d65856;
-    --red-01: #c68d82;
-    --red-02: #dec6c1;
-    --red-03: #ebe1df;
-    --orange-01: #da8248;
-    --orange-02: #b28b7a;
-    --orange-03: #ccbcab;
-    --orange-04: #f4efea;
-    --gray-01: #2a2a2a;
-    --gray-02: #555555;
-    --gray-03: #6d6d6d;
-    --gray-04: #a0a0a0;
-    --gray-05: #e0e0e0;
-    --gray-06: #f2f2f2;
-    --gray-07: #f3f2f0;
-    --background: #faf8f6;
+    --red: 1 61% 59%;
+    --red-01: 10 37% 64%;
+    --red-02: 10 31% 81%;
+    --red-03: 10 23% 90%;
+    --orange-01: 24 66% 57%;
+    --orange-02: 18 27% 59%;
+    --orange-03: 31 24% 74%;
+    --orange-04: 30 31% 94%;
+    --gray-01: 0 0% 16%;
+    --gray-02: 0 0% 33%;
+    --gray-03: 0 0% 43%;
+    --gray-04: 0 0% 63%;
+    --gray-05: 0 0% 88%;
+    --gray-06: 0 0% 95%;
+    --gray-07: 40 11% 95%;
+    --background: 30 29% 97%;
     --foreground: var(--gray-01);
-    --primary: #911a00;
-    --accent: var(--red-03);
-    --black: #0e0e0e;
-    --white: #ffffff;
+    --primary: 11 100% 28%;
+    --accent: var(--primary);
+    --muted: var(--orange-04);
+    --input: var(--gray-06);
+    --ring: var(--primary);
+    --black: 0 0% 5%;
+    --white: 0 0% 100%;
   }
 }
-
 @layer base {
   * {
     /* Root */
