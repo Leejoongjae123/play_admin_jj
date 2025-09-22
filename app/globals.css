@@ -24,6 +24,7 @@
     --primary: 11 100% 28%;
     --accent: var(--primary);
     --muted: var(--orange-04);
+    --light: var(--gray-05);
     --input: var(--gray-06);
     --ring: var(--primary);
     --black: 0 0% 5%;

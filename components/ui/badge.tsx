@@ -13,15 +13,16 @@ const badgeVariants = cva(
         // FIXME: 나중에 추가
         // secondary:
         //   'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
-        // destructive:
-        //   'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+        light: 'bg-light text-light-foreground',
+        lightMd: 'bg-light-md text-light-md-foreground',
+        lightSm: 'bg-light-sm text-light-sm-foreground',
         outline: 'border border-primary text-primary ',
       },
       size: {
         default: 'h-8 py-2 px-[14px] text-xs font-bold rounded-full',
         xs: 'h-5 py-1 px-[6px] text-[10px] font-medium rounded-sm',
-        sm: 'h-6 py-[6px] px-2 text-xs font-bold rounded-[3px]',
-        md: 'h-8 py-2 px-[10px] text-xs font-bold rounded',
+        sm: 'h-6 py-[6px] px-2 text-xs font-medium rounded-[3px]',
+        md: 'h-8 py-2 px-[10px] text-xs font-medium rounded',
         lg: 'h-10 py-2 px-5 font-bold rounded-full',
       },
     },

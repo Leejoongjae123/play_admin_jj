@@ -28,6 +28,18 @@ export default {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--orange-02))',
         },
+        light: {
+          DEFAULT: 'hsl(var(--light))',
+          foreground: 'hsl(var(--gray-03))',
+          md: {
+            DEFAULT: '#D2D2D2',
+            foreground: 'hsl(var(--gray-03))',
+          },
+          sm: {
+            DEFAULT: '#B2B2B2',
+            foreground: 'hsl(var(--gray-03))',
+          },
+        },
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         black: 'hsl(var(--black))',
