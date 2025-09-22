@@ -1,3 +1,5 @@
+'use client';
+
 import { Memo } from '@/models/memo';
 import { Like, Comment } from '@/components/icons';
 import { cn, formatRelativeTime } from '@/lib/utils';
