@@ -1,29 +1,9 @@
-'use client';
-
 import Image from 'next/image';
-import { useState } from 'react';
 import { SearchInput } from '@/components/common';
 
 const hashTags = ['#로맨스', '#고전주의', '#신화', '#비극'];
 
 export default function MainSearchSection() {
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
-  const handleSearch = () => {
-    if (searchValue.trim() === '') return;
-    console.log(searchValue);
-  };
-
   return (
     <section className="flex w-full justify-center bg-[#F8F1EA]">
       <div className="flex w-[376px] flex-col items-center justify-end gap-8 px-5 pb-[100px] pt-11 lg:w-[720px] lg:px-0 lg:pt-[72px]">
@@ -40,15 +20,7 @@ export default function MainSearchSection() {
           </h1>
 
           {/* Search Input */}
-          <SearchInput
-            type="text"
-            value={searchValue}
-            placeholder={hashTags.join(' ')}
-            ariaLabel="희곡 검색"
-            onChange={handleInputChange}
-            onKeyDown={handleKeyPress}
-            onSearch={handleSearch}
-          />
+          <SearchInput className="lg:text-xl" placeholder={hashTags.join(' ')} />
         </div>
       </div>
     </section>
