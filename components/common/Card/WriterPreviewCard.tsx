@@ -12,7 +12,7 @@ export default function WriterPreviewCard({ writer }: WriterPreviewCardProps) {
   const { id, name, createdAt, description, keyword } = writer;
 
   return (
-    <Card className="h flex min-h-[320px] min-w-[335px] flex-1 flex-col rounded-lg bg-white">
+    <Card className="flex min-h-[320px] min-w-[335px] flex-1 flex-col rounded-lg bg-white">
       <Link href={`/writer/${id}`} className="flex h-full w-full flex-col gap-5">
         <CardContent className="flex h-full w-full flex-col p-8">
           <div className="flex flex-1 flex-col gap-5">
