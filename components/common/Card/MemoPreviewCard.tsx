@@ -20,7 +20,7 @@ export default function MemoPreviewCard({ memo }: MemoPreviewCardProps) {
   } = memo;
 
   return (
-    <div className="flex h-[360px] w-[335px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 shadow-[-4px_4px_4px_0_rgba(172,121,58,0.10)]">
+    <div className="flex h-[360px] w-[335px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 shadow-[-4px_4px_4px_0_rgba(172,121,58,0.10)] lg:h-[380px] lg:w-[389px]">
       <div className="flex flex-1 flex-col justify-between">
         <div className="flex flex-col gap-2">
           {/* User info section */}
