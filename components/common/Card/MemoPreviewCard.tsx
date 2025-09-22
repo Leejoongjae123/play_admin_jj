@@ -30,9 +30,9 @@ export default function MemoPreviewCard({ memo }: MemoPreviewCardProps) {
           <div className="flex items-center justify-between py-2">
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-gray-2">{username}</span>
+                <span className="line-clamp-1 text-sm font-medium text-gray-2">{username}</span>
               </div>
-              <span className="text-sm font-semibold text-gray-4">
+              <span className="min-w-[40px] text-sm font-semibold text-gray-4">
                 {formatRelativeTime(createdAt)}
               </span>
             </div>
