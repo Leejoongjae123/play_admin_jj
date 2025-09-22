@@ -44,7 +44,7 @@ export default function SearchInput({
   return (
     <div
       className={cn(
-        'flex h-14 w-full items-center justify-between gap-2.5 border-b-[1.4px] border-red px-6 lg:h-16',
+        'flex h-14 w-full items-center justify-between gap-2.5 border-b-[1.4px] border-red px-6 lg:h-[72px]',
         wrapperClassName,
       )}
     >
@@ -54,7 +54,7 @@ export default function SearchInput({
         value={searchValue}
         placeholder={placeholder}
         className={cn(
-          'h-5 w-full border-none bg-transparent p-0 text-[18px] text-lg font-bold text-primary ring-0 placeholder:text-orange-2 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0',
+          'h-5 w-full border-none bg-transparent p-0 text-lg font-bold text-primary ring-0 placeholder:text-orange-2 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 lg:h-6',
           className,
         )}
         aria-label={ariaLabel}
