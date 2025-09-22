@@ -13,6 +13,11 @@ export default {
         pretendard: ['Pretendard', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
         serif: ['Noto Serif KR', 'serif'],
       },
+      lineClamp: {
+        8: '8',
+        9: '9',
+        10: '10',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

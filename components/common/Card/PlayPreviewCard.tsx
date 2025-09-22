@@ -23,7 +23,9 @@ export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
             <div className="font-semibold text-orange-1">{author}</div>
           </div>
           <div className="hidden overflow-y-auto group-hover:flex">
-            <p className="font-serif text-sm font-bold text-primary lg:text-xl">{quote}</p>
+            <p className="line-clamp-8 xl:line-clamp-10 font-serif text-sm font-bold leading-5 text-primary xl:text-xl xl:leading-[24px]">
+              {quote}
+            </p>
           </div>
         </Link>
 
