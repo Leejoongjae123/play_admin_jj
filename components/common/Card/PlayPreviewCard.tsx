@@ -11,8 +11,8 @@ export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
   const { title, author, keyword, quote, id } = play;
 
   return (
-    <Card className="flex flex-1 flex-col gap-4">
-      <CardContent className="p-0">
+    <Card className="flex min-h-[256px] min-w-[160px] flex-1">
+      <CardContent className="flex flex-col gap-4 p-0">
         {/* Main card */}
         <Link
           href={`/play/${id}`}
