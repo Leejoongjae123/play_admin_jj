@@ -6,9 +6,9 @@ import { IconProps } from './types';
  *
  * @param className - Optional CSS classes
  * @param size - Icon size in pixels (default: 24)
- * @param color - Icon color (default: #D65856)
+ * @param color - Icon color
  */
-export default function Search({ className, size = 24, color = '#D65856' }: IconProps) {
+export default function Search({ className, size = 24, color }: IconProps) {
   return (
     <svg
       width={size}
