@@ -7,3 +7,5 @@ export { default as ChevronDown } from './ChevronDown';
 export { default as Search } from './Search';
 export { default as BannerNext } from './BannerNext';
 export { default as BannerPrevious } from './BannerPrevious';
+export { default as Like } from './Like';
+export { default as Comment } from './Comment';
