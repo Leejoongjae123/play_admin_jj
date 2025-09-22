@@ -39,6 +39,15 @@
   }
 }
 
-body::-webkit-scrollbar {
+/* 모든 요소의 스크롤바 숨기기 */
+* {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE and Edge */
+  -ms-overflow-style: none;
+}
+
+/* Safari and Chrome */
+*::-webkit-scrollbar {
   display: none;
 }

@@ -54,7 +54,7 @@ export default function SearchInput({
         value={searchValue}
         placeholder={placeholder}
         className={cn(
-          'h-5 w-full border-none bg-transparent p-0 text-lg font-bold text-primary ring-0 placeholder:text-orange-2 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 lg:h-6',
+          'h-5 w-full border-none bg-transparent p-0 text-lg font-bold text-primary ring-0 placeholder:text-orange-2 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 lg:h-6 lg:text-2xl',
           className,
         )}
         aria-label={ariaLabel}
