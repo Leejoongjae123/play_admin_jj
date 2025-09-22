@@ -2,7 +2,7 @@ import { MainMemoCarousel } from '../components';
 
 export default function MainMemoSection() {
   return (
-    <section className="flex w-full flex-col justify-center">
+    <section className="flex w-full flex-col justify-center bg-[#F8F1EA]">
       <div className="flex h-[327px] w-full flex-col justify-end gap-3 bg-primary px-5 pb-[120px] pt-20 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-col gap-[10px]">
           <h2 className="font-serif text-2xl font-bold text-white">지금 뜨는 메모</h2>
