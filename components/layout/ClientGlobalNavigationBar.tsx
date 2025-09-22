@@ -77,7 +77,7 @@ export default function ClientGlobalNavigationBar() {
       {/* 커뮤니티 */}
       <Popover open={communityDropdownOpen} onOpenChange={setCommunityDropdownOpen}>
         <PopoverTrigger
-          className="group flex h-full w-fit cursor-pointer items-center gap-2.5"
+          className="group flex h-full w-fit cursor-pointer items-center gap-2.5 outline-none"
           onMouseEnter={() => setCommunityDropdownOpen(true)}
           onMouseLeave={() => setCommunityDropdownOpen(false)}
         >
@@ -91,7 +91,7 @@ export default function ClientGlobalNavigationBar() {
           </span>
           <ChevronDown
             className={cn(
-              'rotate-180 text-gray-3 transition-all group-hover:text-primary',
+              'rotate-180 text-gray-3 outline-none transition-all group-hover:text-primary',
               communityDropdownOpen && 'rotate-0 text-primary',
             )}
           />
