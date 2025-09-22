@@ -2,6 +2,7 @@ import {
   MainBannerCarousel,
   MainStringBannerCarousel,
   MainSearchSection,
+  MainMemoSection,
 } from '@/components/features/main';
 
 export default function MainPage() {
@@ -10,6 +11,7 @@ export default function MainPage() {
       <MainBannerCarousel />
       <MainStringBannerCarousel />
       <MainSearchSection />
+      <MainMemoSection />
     </section>
   );
 }
