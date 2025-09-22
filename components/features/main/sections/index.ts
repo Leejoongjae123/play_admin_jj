@@ -4,3 +4,4 @@ export { default as MainAdBannerSection } from './MainAdBannerSection';
 export { default as MainSearchResultSection } from './MainSearchResultSection';
 export { default as MainSearchResultPlaySection } from './MainSearchResultPlaySection';
 export { default as MainSearchResultWriterSection } from './MainSearchResultWriterSection';
+export { default as MainSearchResultProgramSection } from './MainSearchResultProgramSection';
