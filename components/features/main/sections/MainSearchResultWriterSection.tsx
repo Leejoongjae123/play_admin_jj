@@ -22,7 +22,7 @@ export default function MainSearchResultWriterSection({
   return (
     <section className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <span className="font-serif text-xl font-bold text-gray-1">작가</span>
+        <span className="font-serif text-xl font-bold text-gray-1 lg:text-[28px]">작가</span>
         <ViewMoreLinkButton href="/writer" />
       </div>
 

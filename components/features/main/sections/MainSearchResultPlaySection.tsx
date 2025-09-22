@@ -19,7 +19,7 @@ export default function MainSearchResultPlaySection({ plays }: MainSearchResultP
   return (
     <section className="flex w-full flex-col gap-5 pt-1 lg:pt-1.5">
       <div className="flex items-center justify-between">
-        <span className="font-serif text-xl font-bold text-gray-1">희곡</span>
+        <span className="font-serif text-xl font-bold text-gray-1 lg:text-[28px]">희곡</span>
         <ViewMoreLinkButton href="/play" />
       </div>
 

@@ -12,7 +12,7 @@ export default function MainSearchResultProgramSection({
   return (
     <section className="mb-[60px] flex flex-col gap-5 lg:mb-20">
       <div className="flex items-center justify-between">
-        <span className="font-serif text-xl font-bold text-gray-1">프로그램</span>
+        <span className="font-serif text-xl font-bold text-gray-1 lg:text-[28px]">프로그램</span>
         <ViewMoreLinkButton href="/program" />
       </div>
 
