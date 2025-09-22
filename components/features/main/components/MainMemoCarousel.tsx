@@ -99,6 +99,8 @@ export default function MainMemoCarousel() {
       return [
         AutoScroll({
           speed: 1,
+          stopOnInteraction: false,
+          stopOnMouseEnter: true,
         }),
       ];
     } else {
