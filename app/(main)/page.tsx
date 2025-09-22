@@ -3,6 +3,7 @@ import {
   MainStringBannerCarousel,
   MainSearchSection,
   MainMemoSection,
+  MainAdBannerSection,
 } from '@/components/features/main';
 
 export default function MainPage() {
@@ -12,6 +13,7 @@ export default function MainPage() {
       <MainStringBannerCarousel />
       <MainSearchSection />
       <MainMemoSection />
+      <MainAdBannerSection />
     </section>
   );
 }
