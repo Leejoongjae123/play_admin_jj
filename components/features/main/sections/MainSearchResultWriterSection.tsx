@@ -1,6 +1,10 @@
+'use client';
+
+import { useMemo } from 'react';
 import { ViewMoreLinkButton } from '@/components/common/Button';
 import { WriterPreviewCard } from '@/components/common/Card';
 import { Writer } from '@/models/writer';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 interface MainSearchResultWriterSectionProps {
   writers: Writer[];
@@ -9,6 +13,12 @@ interface MainSearchResultWriterSectionProps {
 export default function MainSearchResultWriterSection({
   writers,
 }: MainSearchResultWriterSectionProps) {
+  const breakpoint = useBreakpoint();
+  const filteredWriters = useMemo(() => {
+    if (breakpoint !== 'xl' && breakpoint !== '2xl') return writers.slice(0, 2);
+    else return writers;
+  }, [breakpoint]);
+
   return (
     <section className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
@@ -17,7 +27,7 @@ export default function MainSearchResultWriterSection({
       </div>
 
       <div className="sm: grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-        {writers.map((writer) => (
+        {filteredWriters.map((writer) => (
           <WriterPreviewCard key={writer.id} writer={writer} />
         ))}
       </div>
