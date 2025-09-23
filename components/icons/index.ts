@@ -12,3 +12,4 @@ export { default as Comment } from './Comment';
 export { default as ArrowRight } from './ArrowRight';
 export { default as AlbumView } from './AlbumView';
 export { default as TextView } from './TextView';
+export { default as Plus } from './Plus';
