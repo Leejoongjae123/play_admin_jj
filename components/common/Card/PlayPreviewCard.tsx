@@ -11,19 +11,19 @@ export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
   const { title, author, keyword, quote, id } = play;
 
   return (
-    <Card className="flex min-h-[256px] min-w-[160px] flex-1">
+    <Card>
       <CardContent className="flex flex-col gap-4 p-0">
         {/* Main card */}
         <Link
           href={`/play/${id}`}
-          className="group flex h-[220px] cursor-pointer justify-between rounded-[3px] bg-primary px-4 py-8 transition-all duration-500 ease-in-out hover:bg-[#EDE0DE] hover:py-8 lg:px-7 lg:py-[60px] xl:h-[300px]"
+          className="group flex aspect-[220/300] h-full w-full cursor-pointer justify-between rounded-[3px] bg-primary p-4 transition-all duration-500 ease-in-out hover:bg-[#EDE0DE] lg:p-7"
         >
-          <div className="flex flex-col gap-2 group-hover:hidden">
+          <div className="flex aspect-[220/300] flex-col gap-2 group-hover:hidden">
             <span className="font-serif text-xl font-bold text-white">{title}</span>
             <div className="font-semibold text-orange-1">{author}</div>
           </div>
-          <div className="hidden overflow-y-auto group-hover:flex">
-            <p className="line-clamp-8 xl:line-clamp-10 font-serif text-sm font-bold leading-5 text-primary xl:text-xl xl:leading-[24px]">
+          <div className="hidden aspect-[220/300] overflow-y-auto group-hover:flex">
+            <p className="font-serif text-sm font-bold text-primary sm:text-base xl:text-xl">
               {quote}
             </p>
           </div>

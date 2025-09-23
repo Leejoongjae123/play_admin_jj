@@ -18,7 +18,7 @@ const banners = [
 export default function MainAdBannerSection() {
   return (
     <section className="relative flex w-full flex-col items-end bg-[#F8F1EA] xl:pb-[177px]">
-      <div className="relative flex w-full flex-col gap-3 bg-gradient-to-b from-[#FAF6F1] to-[#FFFFFF] px-5 pb-[120px] pt-20 lg:px-[120px] xl:flex-row xl:items-center">
+      <div className="relative flex w-full flex-col gap-3 bg-gradient-to-b from-[#FAF6F1] to-[#FFFFFF] px-[8%] pb-[120px] pt-20 xl:flex-row xl:items-center">
         <div className="flex w-full flex-col gap-[10px]">
           <h2 className="font-serif text-2xl font-bold text-primary xl:text-[32px]">
             지금 신청할 수 있는 프로그램
@@ -32,7 +32,7 @@ export default function MainAdBannerSection() {
         </div>
       </div>
 
-      <div className="relative -top-[100px] flex w-full flex-col gap-6 px-5 lg:-top-[72px] lg:gap-20 lg:px-[120px]">
+      <div className="relative -top-[100px] flex w-full flex-col gap-6 px-[8%] lg:-top-[72px] lg:gap-20">
         {banners.map((banner) => (
           <div key={banner.id} className="relative aspect-video min-h-[179px] w-full">
             <Image src={banner.src} alt={`Main Ad Banner ${banner.id}`} fill />
