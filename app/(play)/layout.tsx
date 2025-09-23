@@ -7,7 +7,7 @@ interface PlayLayoutProps {
 
 export default function PlayLayout({ children }: PlayLayoutProps) {
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex min-h-screen w-full flex-col items-center">
       <Header />
       {children}
       <Footer />
