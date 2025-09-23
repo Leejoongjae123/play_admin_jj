@@ -120,7 +120,10 @@ export default function MainMemoCarousel() {
       <CarouselContent className="-ml-5">
         {sampleMemosData.map((memo) => (
           <CarouselItem key={memo.id} className="mb-1 basis-auto pl-5">
-            <MemoPreviewCard memo={memo} />
+            <MemoPreviewCard
+              memo={memo}
+              className="shadow-[-4px_4px_4px_0_rgba(172,121,58,0.10)]"
+            />
           </CarouselItem>
         ))}
       </CarouselContent>
