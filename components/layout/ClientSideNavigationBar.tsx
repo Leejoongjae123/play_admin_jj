@@ -84,8 +84,10 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
               <div className="flex w-fit cursor-pointer items-center gap-2.5 py-2.5">
                 <span className="text-2xl font-semibold leading-8 text-white">프로그램</span>
                 <ChevronDown
-                  color="white"
-                  className={cn('rotate-180 transition-transform', isProgramExpanded && 'rotate-0')}
+                  className={cn(
+                    'rotate-180 text-white transition-transform',
+                    isProgramExpanded && 'rotate-0',
+                  )}
                 />
               </div>
             </CollapsibleTrigger>
@@ -120,9 +122,8 @@ export default function ClientSideNavigationBar({ isOpen, onClose }: NavigationP
               <div className="flex w-fit cursor-pointer items-center gap-2.5 py-2.5">
                 <span className="text-2xl font-semibold leading-8 text-white">커뮤니티</span>
                 <ChevronDown
-                  color="white"
                   className={cn(
-                    'rotate-180 transition-transform',
+                    'rotate-180 text-white transition-transform',
                     isCommunityExpanded && 'rotate-0',
                   )}
                 />

@@ -19,7 +19,7 @@ export default {
         10: '10',
       },
       colors: {
-        background: 'hsl(var(--background))',
+        background: 'var(--background)',
         foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
