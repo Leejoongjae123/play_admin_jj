@@ -23,7 +23,7 @@ export default function MainSearchResultPlaySection({ plays }: MainSearchResultP
         <ViewMoreLinkButton href="/play" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-6">
         {filteredPlays.map((play) => (
           <PlayPreviewCard key={play.id} play={play} />
         ))}
