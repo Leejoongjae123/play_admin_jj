@@ -240,7 +240,7 @@ export default async function MainSearchPage({ searchParams }: MainSearchPagePro
   ];
 
   return (
-    <section className="flex w-full flex-col bg-background px-[8%]">
+    <section className="flex w-full flex-col bg-background px-[8vw]">
       <MainSearchResultSection keyword={keyword} />
 
       <div className="flex flex-col gap-[60px] lg:gap-20">
