@@ -7,9 +7,10 @@ import { cn, formatRelativeTime } from '@/lib/utils';
 
 interface MemoPreviewCardProps {
   memo: Memo;
+  className?: string;
 }
 
-export default function MemoPreviewCard({ memo }: MemoPreviewCardProps) {
+export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProps) {
   const {
     username,
     createdAt,
@@ -23,7 +24,12 @@ export default function MemoPreviewCard({ memo }: MemoPreviewCardProps) {
   } = memo;
 
   return (
-    <Card className="flex h-[360px] w-[335px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 shadow-[-4px_4px_4px_0_rgba(172,121,58,0.10)] lg:h-[380px] lg:w-[389px]">
+    <Card
+      className={cn(
+        'flex h-[360px] w-[335px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 lg:h-[380px] lg:w-[389px]',
+        className,
+      )}
+    >
       <CardContent className="flex flex-1 flex-col justify-between p-0">
         <div className="flex flex-col gap-2">
           {/* User info section */}
