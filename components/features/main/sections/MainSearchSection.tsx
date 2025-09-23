@@ -21,7 +21,7 @@ export default function MainSearchSection() {
 
           {/* Search Input */}
           <SearchInput
-            className="lg:h-16 lg:text-xl"
+            className="font-bold lg:h-16 lg:text-xl"
             wrapperClassName="bg-transparent"
             placeholder={hashTags.join(' ')}
           />
