@@ -1,5 +1,5 @@
 import { SearchInput } from '@/components/common';
-import { PlaySection, PlayMemoSection } from '@/components/features/play';
+import { PlaySection, PlayMemoSection, PlayHeroSection } from '@/components/features/play';
 import { Play } from '@/models/play';
 import { Memo } from '@/models/memo';
 
@@ -143,10 +143,11 @@ export default function PlayPage() {
   ];
 
   return (
-    <section className="flex w-full flex-1 flex-col gap-[60px] px-[8%] pt-10">
+    <section className="flex w-full flex-1 flex-col gap-[60px] px-[8vw] pt-10">
       <SearchInput />
       <PlaySection playList={playList} />
       <PlayMemoSection playMemoList={playMemoList} />
+      <PlayHeroSection />
     </section>
   );
 }
