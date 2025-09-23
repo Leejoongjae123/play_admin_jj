@@ -20,7 +20,11 @@ export default function MainSearchSection() {
           </h1>
 
           {/* Search Input */}
-          <SearchInput className="lg:h-16 lg:text-xl" placeholder={hashTags.join(' ')} />
+          <SearchInput
+            className="lg:h-16 lg:text-xl"
+            wrapperClassName="bg-transparent"
+            placeholder={hashTags.join(' ')}
+          />
         </div>
       </div>
     </section>
