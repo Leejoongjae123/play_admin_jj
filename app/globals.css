@@ -22,6 +22,7 @@
     --background: #faf8f6;
     --foreground: var(--gray-01);
     --primary: 11 100% 28%;
+    --secondary: 10 23% 90%;
     --accent: var(--primary);
     --muted: var(--orange-04);
     --light: var(--gray-05);
