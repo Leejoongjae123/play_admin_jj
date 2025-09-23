@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function Footer() {
   return (
     <footer
-      className="flex w-full flex-col gap-8 bg-red-3 px-8 pb-11 pt-[60px] lg:flex-row lg:justify-between xl:gap-0 xl:px-[120px] xl:pb-[100px]"
+      className="flex w-full flex-col gap-8 bg-red-3 px-[8%] pb-11 pt-[60px] lg:flex-row lg:justify-between xl:gap-0 xl:pb-[100px]"
       data-component-name="footer"
     >
       {/* Main Content Container */}
