@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import { SearchInput } from '@/components/common';
 
 const hashTags = ['#로맨스', '#고전주의', '#신화', '#비극'];
@@ -24,6 +25,7 @@ export default function MainSearchSection() {
             className="font-bold lg:h-16 lg:text-xl"
             wrapperClassName="bg-transparent"
             placeholder={hashTags.join(' ')}
+            searchPath="/search"
           />
         </div>
       </div>

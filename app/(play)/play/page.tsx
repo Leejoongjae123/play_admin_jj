@@ -144,7 +144,7 @@ export default function PlayPage() {
 
   return (
     <section className="flex w-full flex-1 flex-col gap-[60px] px-[8vw] pt-10">
-      <SearchInput />
+      <SearchInput searchPath="/play/search" />
       <PlaySection playList={playList} />
       <PlayMemoSection playMemoList={playMemoList} />
       <PlayHeroSection />

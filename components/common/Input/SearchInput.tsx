@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { Search } from '../../icons';
 import { Input } from '../../ui/input';
 import { cn } from '@/lib/utils';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 interface SearchInput extends React.ComponentProps<'input'> {
   value?: string;
+  searchPath?: string;
   placeholder?: string;
   ariaLabel?: string;
   className?: string;
@@ -18,11 +19,13 @@ export default function SearchInput({
   value = '',
   placeholder = 'SEARCH',
   ariaLabel = '전체 검색',
+  searchPath,
   className,
   wrapperClassName,
   ...props
 }: SearchInput) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(value);
 
@@ -37,8 +40,11 @@ export default function SearchInput({
   };
 
   const handleSearch = () => {
-    if (searchValue.trim() === '' || searchValue.trim() === searchParams.get('keyword')) return;
-    router.push(`/search?keyword=${searchValue}`);
+    const trimmed = searchValue.trim();
+    if (trimmed === '' || trimmed === searchParams.get('keyword')) return;
+
+    router.push(`${searchPath || pathname}?keyword=${encodeURIComponent(trimmed)}`);
+    setSearchValue('');
   };
 
   return (

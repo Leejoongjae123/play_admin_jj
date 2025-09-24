@@ -7,7 +7,7 @@ interface MainSearchResultSectionProps {
 export default function MainSearchResultSection({ keyword }: MainSearchResultSectionProps) {
   return (
     <section className="flex w-full flex-col pt-10 lg:pt-[76px]">
-      <SearchInput wrapperClassName="bg-orange-4" value={keyword} />
+      <SearchInput wrapperClassName="bg-orange-4" />
       <span className="py-6 font-serif text-2xl font-bold text-primary lg:text-[32px]">{`“${keyword}” 검색 결과`}</span>
     </section>
   );
