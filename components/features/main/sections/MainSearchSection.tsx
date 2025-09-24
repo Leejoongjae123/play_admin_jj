@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
 import { SearchInput } from '@/components/common';
 
 const hashTags = ['#로맨스', '#고전주의', '#신화', '#비극'];
