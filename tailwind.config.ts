@@ -52,6 +52,10 @@ export default {
             foreground: 'hsl(var(--gray-03))',
           },
         },
+        cancle: {
+          DEFAULT: 'hsl(var(--cancle))',
+          foreground: 'hsl(var(--gray-03))',
+        },
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         black: 'hsl(var(--black))',

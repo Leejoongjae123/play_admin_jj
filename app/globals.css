@@ -33,6 +33,7 @@
     --ring: var(--primary);
     --black: 0 0% 5%;
     --white: 0 0% 100%;
+    --cancle: var(--gray-05);
   }
 }
 @layer base {
