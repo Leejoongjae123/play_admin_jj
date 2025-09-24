@@ -73,13 +73,16 @@ export default function FormTagInput({
     <div className="flex w-full flex-col">
       <div className="flex items-center justify-between">
         <FormLabel
-          className={cn('relative w-20 gap-1 text-gray-3 lg:w-40 lg:text-xl', error && '-top-2.5')}
+          className={cn(
+            'relative w-[65px] gap-1 leading-6 text-gray-3 lg:w-40 lg:text-xl',
+            error && '-top-2.5',
+          )}
         >
           {label}
           {required && <span className="text-red">*</span>}
         </FormLabel>
 
-        <div className="flex w-full max-w-[430px] flex-col gap-1">
+        <div className="flex w-full max-w-[250px] flex-col gap-1 sm:max-w-[430px]">
           <Input
             className={cn(
               'h-12 bg-orange-4 text-sm placeholder:text-orange-3 lg:h-14 lg:text-base',
