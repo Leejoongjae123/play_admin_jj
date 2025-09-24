@@ -19,14 +19,17 @@
     --gray-05: 0 0% 88%;
     --gray-06: 0 0% 95%;
     --gray-07: 40 11% 95%;
+    --success: 146 80% 27%;
+    --warning: 1 81% 57%;
     --background: #faf8f6;
     --foreground: var(--gray-01);
     --primary: 11 100% 28%;
     --secondary: 10 23% 90%;
     --accent: var(--primary);
+    --destructive: var(--warning);
     --muted: var(--orange-04);
     --light: var(--gray-05);
-    --input: var(--gray-06);
+    --input: var(--red-03);
     --ring: var(--primary);
     --black: 0 0% 5%;
     --white: 0 0% 100%;
