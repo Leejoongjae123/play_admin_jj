@@ -101,8 +101,8 @@ export default function FormTagInput({
         </div>
       </div>
 
-      <div className="mt-3 flex w-full justify-end">
-        {value.length > 0 && (
+      {value.length > 0 && (
+        <div className="mt-3 flex w-full justify-end">
           <div className="flex max-w-[250px] flex-wrap justify-end gap-2 lg:max-w-[430px]">
             {value.map((tag, index) => (
               <Badge
@@ -117,8 +117,8 @@ export default function FormTagInput({
               </Badge>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
