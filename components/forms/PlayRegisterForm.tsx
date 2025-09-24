@@ -46,10 +46,6 @@ export default function PlayRegisterForm({ onSubmit, className }: PlayRegisterFo
 
   const { isValid } = form.formState;
 
-  // const isValid = form.formState.isValid;
-
-  console.log(isValid);
-
   return (
     <Form {...form}>
       <form
