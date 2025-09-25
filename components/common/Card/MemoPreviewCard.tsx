@@ -26,7 +26,7 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
   return (
     <Card
       className={cn(
-        'flex h-[360px] w-[335px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 lg:h-[380px] lg:w-[389px]',
+        'flex h-[360px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 md:h-[380px]',
         className,
       )}
     >
@@ -49,12 +49,12 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
             {title && (
               <span className="line-clamp-1 text-xl font-semibold text-primary">{title}</span>
             )}
-            <p className="line-clamp-6 max-h-44 text-gray-2">{content}</p>
+            <p className="line-clamp-8 text-gray-2">{content}</p>
           </div>
         </div>
 
         {/* Bottom section with interactions and book info */}
-        <div className="mt-4 flex items-end justify-between">
+        <div className="mt-4 flex items-end justify-between gap-2">
           {/* Interaction icons */}
           <div className="flex items-center gap-5">
             <div className="line-clamp-1 flex h-6 max-w-[200px] items-center gap-2">
@@ -69,11 +69,11 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
 
           {/* Author and book info */}
           {authorName && playTitle && (
-            <div className="flex max-w-[150px] flex-col justify-between gap-1">
-              <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium text-gray-3">
+            <div className="flex-1 flex-col justify-between gap-1 overflow-hidden">
+              <span className="line-clamp-1 flex-1 text-right text-sm font-medium text-gray-3">
                 {authorName}
               </span>
-              <span className="line-clamp-1 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-semibold text-primary">
+              <span className="line-clamp-1 flex-1 text-right text-sm font-semibold text-primary">
                 {`『${playTitle}』`}
               </span>
             </div>

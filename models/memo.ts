@@ -4,9 +4,11 @@ export const DummyMemos: Memo[] = [
   {
     type: 'play',
     id: '1',
+    playId: '1', // '시골에서의 한 달' (이반 투르게네프)
+    userId: '1',
     username: 'tester1',
     content:
-      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
+      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
     authorName: '에우리피데스',
     playTitle: '메데이아',
     likeCount: 0,
@@ -17,6 +19,8 @@ export const DummyMemos: Memo[] = [
   {
     type: 'writer',
     id: '2',
+    writerId: '2', // 윌리엄 셰익스피어
+    userId: '2',
     username: 'tester2',
     title: '벚꽃 동산',
     content:
@@ -31,6 +35,8 @@ export const DummyMemos: Memo[] = [
   {
     type: 'program',
     id: '3',
+    programId: '3', // '고전 희곡 낭독회: 햄릿'
+    userId: '3',
     username: 'tester3',
     title: '넘버',
     content:
@@ -45,6 +51,8 @@ export const DummyMemos: Memo[] = [
   {
     type: 'play',
     id: '4',
+    playId: '4', // 'Waiting for Godot' (사무엘 베케트)
+    userId: '4',
     username: 'tester4',
     content:
       '셰익스피어의 『리어 왕』을 2주 전 다시 보았습니다. 왕과 가족, 권력과 인간성이라는 주제는 여전히 날카롭게 현재를 비추며, 시간이 지나도 빛바래지 않는 고전의 힘을 보여주었습니다.',
@@ -58,6 +66,8 @@ export const DummyMemos: Memo[] = [
   {
     type: 'writer',
     id: '5',
+    writerId: 'w4', // 사무엘 베케트
+    userId: '5',
     username: 'tester5',
     content:
       '2달 전 다시 읽은 아서 밀러의 작품은 여전히 묵직했습니다. 개인의 꿈과 사회의 기대가 충돌하는 지점에서 인간이 얼마나 흔들릴 수 있는지를 통렬히 보여줍니다.',
@@ -71,6 +81,8 @@ export const DummyMemos: Memo[] = [
   {
     type: 'program',
     id: '6',
+    programId: '3', // '청소년 문화예술 캠프'
+    userId: '6',
     username: 'tester6',
     title: '갈라테아',
     content:
@@ -82,11 +94,42 @@ export const DummyMemos: Memo[] = [
     isLiked: false,
     createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(),
   },
+  {
+    type: 'play',
+    id: '7',
+    playId: '2', // '시골에서의 한 달' (이반 투르게네프)
+    userId: '3',
+    username: 'tester1',
+    content:
+      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
+    authorName: '에우리피데스에우리피데스에우리피데스',
+    playTitle: '메데이아메데이아메데이아메데이아',
+    likeCount: 0,
+    commentCount: 0,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+  },
+  {
+    type: 'play',
+    id: '8',
+    playId: '2', // '시골에서의 한 달' (이반 투르게네프)
+    userId: '3',
+    username: 'tester1',
+    content:
+      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
+    authorName: '에우리피데스에우리피데스에우리피데스',
+    playTitle: '메데이아메데이아메데이아메데이아',
+    likeCount: 0,
+    commentCount: 0,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+  },
 ];
 
-export interface Memo {
+interface BaseMemo {
   id: string;
   type: MemoType;
+  userId: string;
   username: string;
   title?: string;
   content: string;
@@ -97,3 +140,26 @@ export interface Memo {
   isLiked: boolean;
   createdAt: string;
 }
+
+interface PlayMemo extends BaseMemo {
+  type: 'play';
+  playId: string;
+  // writerId?: never;
+  // programId?: never;
+}
+
+interface WriterMemo extends BaseMemo {
+  type: 'writer';
+  writerId: string;
+  // playId?: never;
+  // programId?: never;
+}
+
+interface ProgramMemo extends BaseMemo {
+  type: 'program';
+  programId: string;
+  // playId?: never;
+  // writerId?: never;
+}
+
+export type Memo = PlayMemo | WriterMemo | ProgramMemo;

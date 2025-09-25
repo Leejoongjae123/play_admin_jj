@@ -5,7 +5,7 @@ import { DummyPlays } from '@/models/play';
 import { DummyMemos } from '@/models/memo';
 
 export default async function PlayPage() {
-  const DummyPlayMemoList = DummyMemos.filter((memo) => memo.type === 'play');
+  const DummyPlayMemoList = DummyMemos.filter((memo) => memo.type === 'play').slice(0, 3);
 
   return (
     <section className="flex w-full flex-1 flex-col gap-[60px] px-[8vw] pt-10">
