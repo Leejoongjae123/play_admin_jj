@@ -13,3 +13,5 @@ export { default as ArrowRight } from './ArrowRight';
 export { default as AlbumView } from './AlbumView';
 export { default as TextView } from './TextView';
 export { default as Plus } from './Plus';
+export { default as Bookmark } from './Bookmark';
+export { default as Share } from './Share';
