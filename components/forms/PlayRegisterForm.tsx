@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayRegisterFormData, PlayRegisterFormSchema } from './schema';
@@ -375,7 +374,7 @@ export default function PlayRegisterForm({ onSubmit, className }: PlayRegisterFo
         <Button
           type="submit"
           className={cn(
-            'disabled:bg-cancle disabled:text-cancle-foreground mx-auto mt-1 w-full max-w-[335px] text-lg font-semibold lg:max-w-[470px]',
+            'mx-auto mt-1 w-full max-w-[335px] text-lg font-semibold disabled:bg-cancle disabled:text-cancle-foreground lg:max-w-[470px]',
           )}
           disabled={!isValid || form.formState.isSubmitting}
         >
