@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Form, FormField, FormItem, FormControl, FormLabel } from '../ui/form';
+import { Form, FormField, FormItem, FormControl } from '../ui/form';
 import { EntryFormData, EntryFormSchema } from './schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from '@/lib/utils';
