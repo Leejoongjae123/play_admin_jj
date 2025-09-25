@@ -21,7 +21,7 @@ export default function PlayDetailSection({ play }: PlayDetailSectionProps) {
   };
 
   return (
-    <section className="flex w-full flex-col">
+    <section className="flex w-full flex-col pb-10">
       <div className="flex w-full flex-col gap-3 border-b border-primary px-[8vw] pb-5 lg:gap-5">
         <h1 className="flex font-serif text-2xl font-bold leading-[28px] text-gray-1 lg:text-[48px] lg:leading-[62.4px]">
           {play.title}
