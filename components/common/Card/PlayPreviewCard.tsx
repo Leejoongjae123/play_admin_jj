@@ -8,7 +8,7 @@ interface PlayPreviewCardProps {
 }
 
 export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
-  const { title, author, keyword, quote, id } = play;
+  const { title, author, keywords, line1, id } = play;
 
   return (
     <Card>
@@ -24,16 +24,16 @@ export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
           </div>
           <div className="hidden aspect-[220/300] overflow-y-auto group-hover:flex">
             <p className="font-serif text-sm font-bold text-primary sm:text-base xl:text-xl">
-              {quote}
+              {line1}
             </p>
           </div>
         </Link>
 
-        {/* Tags */}
+        {/* keywords */}
         <div className="flex flex-wrap gap-1.5">
-          {keyword.map((tag, index) => (
-            <Badge key={`${tag}-${index}`} variant="outline" size="md">
-              {tag}
+          {keywords.map((keyword, index) => (
+            <Badge key={`${keyword}-${index}`} variant="outline" size="md">
+              {keyword}
             </Badge>
           ))}
         </div>
