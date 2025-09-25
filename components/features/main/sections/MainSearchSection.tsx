@@ -10,7 +10,7 @@ export default function MainSearchSection() {
       <div className="flex w-[376px] flex-col items-center justify-end gap-8 px-5 pb-[100px] pt-11 lg:w-[720px] lg:px-0 lg:pt-[72px]">
         {/* Play Icon Container */}
         <div className="relative h-20 w-20 lg:h-[112px] lg:w-[112px]">
-          <Image src="/images/play.webp" alt="Play icon" className="object-contain" priority fill />
+          <Image src="/images/play.webp" alt="Play icon" className="object-contain" fill />
         </div>
 
         {/* Content Container: Title and search input */}
