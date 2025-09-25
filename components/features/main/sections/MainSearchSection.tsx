@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { SearchInput } from '@/components/common';
+import { Suspense } from 'react';
 
 const hashTags = ['#로맨스', '#고전주의', '#신화', '#비극'];
 
@@ -20,12 +21,14 @@ export default function MainSearchSection() {
           </h1>
 
           {/* Search Input */}
-          <SearchInput
-            className="font-bold lg:h-16 lg:text-xl"
-            wrapperClassName="bg-transparent"
-            placeholder={hashTags.join(' ')}
-            searchPath="/search"
-          />
+          <Suspense fallback={<div />}>
+            <SearchInput
+              className="font-bold lg:h-16 lg:text-xl"
+              wrapperClassName="bg-transparent"
+              placeholder={hashTags.join(' ')}
+              searchPath="/search"
+            />
+          </Suspense>
         </div>
       </div>
     </section>

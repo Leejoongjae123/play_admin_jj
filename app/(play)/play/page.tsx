@@ -1,9 +1,10 @@
+import { Suspense } from 'react';
 import { SearchInput } from '@/components/common';
 import { PlaySection, PlayMemoSection, PlayHeroSection } from '@/components/features/play';
 import { DummyPlays } from '@/models/play';
 import { Memo } from '@/models/memo';
 
-export default function PlayPage() {
+export default async function PlayPage() {
   const playMemoList: Memo[] = [
     {
       type: 'play',
@@ -48,8 +49,13 @@ export default function PlayPage() {
 
   return (
     <section className="flex w-full flex-1 flex-col gap-[60px] px-[8vw] pt-10">
-      <SearchInput searchPath="/play/search" />
-      <PlaySection playList={DummyPlays} />
+      <Suspense fallback={<div />}>
+        <SearchInput searchPath="/play/search" />
+      </Suspense>
+
+      <Suspense fallback={<div />}>
+        <PlaySection playList={DummyPlays} />
+      </Suspense>
       <PlayMemoSection playMemoList={playMemoList} />
       <PlayHeroSection />
     </section>

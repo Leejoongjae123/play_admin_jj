@@ -1,4 +1,5 @@
 import { SearchInput } from '@/components/common';
+import { Suspense } from 'react';
 
 interface MainSearchResultSectionProps {
   keyword: string;
@@ -7,7 +8,9 @@ interface MainSearchResultSectionProps {
 export default function MainSearchResultSection({ keyword }: MainSearchResultSectionProps) {
   return (
     <section className="flex w-full flex-col pt-10 lg:pt-[76px]">
-      <SearchInput wrapperClassName="bg-orange-4" />
+      <Suspense fallback={<div />}>
+        <SearchInput wrapperClassName="bg-orange-4" />
+      </Suspense>
       <span className="py-6 font-serif text-2xl font-bold text-primary lg:text-[32px]">{`“${keyword}” 검색 결과`}</span>
     </section>
   );

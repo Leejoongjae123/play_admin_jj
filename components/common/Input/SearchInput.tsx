@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Search } from '../../icons';
-import { Input } from '../../ui/input';
+import { Search } from '@/components/icons';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
