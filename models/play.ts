@@ -4,6 +4,12 @@ export enum PublicStatus {
   OUT_OF_PRINT = 'outOfPrint',
 }
 
+export const PublicStatusLabel: Record<PublicStatus, string> = {
+  [PublicStatus.PUBLISHED]: '출간',
+  [PublicStatus.UNPUBLISHED]: '미출간',
+  [PublicStatus.OUT_OF_PRINT]: '절판',
+};
+
 export const DummyPlays: Play[] = [
   {
     id: '1',
