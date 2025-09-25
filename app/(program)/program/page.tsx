@@ -1,11 +1,11 @@
 import { ProgramPageSearchParams } from './types';
 
 interface ProgramPageProps {
-  searchParams: ProgramPageSearchParams;
+  searchParams: Promise<ProgramPageSearchParams>;
 }
 
-export default function ProgramPage({ searchParams }: ProgramPageProps) {
-  const { view } = searchParams;
+export default async function ProgramPage({ searchParams }: ProgramPageProps) {
+  const { view } = await searchParams;
 
   return (
     <section>
