@@ -8,7 +8,7 @@ interface PlayPreviewCardProps {
 }
 
 export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
-  const { title, author, keywords, line1, id } = play;
+  const { title, writer, keywords, line1, id } = play;
 
   return (
     <Card>
@@ -20,7 +20,7 @@ export default function PlayPreviewCard({ play }: PlayPreviewCardProps) {
         >
           <div className="flex aspect-[220/300] flex-col gap-2 group-hover:hidden">
             <span className="font-serif text-xl font-bold text-white">{title}</span>
-            <div className="font-semibold text-orange-1">{author}</div>
+            <div className="font-semibold text-orange-1">{writer.writerName}</div>
           </div>
           <div className="hidden aspect-[220/300] overflow-y-auto group-hover:flex">
             <p className="font-serif text-sm font-bold text-primary sm:text-base xl:text-xl">

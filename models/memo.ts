@@ -1,140 +1,16 @@
-export type MemoType = 'play' | 'writer' | 'program';
+import { Play, DummyPlays } from './play';
+import { Writer, DummyWriters } from './writer';
+import { Program, DummyPrograms } from './program';
+import { User, DummyUsers } from './user';
 
-export const DummyMemos: Memo[] = [
-  {
-    type: 'play',
-    id: '1',
-    playId: '1', // '시골에서의 한 달' (이반 투르게네프)
-    userId: '1',
-    username: 'tester1',
-    content:
-      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
-    authorName: '에우리피데스',
-    playTitle: '메데이아',
-    likeCount: 0,
-    commentCount: 0,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'writer',
-    id: '2',
-    writerId: '2', // 윌리엄 셰익스피어
-    userId: '2',
-    username: 'tester2',
-    title: '벚꽃 동산',
-    content:
-      '체호프의 단편에서 느껴지는 일상의 쓸쓸함은 한 시간 전에도 여전히 마음에 남아 있습니다. 인간의 사소한 순간들이 어떻게 예술로 승화되는지를 다시금 느끼게 되었습니다.',
-    authorName: '안톤 체호프',
-    playTitle: '벚꽃 동산',
-    likeCount: 2,
-    commentCount: 1,
-    isLiked: true,
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'program',
-    id: '3',
-    programId: '3', // '고전 희곡 낭독회: 햄릿'
-    userId: '3',
-    username: 'tester3',
-    title: '넘버',
-    content:
-      '지난 며칠 간 이어진 낭독 프로그램은 단순한 공연을 넘어 관객과 배우가 함께 호흡하며 사유하는 장이 되었습니다. 특히 3일 전 무대는 조용히 퍼져 나가는 울림이 깊었습니다.',
-    authorName: '캐럴 처칠',
-    playTitle: '넘버',
-    likeCount: 1,
-    commentCount: 0,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'play',
-    id: '4',
-    playId: '4', // 'Waiting for Godot' (사무엘 베케트)
-    userId: '4',
-    username: 'tester4',
-    content:
-      '셰익스피어의 『리어 왕』을 2주 전 다시 보았습니다. 왕과 가족, 권력과 인간성이라는 주제는 여전히 날카롭게 현재를 비추며, 시간이 지나도 빛바래지 않는 고전의 힘을 보여주었습니다.',
-    authorName: '윌리엄 셰익스피어',
-    playTitle: '리어 왕',
-    likeCount: 3,
-    commentCount: 1,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'writer',
-    id: '5',
-    writerId: 'w4', // 사무엘 베케트
-    userId: '5',
-    username: 'tester5',
-    content:
-      '2달 전 다시 읽은 아서 밀러의 작품은 여전히 묵직했습니다. 개인의 꿈과 사회의 기대가 충돌하는 지점에서 인간이 얼마나 흔들릴 수 있는지를 통렬히 보여줍니다.',
-    authorName: '아서 밀러',
-    playTitle: '세일즈맨의 죽음',
-    likeCount: 4,
-    commentCount: 2,
-    isLiked: true,
-    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'program',
-    id: '6',
-    programId: '3', // '청소년 문화예술 캠프'
-    userId: '6',
-    username: 'tester6',
-    title: '갈라테아',
-    content:
-      '작년 같은 시기에 참여했던 프로그램은 단순한 공연이 아니라 하나의 사건이었습니다. 연극과 토론, 그리고 관객들의 목소리가 어우러져 한 해가 지나도 여전히 생생하게 남아 있습니다.',
-    authorName: '게리 오언',
-    playTitle: '갈라테아',
-    likeCount: 5,
-    commentCount: 3,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'play',
-    id: '7',
-    playId: '2', // '시골에서의 한 달' (이반 투르게네프)
-    userId: '3',
-    username: 'tester1',
-    content:
-      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
-    authorName: '에우리피데스에우리피데스에우리피데스',
-    playTitle: '메데이아메데이아메데이아메데이아',
-    likeCount: 0,
-    commentCount: 0,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-  },
-  {
-    type: 'play',
-    id: '8',
-    playId: '2', // '시골에서의 한 달' (이반 투르게네프)
-    userId: '3',
-    username: 'tester1',
-    content:
-      '희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.\n희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.희곡 『메데이아』는 고대 비극의 원형이자 인간 내면의 격렬한 감정을 극단적으로 드러내는 작품입니다. 짧은 순간에도 관객에게 강렬한 울림을 남기며 고대와 현재를 잇는 힘을 보여주었습니다.',
-    authorName: '에우리피데스에우리피데스에우리피데스',
-    playTitle: '메데이아메데이아메데이아메데이아',
-    likeCount: 0,
-    commentCount: 0,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-  },
-];
+export type MemoType = 'play' | 'writer' | 'program';
 
 interface BaseMemo {
   id: string;
   type: MemoType;
-  userId: string;
-  username: string;
+  user: User;
   title?: string;
   content: string;
-  authorName?: string;
-  playTitle?: string;
   likeCount: number;
   commentCount: number;
   isLiked: boolean;
@@ -143,23 +19,174 @@ interface BaseMemo {
 
 interface PlayMemo extends BaseMemo {
   type: 'play';
-  playId: string;
-  // writerId?: never;
-  // programId?: never;
+  play: Play;
 }
 
 interface WriterMemo extends BaseMemo {
   type: 'writer';
-  writerId: string;
-  // playId?: never;
-  // programId?: never;
+  writer: Writer;
 }
 
 interface ProgramMemo extends BaseMemo {
   type: 'program';
-  programId: string;
-  // playId?: never;
-  // writerId?: never;
+  program: Program;
 }
 
 export type Memo = PlayMemo | WriterMemo | ProgramMemo;
+
+// 헬퍼 함수들
+const getUserById = (id: string): User => {
+  const user = DummyUsers.find((u) => u.id === id);
+  if (!user) throw new Error(`User with id ${id} not found`);
+  return user;
+};
+
+const getPlayById = (id: string): Play => {
+  const play = DummyPlays.find((p) => p.id === id);
+  if (!play) throw new Error(`Play with id ${id} not found`);
+  return play;
+};
+
+const getWriterById = (id: string): Writer => {
+  const writer = DummyWriters.find((w) => w.id === id);
+  if (!writer) throw new Error(`Writer with id ${id} not found`);
+  return writer;
+};
+
+const getProgramById = (id: string): Program => {
+  const program = DummyPrograms.find((p) => p.id === id);
+  if (!program) throw new Error(`Program with id ${id} not found`);
+  return program;
+};
+
+export const DummyMemos: Memo[] = [
+  // Play Memos - 희곡 관련 메모
+  {
+    type: 'play',
+    id: '1',
+    user: getUserById('2'), // 김민수 (작가)
+    play: getPlayById('1'), // 디지털 휴먼
+    content:
+      'SF 장르의 새로운 시도가 인상적입니다. 인공지능과 인간의식의 경계를 탐구하는 철학적 접근이 깊이 있어 보였어요. 특히 "나는... 정말 나인가?"라는 대사가 계속 머릿속에 맴돕니다.',
+    likeCount: 8,
+    commentCount: 3,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2시간 전
+  },
+  {
+    type: 'play',
+    id: '2',
+    user: getUserById('4'), // 박서준 (일반 유저)
+    play: getPlayById('2'), // 봄날의 편지
+    content:
+      '로맨스 장르지만 진부하지 않고 감성적이었습니다. 편지를 통한 소통이라는 소재가 현대적으로 잘 해석된 것 같아요. 이은지 작가의 섬세한 감정 묘사가 돋보였습니다.',
+    likeCount: 12,
+    commentCount: 5,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1일 전
+  },
+  {
+    type: 'play',
+    id: '3',
+    user: getUserById('10'), // 윤태영 (작가)
+    play: getPlayById('3'), // 밤의 목격자
+    content:
+      '심리 스릴러의 정수를 보여주는 작품입니다. 정현우 작가의 치밀한 구성과 예측 불가능한 반전이 마지막까지 긴장감을 놓지 않게 합니다. 특히 기억의 신뢰성에 대한 질문이 흥미롭네요.',
+    likeCount: 15,
+    commentCount: 7,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3일 전
+  },
+  {
+    type: 'play',
+    id: '4',
+    user: getUserById('7'), // 한예원 (작가)
+    play: getPlayById('5'), // 임진왜란 대기록
+    content:
+      '역사적 사실을 바탕으로 한 대서사시가 웅장하면서도 감동적입니다. 동현 작가가 그려낸 영웅들의 희생정신과 백성들의 삶이 생생하게 전해져 옵니다.',
+    likeCount: 9,
+    commentCount: 2,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5일 전
+  },
+
+  // Writer Memos - 작가 관련 메모
+  {
+    type: 'writer',
+    id: '5',
+    user: getUserById('1'), // 관리자
+    writer: getWriterById('2'), // 김민수→김민하 (SF)
+    title: 'SF 작가로서의 비전',
+    content:
+      '김민하 작가의 작품 세계관이 정말 독창적입니다. 기술 발전에 대한 깊이 있는 이해를 바탕으로 인간성에 대한 철학적 질문을 던지는 방식이 인상적이에요. 앞으로의 작품이 더욱 기대됩니다.',
+    likeCount: 6,
+    commentCount: 1,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7일 전
+  },
+  {
+    type: 'writer',
+    id: '6',
+    user: getUserById('5'), // 최수민 (suspended)
+    writer: getWriterById('3'), // 이지은→이은지 (로맨스)
+    title: '감성적 서사의 힘',
+    content:
+      '이은지 작가의 글에는 특별한 따뜻함이 있어요. 일상의 소소한 순간들을 놓치지 않고 아름답게 포착하는 시선이 돋보입니다. 로맨스 장르에 새로운 생명력을 불어넣고 있다고 생각해요.',
+    likeCount: 11,
+    commentCount: 4,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10일 전
+  },
+  {
+    type: 'writer',
+    id: '7',
+    user: getUserById('8'), // 임동현 (작가)
+    writer: getWriterById('10'), // 윤태영→태영 (공포소설)
+    content:
+      '태영 작가의 공포 소설은 단순한 놀람이 아닌 깊은 불안감을 자아냅니다. 한국적 정서를 바탕으로 한 공포 표현이 서구의 호러와는 다른 독특한 매력을 만들어내네요.',
+    likeCount: 7,
+    commentCount: 2,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), // 12일 전
+  },
+
+  // Program Memos - 프로그램 관련 메모
+  {
+    type: 'program',
+    id: '8',
+    user: getUserById('3'), // 이지은 (작가)
+    program: getProgramById('1'), // 청년 창작 연극 워크숍
+    title: '창작의 열기',
+    content:
+      '워크숍에 참여했는데 정말 유익했습니다. 다양한 연령대의 청년 창작자들이 모여 서로의 작품을 공유하고 피드백을 나누는 과정이 인상 깊었어요. 실제 무대 연출까지 경험할 수 있어서 소중한 시간이었습니다.',
+    likeCount: 13,
+    commentCount: 6,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), // 15일 전
+  },
+  {
+    type: 'program',
+    id: '9',
+    user: getUserById('6'), // 정현우 (작가)
+    program: getProgramById('2'), // 고전 희곡 낭독회: 햄릿
+    content:
+      '햄릿 낭독회가 정말 감동적이었습니다. 무대 장치 없이 오직 배우들의 연기력만으로 셰익스피어의 세계를 구현해내는 모습이 압권이었어요. 고전의 힘을 다시 한번 느낄 수 있었습니다.',
+    likeCount: 18,
+    commentCount: 8,
+    isLiked: true,
+    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), // 20일 전
+  },
+  {
+    type: 'program',
+    id: '10',
+    user: getUserById('9'), // 송하린 (작가, blacklist)
+    program: getProgramById('3'), // 청소년 문화예술 캠프
+    title: '미래 예술가들과의 만남',
+    content:
+      '청소년 캠프 멘토로 참여했는데, 젊은 예술가들의 열정이 정말 대단했습니다. 하린이라는 필명으로 활동하고 있지만, 이런 교육 프로그램에서는 더욱 보람을 느끼게 되네요. 미래가 기대됩니다.',
+    likeCount: 22,
+    commentCount: 12,
+    isLiked: false,
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30일 전
+  },
+];

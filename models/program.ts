@@ -44,7 +44,7 @@ export const DummyPrograms: Program[] = [
     applicationCount: 32,
     viewCount: 240,
     bookmarkCount: 15,
-    status: 'ongoing' as ProgramStatus,
+    status: 'ongoing',
   },
   {
     id: '2',
@@ -66,7 +66,7 @@ export const DummyPrograms: Program[] = [
     applicationCount: 120,
     viewCount: 560,
     bookmarkCount: 45,
-    status: 'ongoing' as ProgramStatus,
+    status: 'ongoing',
   },
   {
     id: '3',
@@ -88,6 +88,6 @@ export const DummyPrograms: Program[] = [
     applicationCount: 80,
     viewCount: 890,
     bookmarkCount: 62,
-    status: 'closed' as ProgramStatus,
+    status: 'closed',
   },
 ];

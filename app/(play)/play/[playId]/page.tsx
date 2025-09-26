@@ -7,20 +7,28 @@ interface PlayDetailPageParams {
 }
 
 interface PlayDetailPageProps {
-  params: PlayDetailPageParams;
+  params: Promise<PlayDetailPageParams>;
 }
 
 export default async function PlayDetailPage({ params }: PlayDetailPageProps) {
-  const { playId } = params;
+  const { playId } = await params;
   // TODO: API 연동
   // const play = await getPlay(playId);
   // const playMemoList = await getPlayMemoList(playId);
 
-  const playMemoList = DummyMemos.filter((memo) => memo.type === 'play').slice(0, 6);
+  const play = DummyPlays.find((play) => play.id === playId);
+  const playMemoList = DummyMemos.filter(
+    (memo) => memo.type === 'play' && memo.play.id === playId,
+  ).slice(0, 6);
+
+  if (!play) {
+    // TODO: Not Found
+    return;
+  }
 
   return (
     <section className="flex w-full flex-1 flex-col pb-[60px] pt-11 lg:pt-[80px]">
-      <PlayDetailSection play={DummyPlays[0]} />
+      <PlayDetailSection play={play} />
       <PlayDetailMemoSection playId={playId} playMemoList={playMemoList} />
     </section>
   );

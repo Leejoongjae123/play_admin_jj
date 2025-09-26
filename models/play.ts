@@ -1,3 +1,6 @@
+import { User, DummyUsers } from './user';
+import { Writer, DummyWriters } from './writer';
+
 export enum PublicStatus {
   PUBLISHED = 'published',
   UNPUBLISHED = 'unpublished',
@@ -10,186 +13,14 @@ export const PublicStatusLabel: Record<PublicStatus, string> = {
   [PublicStatus.OUT_OF_PRINT]: '절판',
 };
 
-export const DummyPlays: Play[] = [
-  {
-    id: '1',
-    creatorId: '1',
-    creator: 'admin',
-    createdAt: '2025-01-01T12:00:00Z',
-    viewCount: 1200,
-    bookmarkCount: 340,
-    title: '시골에서의 한 달',
-    authorId: '1',
-    author: '이반 투르게네프',
-    publisher: '',
-    ganre: '비극',
-    summary:
-      '대사 또는 출판사의 책 소개나, 인스크립트만의 책 소개 줄글이 들어가는 것 또한 괜찮을 것 같습니다. DB 카테고리를 어떻게 정하느냐에 따라 레이아웃이 달라질 수 있습니다.\n대사 또는 출판사의 책 소개나, 인스크립트만의 책 소개 줄글이 들어가는 것 또한 괜찮을 것 같습니다. DB 카테고리를 어떻게 정하느냐에 따라 레이아웃이 달라질 수 있습니다.',
-    keywords: ['질투', '삼각관계', '사실주의'],
-    isVisible: true,
-    line1:
-      '그래, 대체 이게 뭐지? 내가 베라를 질투하는 건가? 내가… 내가 그를 사랑하는 건가? (...)\n넌 사랑에 빠진 거라고, 불행한 것! 대체 어떻게 된 영문인지… 모르겠어.',
-    line2: '난 여기가 답답해요. 밖으로 나가고 싶어요.',
-    line3: '난 여기가 답답해요. 밖으로 나가고 싶어요.',
-    year: '1951',
-    country: '러시아',
-    femaleCharacterCount: '1',
-    maleCharacterCount: '2',
-    characterList: ['헤르메스', '이온', '크레우사', '크수토스'],
-    publicHistory:
-      '『갈매기』 , 장한(옮김), 더클래식, 2021\n『갈매기/세 자매/바냐 아저씨/벚꽃 동산』 수록, 동완(옮김), 동서문화사, 2012',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-  {
-    id: '2',
-    creatorId: '2',
-    creator: 'system',
-    createdAt: '2025-01-05T12:00:00Z',
-    viewCount: 980,
-    bookmarkCount: 280,
-    title: 'Oedipus Rex',
-    authorId: '2',
-    author: '소포클레스',
-    publisher: 'Classical Athens',
-    ganre: '비극',
-    summary:
-      '자신의 운명을 피하려다 결국 예언대로 아버지를 죽이고 어머니와 결혼하는 오이디푸스의 비극.',
-    keywords: ['운명', '비극', '그리스', '숙명'],
-    isVisible: true,
-    line1: 'The truth must be made known, though it brings me ruin.',
-    line2: '오! 신들이여, 나는 이미 내 운명의 길을 걷고 있었구나.',
-    line3: '진실이 밝혀져야 한다, 비록 그것이 나를 파멸로 이끌지라도.',
-    year: '기원전 429년경',
-    country: '고대 그리스',
-    femaleCharacterCount: '2',
-    maleCharacterCount: '3',
-    characterList: ['오이디푸스', '이오카스테', '크레온', '테이레시아스', '목자'],
-    publicHistory:
-      '『오이디푸스 왕』, 김재홍(옮김), 지식을만드는지식, 2010\n『소포클레스 비극 전집』 수록, 천병희(옮김), 숲, 2009',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-  {
-    id: '3',
-    creatorId: '3',
-    creator: 'system',
-    createdAt: '2025-01-10T12:00:00Z',
-    viewCount: 750,
-    bookmarkCount: 190,
-    title: "A Doll's House",
-    authorId: '3',
-    author: '헨리크 입센',
-    publisher: 'Gyldendal',
-    ganre: '현대극',
-    summary: '가부장제와 여성의 자아를 다룬 현대극의 고전으로, 노라의 독립 선언이 유명하다.',
-    keywords: ['여성주의', '사실주의', '가부장제', '자아실현'],
-    isVisible: true,
-    line1: 'I must stand quite alone, if I am to understand myself and everything about me.',
-    line2: '나는 완전히 홀로 서야 해요. 나 자신과 내 주변의 모든 것을 이해하려면.',
-    line3: '당신은 무엇보다 먼저 아내이자 어머니라고 하겠지만, 나는 그렇게 생각하지 않아요.',
-    year: '1879',
-    country: '노르웨이',
-    femaleCharacterCount: '3',
-    maleCharacterCount: '4',
-    characterList: ['노라', '토르발드', '크리스틴', '크로그스타드', '랑크 박사'],
-    publicHistory:
-      '『인형의 집』, 박종덕(옮김), 펭귄클래식코리아, 2009\n『입센 희곡집』 수록, 이원기(옮김), 을유문화사, 2005',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-  {
-    id: '4',
-    creatorId: '4',
-    creator: 'system',
-    createdAt: '2025-01-15T12:00:00Z',
-    viewCount: 680,
-    bookmarkCount: 150,
-    title: 'Waiting for Godot',
-    authorId: '4',
-    author: '사무엘 베케트',
-    publisher: 'Grove Press',
-    ganre: '부조리극',
-    summary: '두 인물이 고도를 기다리며 삶의 부조리와 무의미를 탐구하는 부조리극.',
-    keywords: ['부조리주의', '실존주의', '기다림', '무의미'],
-    isVisible: true,
-    line1: 'Nothing to be done.',
-    line2: '아무것도 할 일이 없다.',
-    line3: '우리는 고도를 기다리고 있다.',
-    year: '1953',
-    country: '프랑스',
-    femaleCharacterCount: '0',
-    maleCharacterCount: '4',
-    characterList: ['블라디미르', '에스트라공', '포조', '럭키'],
-    publicHistory:
-      '『고도를 기다리며』, 오증자(옮김), 민음사, 2000\n『베케트 희곡선』 수록, 김현균(옮김), 문학동네, 2010',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-  {
-    id: '5',
-    creatorId: '5',
-    creator: 'system',
-    createdAt: '2025-01-20T12:00:00Z',
-    viewCount: 820,
-    bookmarkCount: 220,
-    title: 'The Seagull',
-    authorId: '5',
-    author: '안톤 체호프',
-    publisher: "Suvorin's Press",
-    ganre: '극',
-    summary: '예술, 사랑, 인간관계의 복잡한 얽힘을 담은 체호프의 대표적인 심리극.',
-    keywords: ['사랑', '예술', '비극', '심리'],
-    isVisible: true,
-    line1: 'I am in mourning for my life.',
-    line2: '나는 내 인생을 위해 애도하고 있다.',
-    line3: '예술이란 무엇인가? 삶이란 무엇인가?',
-    year: '1896',
-    country: '러시아',
-    femaleCharacterCount: '4',
-    maleCharacterCount: '5',
-    characterList: ['니나', '아르카지나', '트레플료프', '트리고린', '소린', '마샤'],
-    publicHistory:
-      '『갈매기』, 장한(옮김), 더클래식, 2021\n『체호프 희곡전집』 수록, 신정옥(옮김), 열린책들, 2006',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-  {
-    id: '6',
-    creatorId: '6',
-    creator: 'system',
-    createdAt: '2025-01-25T12:00:00Z',
-    viewCount: 560,
-    bookmarkCount: 130,
-    title: 'Death of a Salesman',
-    authorId: '6',
-    author: '아서 밀러',
-    publisher: 'Viking Press',
-    ganre: '현대 비극',
-    summary:
-      '아메리칸 드림과 현실의 괴리 속에서 몰락해가는 세일즈맨 윌리 로먼의 삶을 다룬 현대 비극.',
-    keywords: ['아메리칸 드림', '가족', '비극', '자본주의'],
-    isVisible: true,
-    line1: 'Attention, attention must finally be paid to such a person.',
-    line2: '주목하라, 이런 사람에게는 마침내 주목해야 한다.',
-    line3: '나는 세일즈맨이야. 내가 아는 건 그것뿐이야.',
-    year: '1949',
-    country: '미국',
-    femaleCharacterCount: '2',
-    maleCharacterCount: '4',
-    characterList: ['윌리 로먼', '린다', '비프', '해피', '벤 삼촌', '찰리'],
-    publicHistory:
-      '『세일즈맨의 죽음』, 김석만(옮김), 민음사, 2005\n『아서 밀러 희곡선』 수록, 오화섭(옮김), 동인, 2000',
-    publicStatus: PublicStatus.PUBLISHED,
-  },
-];
-
 export interface Play {
   id: string;
-  creatorId: string;
-  creator: string;
+  createdBy: User;
   createdAt: string;
   viewCount: number;
   bookmarkCount: number;
   title: string;
-  authorId: string;
-  author: string;
-  publisher?: string;
+  writer: Writer;
   ganre?: string;
   summary: string;
   keywords: string[];
@@ -205,3 +36,187 @@ export interface Play {
   publicHistory?: string;
   publicStatus?: PublicStatus;
 }
+
+// 유저와 작가 정보를 찾는 헬퍼 함수들
+const getUserById = (id: string): User => {
+  const user = DummyUsers.find((u) => u.id === id);
+  if (!user) throw new Error(`User with id ${id} not found`);
+  return user;
+};
+
+const getWriterById = (id: string): Writer => {
+  const writer = DummyWriters.find((w) => w.id === id);
+  if (!writer) throw new Error(`Writer with id ${id} not found`);
+  return writer;
+};
+
+export const DummyPlays: Play[] = [
+  {
+    id: '1',
+    createdBy: getUserById('1'), // 관리자
+    createdAt: '2024-12-01T10:00:00Z',
+    viewCount: 1450,
+    bookmarkCount: 102,
+    title: '디지털 휴먼',
+    writer: getWriterById('2'), // 김민수 → 김민하 (SF)
+    ganre: '과학소설',
+    summary:
+      '2045년 미래, 인공지능과 인간의 경계가 모호해진 시대. 디지털로 업로드된 인간의 의식과 실제 인간 사이의 갈등을 그린 SF 드라마.',
+    keywords: ['SF', '미래', '기술', '인공지능', '의식'],
+    isVisible: true,
+    line1: '나는... 정말 나인가? 아니면 나의 복사본인가?',
+    line2: '기억이 모든 것이라면, 우리는 모두 데이터의 집합일 뿐이야.',
+    line3: '인간다움이란 무엇인가? 감정인가, 기억인가, 아니면 그 무언가인가?',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '2',
+    maleCharacterCount: '3',
+    characterList: ['진우', '사라', '닥터 김', 'AI 진우', '네오'],
+    publicHistory: '『디지털 휴먼』, 연극실험실, 2024년 초연',
+    publicStatus: PublicStatus.PUBLISHED,
+  },
+  {
+    id: '2',
+    createdBy: getUserById('4'), // 박서준 (일반 유저)
+    createdAt: '2024-12-05T14:20:00Z',
+    viewCount: 1250,
+    bookmarkCount: 89,
+    title: '봄날의 편지',
+    writer: getWriterById('3'), // 이지은 → 이은지 (로맨스)
+    ganre: '로맨스',
+    summary:
+      '오래된 편지 한 통으로 시작되는 두 남녀의 운명적 만남. 시간과 공간을 초월한 사랑 이야기를 따뜻하고 감성적으로 그려낸 로맨틱 드라마.',
+    keywords: ['로맨스', '일상', '감성', '현대소설', '편지'],
+    isVisible: true,
+    line1: '이 편지가 당신에게 닿기를... 마음이 닿기를...',
+    line2: '사랑은 시간을 뛰어넘는다고 했나요? 정말일까요?',
+    line3: '당신을 만나서... 삶이 이렇게 아름다운 줄 몰랐어요.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '3',
+    maleCharacterCount: '2',
+    characterList: ['지수', '민호', '할머니', '영희', '택배기사'],
+    publicHistory: '『봄날의 편지』, 소극장 봄날, 2024년 춘계 시즌',
+    publicStatus: PublicStatus.PUBLISHED,
+  },
+  {
+    id: '3',
+    createdBy: getUserById('1'), // 관리자
+    createdAt: '2024-11-20T16:45:00Z',
+    viewCount: 980,
+    bookmarkCount: 67,
+    title: '밤의 목격자',
+    writer: getWriterById('6'), // 정현우 (스릴러)
+    ganre: '스릴러',
+    summary:
+      '연쇄살인 사건의 유일한 목격자가 된 여성. 하지만 그녀가 본 것은 과연 진실일까? 복잡한 인간 심리와 예측 불가능한 반전이 가득한 심리 스릴러.',
+    keywords: ['추리', '심리스릴러', '범죄', '서스펜스', '목격자'],
+    isVisible: true,
+    line1: '내가 본 것이... 정말 그 사람이었을까?',
+    line2: '기억이라는 건 때로는 거짓말을 하죠.',
+    line3: '진실은 항상 가장 어두운 곳에 숨어있다.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '2',
+    maleCharacterCount: '4',
+    characterList: ['수진', '형사 박', '용의자 A', '의사', '변호사', '증인 B'],
+    publicHistory: '『밤의 목격자』, 블랙박스 시어터, 2024년 가을 시즌',
+    publicStatus: PublicStatus.PUBLISHED,
+  },
+  {
+    id: '4',
+    createdBy: getUserById('4'), // 박서준
+    createdAt: '2024-11-15T11:30:00Z',
+    viewCount: 720,
+    bookmarkCount: 45,
+    title: '열아홉의 여름',
+    writer: getWriterById('7'), // 한예원 (청춘소설, pending)
+    ganre: '청춘소설',
+    summary:
+      '대학 입시를 앞둔 고3 학생들의 마지막 여름. 꿈과 현실 사이에서 고민하는 청춘들의 성장 이야기를 따뜻한 시선으로 그려낸 작품.',
+    keywords: ['청춘', '성장', '꿈', '우정', '입시'],
+    isVisible: false, // pending 상태라서 아직 비공개
+    line1: '우리에겐 아직 시간이 있어. 꿈꿀 시간이.',
+    line2: '어른이 된다는 건... 꿈을 포기하는 걸까?',
+    line3: '이 여름이 영원했으면 좋겠어.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '3',
+    maleCharacterCount: '3',
+    characterList: ['예원', '지훈', '소영', '태민', '선생님', '엄마'],
+    publicHistory: '미출간 (심사 중)',
+    publicStatus: PublicStatus.UNPUBLISHED,
+  },
+  {
+    id: '5',
+    createdBy: getUserById('5'), // 최수민 (suspended)
+    createdAt: '2024-10-30T09:15:00Z',
+    viewCount: 890,
+    bookmarkCount: 58,
+    title: '임진왜란 대기록',
+    writer: getWriterById('8'), // 임동현 → 동현 (역사소설)
+    ganre: '역사소설',
+    summary:
+      '1592년 임진왜란 발발. 조선의 운명이 걸린 7년 전쟁 속에서 백성들의 삶과 영웅들의 희생을 그린 대하 역사극.',
+    keywords: ['역사', '조선', '전쟁', '영웅', '임진왜란'],
+    isVisible: true,
+    line1: '이 땅을 지키는 것이... 우리의 의무입니다.',
+    line2: '적이 쳐들어와도 조선의 혼은 꺾이지 않는다!',
+    line3: '백성을 위한 왕이 되겠습니다.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '2',
+    maleCharacterCount: '6',
+    characterList: ['이순신', '선조', '정유정', '왜장', '의병장', '백성 A', '백성 B', '궁녀'],
+    publicHistory: '『임진왜란 대기록』, 국립극장, 2024년 대하사극 시리즈',
+    publicStatus: PublicStatus.PUBLISHED,
+  },
+  {
+    id: '6',
+    createdBy: getUserById('1'), // 관리자
+    createdAt: '2024-10-10T13:50:00Z',
+    viewCount: 450,
+    bookmarkCount: 23,
+    title: '마법사의 귀환',
+    writer: getWriterById('9'), // 송하린 → 하린 (판타지, rejected)
+    ganre: '판타지',
+    summary:
+      '천년의 봉인에서 깨어난 마법사와 현대 세계의 충돌. 고대 마법과 현대 문명이 만나면서 벌어지는 환상적인 모험 이야기.',
+    keywords: ['판타지', '마법', '모험', '이세계', '현대'],
+    isVisible: false, // rejected 상태라서 비공개
+    line1: '천년의 잠에서 깨어나니... 세상이 모두 바뀌었구나.',
+    line2: '마법이 사라진 이 세계에서... 나는 무엇을 해야 하는가?',
+    line3: '진정한 마법은... 마음에서 나오는 것이다.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '2',
+    maleCharacterCount: '4',
+    characterList: ['아르카나', '현대인 민수', '요정 루나', '악마', '마법학자', '소녀'],
+    publicHistory: '심사 탈락 (재심사 예정)',
+    publicStatus: PublicStatus.UNPUBLISHED,
+  },
+  {
+    id: '7',
+    createdBy: getUserById('4'), // 박서준
+    createdAt: '2024-09-25T20:10:00Z',
+    viewCount: 650,
+    bookmarkCount: 34,
+    title: '밤이 깊어갈 때',
+    writer: getWriterById('10'), // 윤태영 → 태영 (공포소설)
+    ganre: '공포소설',
+    summary:
+      '깊은 밤, 혼자 남은 사무실에서 벌어지는 기이한 현상들. 일상 속에 숨어있는 공포와 미스터리를 한국적 정서로 표현한 공포극.',
+    keywords: ['공포', '미스터리', '초자연', '서스펜스', '심리공포'],
+    isVisible: true,
+    line1: '밤이 깊어질수록... 그들이 나타난다.',
+    line2: '이 소리... 분명 들었는데... 아무도 없어.',
+    line3: '현실과 악몽의 경계가... 사라져 간다.',
+    year: '2024',
+    country: '한국',
+    femaleCharacterCount: '1',
+    maleCharacterCount: '3',
+    characterList: ['회사원 진호', '청소부', '경비원', '의문의 여자'],
+    publicHistory: '『밤이 깊어갈 때』, 호러 페스티벌 2024',
+    publicStatus: PublicStatus.PUBLISHED,
+  },
+];

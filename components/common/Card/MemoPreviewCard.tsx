@@ -11,17 +11,7 @@ interface MemoPreviewCardProps {
 }
 
 export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProps) {
-  const {
-    username,
-    createdAt,
-    title,
-    content,
-    authorName,
-    playTitle,
-    likeCount,
-    commentCount,
-    isLiked,
-  } = memo;
+  const { type, user, createdAt, title, content, likeCount, commentCount, isLiked } = memo;
 
   return (
     <Card
@@ -36,7 +26,7 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
           <div className="flex items-center justify-between py-2">
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-3">
-                <span className="line-clamp-1 text-sm font-medium text-gray-2">{username}</span>
+                <span className="line-clamp-1 text-sm font-medium text-gray-2">{user.name}</span>
               </div>
               <span className="min-w-[40px] text-sm font-semibold text-gray-4">
                 {formatRelativeTime(createdAt)}
@@ -68,13 +58,13 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
           </div>
 
           {/* Author and book info */}
-          {authorName && playTitle && (
+          {type === 'play' && (
             <div className="flex-1 flex-col justify-between gap-1 overflow-hidden">
               <span className="line-clamp-1 flex-1 text-right text-sm font-medium text-gray-3">
-                {authorName}
+                {memo.play.writer.writerName}
               </span>
               <span className="line-clamp-1 flex-1 text-right text-sm font-semibold text-primary">
-                {`『${playTitle}』`}
+                {`『${memo.play.title}』`}
               </span>
             </div>
           )}
