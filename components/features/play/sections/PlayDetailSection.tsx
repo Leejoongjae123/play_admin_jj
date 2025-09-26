@@ -1,7 +1,6 @@
 import { Play } from '@/models/play';
 import { Badge } from '@/components/ui/badge';
 import { PublicStatusLabel } from '@/models/play';
-import { PlayDetailHeader } from '@/components/features/play';
 
 interface PlayDetailSectionProps {
   play: Play;
@@ -10,9 +9,7 @@ interface PlayDetailSectionProps {
 export default function PlayDetailSection({ play }: PlayDetailSectionProps) {
   return (
     <section className="flex w-full flex-col pb-10">
-      <PlayDetailHeader play={play} />
-
-      <div className="flex justify-center px-[8vw] pt-8">
+      <div className="flex justify-center px-[8vw]">
         <div className="flex flex-col gap-5 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-2.5 lg:basis-[58%]">
             <h2 className="text-lg font-semibold leading-[20px] text-gray-1 lg:text-[20px]">
