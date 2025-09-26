@@ -2,15 +2,15 @@ import { PlayDetailHeader, PlayDetailMemoListSection } from '@/components/featur
 import { DummyMemos } from '@/models/memo';
 import { DummyPlays } from '@/models/play';
 
-interface PlayDetailMemoParams {
+interface PlayDetailMemoListParams {
   playId: string;
 }
 
-interface PlayDetailMemoProps {
-  params: Promise<PlayDetailMemoParams>;
+interface PlayDetailMemoListProps {
+  params: Promise<PlayDetailMemoListParams>;
 }
 
-export default async function PlayDetailMemoPage({ params }: PlayDetailMemoProps) {
+export default async function PlayDetailMemoListPage({ params }: PlayDetailMemoListProps) {
   const { playId } = await params;
   // TODO: API 연동
   // const play = await getPlay(playId);
