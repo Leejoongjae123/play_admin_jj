@@ -9,7 +9,7 @@ interface MemoListProps {
 
 export default function MemoList({ memoList, className }: MemoListProps) {
   return (
-    <div className={cn('grid grid-cols-1 gap-4 lg:grid-cols-3', className)}>
+    <div className={cn('grid grid-cols-1 gap-4 lg:auto-rows-[380px] lg:grid-cols-3', className)}>
       {memoList.map((memo) => (
         <MemoPreviewCard key={memo.id} memo={memo} />
       ))}

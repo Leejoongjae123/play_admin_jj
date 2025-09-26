@@ -30,7 +30,7 @@ export default function PlayDetailMemoSection({
           </span>
         </div>
 
-        <ViewMoreLinkButton href={`/play/${playId}/memos`} />
+        <ViewMoreLinkButton href={`/play/${playId}/memo`} />
       </div>
 
       {/* 메모 작성 폼 */}

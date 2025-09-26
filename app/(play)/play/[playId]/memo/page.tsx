@@ -1,4 +1,4 @@
-import { PlayDetailHeader } from '@/components/features/play';
+import { PlayDetailHeader, PlayDetailMemoListSection } from '@/components/features/play';
 import { DummyMemos } from '@/models/memo';
 import { DummyPlays } from '@/models/play';
 
@@ -28,7 +28,7 @@ export default async function PlayDetailMemoPage({ params }: PlayDetailMemoProps
   return (
     <section className="flex w-full flex-1 flex-col pb-[60px] pt-11 lg:pt-[80px]">
       <PlayDetailHeader play={play} />
-      {/* <PlayDetailMemoListSection/> */}
+      <PlayDetailMemoListSection playMemoList={playMemoList} />
     </section>
   );
 }

@@ -3,3 +3,4 @@ export { default as PlayMemoSection } from './PlayMemoSection';
 export { default as PlayHeroSection } from './PlayHeroSection';
 export { default as PlayDetailSection } from './PlayDetailSection';
 export { default as PlayDetailMemoSection } from './PlayDetailMemoSection';
+export { default as PlayDetailMemoListSection } from './PlayDetailMemoListSection';
