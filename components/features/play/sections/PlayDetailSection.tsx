@@ -1,45 +1,16 @@
-'use client';
-
-import Link from 'next/link';
 import { Play } from '@/models/play';
-import { ChevronRight } from 'lucide-react';
-import { BookmarkButton, ShareButton } from '@/components/common/Button';
 import { Badge } from '@/components/ui/badge';
 import { PublicStatusLabel } from '@/models/play';
+import { PlayDetailHeader } from '@/components/features/play';
 
 interface PlayDetailSectionProps {
   play: Play;
 }
 
 export default function PlayDetailSection({ play }: PlayDetailSectionProps) {
-  const handleBookmarkButtonClick = () => {
-    console.log('bookmark button clicked');
-  };
-
-  const handleShareButtonClick = () => {
-    console.log('share button clicked');
-  };
-
   return (
     <section className="flex w-full flex-col pb-10">
-      <div className="flex w-full flex-col gap-3 border-b border-primary px-[8vw] pb-5 lg:gap-5">
-        <h1 className="flex font-serif text-2xl font-bold leading-[28px] text-gray-1 lg:text-[48px] lg:leading-[62.4px]">
-          {play.title}
-        </h1>
-        <div className="flex items-center justify-between">
-          <Link href={`/writer/${play.writer.id}`} className="flex items-center gap-1.5">
-            <span className="font-serif text-sm font-bold leading-[18px] text-primary lg:text-[28px] lg:leading-[36.4px]">
-              {play.writer.writerName}
-            </span>
-            <ChevronRight className="h-5 w-5 font-normal text-primary lg:h-9 lg:w-9" />
-          </Link>
-
-          <div className="flex items-center gap-3">
-            <BookmarkButton onClick={handleBookmarkButtonClick} />
-            <ShareButton onClick={handleShareButtonClick} />
-          </div>
-        </div>
-      </div>
+      <PlayDetailHeader play={play} />
 
       <div className="flex justify-center px-[8vw] pt-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:justify-between">
