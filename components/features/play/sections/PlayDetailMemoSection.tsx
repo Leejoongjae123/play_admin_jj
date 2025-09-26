@@ -1,6 +1,7 @@
 'use client';
 
-import { MemoList, ViewMoreLinkButton } from '@/components/common';
+import { ViewMoreLinkButton } from '@/components/common';
+import { MemoList } from '@/components/features/memo';
 import { EntryForm } from '@/components/forms';
 import { Memo } from '@/models/memo';
 

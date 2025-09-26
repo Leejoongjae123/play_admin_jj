@@ -27,9 +27,9 @@ export default function PlayDetailSection({ play }: PlayDetailSectionProps) {
           {play.title}
         </h1>
         <div className="flex items-center justify-between">
-          <Link href={`/writer/${play.authorId}`} className="flex items-center gap-1.5">
+          <Link href={`/writer/${play.writer.id}`} className="flex items-center gap-1.5">
             <span className="font-serif text-sm font-bold leading-[18px] text-primary lg:text-[28px] lg:leading-[36.4px]">
-              {play.author}
+              {play.writer.writerName}
             </span>
             <ChevronRight className="h-5 w-5 font-normal text-primary lg:h-9 lg:w-9" />
           </Link>

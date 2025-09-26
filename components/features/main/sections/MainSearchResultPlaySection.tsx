@@ -1,6 +1,7 @@
 'use client';
 
-import { PlayPreviewCard, ViewMoreLinkButton } from '@/components/common';
+import { ViewMoreLinkButton } from '@/components/common';
+import { PlayPreviewCard } from '@/components/features/play';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { Play } from '@/models/play';
 import { useMemo } from 'react';

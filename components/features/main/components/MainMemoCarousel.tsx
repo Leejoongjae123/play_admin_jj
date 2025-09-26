@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import { MemoPreviewCard } from '@/components/common/Card';
+import { MemoPreviewCard } from '@/components/features/memo';
 import { DummyMemos } from '@/models/memo';
 import { useBreakpoint } from '@/hooks';
 import AutoScroll from 'embla-carousel-auto-scroll';

@@ -1,5 +1,5 @@
 import { ViewMoreLinkButton } from '@/components/common/Button';
-import { ProgramPreviewCard } from '@/components/common/Card';
+import { ProgramPreviewCard } from '@/components/features/program';
 import { Program } from '@/models/program';
 
 interface MainSearchResultProgramSectionProps {

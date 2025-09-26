@@ -1,4 +1,5 @@
-import { MemoList, ViewMoreLinkButton } from '@/components/common';
+import { ViewMoreLinkButton } from '@/components/common';
+import { MemoList } from '@/components/features/memo';
 import { Memo } from '@/models/memo';
 
 interface PlayMemoSectionProps {

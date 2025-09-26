@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { ViewMoreLinkButton } from '@/components/common/Button';
-import { WriterPreviewCard } from '@/components/common/Card';
+import { WriterPreviewCard } from '@/components/features/writer';
 import { Writer } from '@/models/writer';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 

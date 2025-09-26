@@ -1,0 +1,18 @@
+import { MemoPreviewCard } from '@/components/features/memo/components';
+import { Memo } from '@/models/memo';
+import { cn } from '@/lib/utils';
+
+interface MemoListProps {
+  memoList: Memo[];
+  className?: string;
+}
+
+export default function MemoList({ memoList, className }: MemoListProps) {
+  return (
+    <div className={cn('grid grid-cols-1 gap-4 lg:grid-cols-3', className)}>
+      {memoList.map((memo) => (
+        <MemoPreviewCard key={memo.id} memo={memo} />
+      ))}
+    </div>
+  );
+}

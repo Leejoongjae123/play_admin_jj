@@ -1,4 +1,5 @@
-import { PlayPreviewCard, ShowMoreButton } from '@/components/common';
+import { PlayPreviewCard } from '@/components/features/play';
+import { ShowMoreButton } from '@/components/common';
 import { Play } from '@/models/play';
 import { Card, CardContent } from '@/components/ui/card';
 
