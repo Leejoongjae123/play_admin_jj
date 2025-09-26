@@ -40,10 +40,13 @@ export default function SearchInput({
   };
 
   const handleSearch = () => {
-    const trimmed = searchValue.trim();
-    if (trimmed === '' || trimmed === searchParams.get('keyword')) return;
+    const trimmed = searchValue.replaceAll(' ', '');
+    if (trimmed === '') return;
 
-    router.push(`${searchPath || pathname}?keyword=${encodeURIComponent(trimmed)}`);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('keyword', trimmed);
+    router.push(`${pathname}?${params.toString()}`);
+
     setSearchValue('');
   };
 
