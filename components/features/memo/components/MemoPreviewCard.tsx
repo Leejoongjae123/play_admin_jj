@@ -30,10 +30,6 @@ export default function MemoPreviewCard({ memo, className }: MemoPreviewCardProp
   return (
     <Link href={getMemoLink(memo)} className="h-full w-full">
       <Card
-        // className={cn(
-        //   'flex h-[360px] flex-1 shrink-0 flex-col border border-orange-4 bg-white p-8 md:h-[380px]',
-        //   className,
-        // )}
         className={cn('flex h-full w-full flex-col border border-orange-4 bg-white p-8', className)}
       >
         <CardContent className="flex flex-1 flex-col justify-between p-0">
