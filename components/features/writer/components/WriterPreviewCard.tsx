@@ -12,9 +12,9 @@ export default function WriterPreviewCard({ writer }: WriterPreviewCardProps) {
   const { id, name, createdAt, description, keyword } = writer;
 
   return (
-    <Card className="flex min-h-[320px] min-w-[335px] flex-1 flex-col rounded-lg bg-white">
-      <Link href={`/writer/${id}`} className="flex h-full w-full flex-col gap-5">
-        <CardContent className="flex h-full w-full flex-col p-8">
+    <Link href={`/writer/${id}`} className="h-full w-full">
+      <Card className="flex h-full w-full flex-col rounded-lg bg-white">
+        <CardContent className="flex flex-1 flex-col p-8">
           <div className="flex flex-1 flex-col gap-5">
             {/* Header section with username and date */}
             <div className="flex items-center gap-5">
@@ -33,7 +33,7 @@ export default function WriterPreviewCard({ writer }: WriterPreviewCardProps) {
           </div>
 
           {/* Tags section */}
-          <div className="flex items-center gap-2">
+          <div className="mt-4 flex items-center gap-2">
             {keyword.map((tag, index) => (
               <Badge
                 key={`${tag}-${index}`}
@@ -46,7 +46,7 @@ export default function WriterPreviewCard({ writer }: WriterPreviewCardProps) {
             ))}
           </div>
         </CardContent>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
 }

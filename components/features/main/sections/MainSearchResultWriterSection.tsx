@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { ViewMoreLinkButton } from '@/components/common/Button';
-import { WriterPreviewCard } from '@/components/features/writer';
+import { WriterList } from '@/components/features/writer';
 import { Writer } from '@/models/writer';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 
@@ -26,11 +26,10 @@ export default function MainSearchResultWriterSection({
         <ViewMoreLinkButton href="/writer" />
       </div>
 
-      <div className="sm: grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-        {filteredWriters.map((writer) => (
-          <WriterPreviewCard key={writer.id} writer={writer} />
-        ))}
-      </div>
+      <WriterList
+        writerList={filteredWriters}
+        className="grid auto-rows-[320px] grid-cols-1 gap-4 md:gap-5 lg:auto-rows-max lg:grid-cols-2"
+      />
     </section>
   );
 }
