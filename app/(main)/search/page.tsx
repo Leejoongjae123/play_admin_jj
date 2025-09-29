@@ -4,10 +4,13 @@ import {
   MainSearchResultWriterSection,
   MainSearchResultProgramSection,
 } from '@/components/features/main/sections';
-import { MainSearchPageSearchParams } from './types';
 import { DummyPlays } from '@/models/play';
 import { DummyWriters } from '@/models/writer';
 import { DummyPrograms } from '@/models/program';
+
+interface MainSearchPageSearchParams {
+  keyword: string;
+}
 
 interface MainSearchPageProps {
   searchParams: Promise<MainSearchPageSearchParams>;
