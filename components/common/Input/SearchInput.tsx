@@ -45,7 +45,9 @@ export default function SearchInput({
 
     const params = new URLSearchParams(searchParams.toString());
     params.set('keyword', trimmed);
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(
+      searchPath ? `${searchPath}?${params.toString()}` : `${pathname}?${params.toString()}`,
+    );
 
     setSearchValue('');
   };
