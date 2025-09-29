@@ -7,7 +7,7 @@ export default function WriterPage() {
   const DummyPlayMemoList = DummyMemos.filter((memo) => memo.type === 'writer').slice(0, 6);
 
   return (
-    <section className="flex w-full flex-1 flex-col gap-[60px] px-[8vw] pb-[60px] pt-10">
+    <section className="flex w-full flex-1 flex-col px-[8vw] pb-[60px] pt-10">
       <Suspense fallback={<div />}>
         <SearchInput searchPath="/writer/search" />
       </Suspense>
