@@ -15,3 +15,8 @@ export { default as TextView } from './TextView';
 export { default as Plus } from './Plus';
 export { default as Bookmark } from './Bookmark';
 export { default as Share } from './Share';
+export { default as Calendar } from './Calendar';
+export { default as Refresh } from './Refresh';
+export { default as Excel } from './Excel';
+export { default as Arrow } from './Arrow';
+export { default as UpArrow } from './UpArrow';
