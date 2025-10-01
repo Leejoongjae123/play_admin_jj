@@ -1,23 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useRef, useEffect } from 'react';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Calendar,
-  ChevronDown,
-  Search,
-  Refresh,
-  Excel,
-  Arrow,
-} from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import Calendar from '@/components/icons/Calendar';
+import Search from '@/components/icons/Search';
+import Refresh from '@/components/icons/Refresh';
+import Excel from '@/components/icons/Excel';
 import CommentDetailModal from './components/CommentDetailModal';
 
 // 샘플 데이터
@@ -155,8 +148,8 @@ const commentData = [
 ];
 
 export default function AdminCommentsPage() {
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [category, setCategory] = useState('전체');
   const [status, setStatus] = useState('전체');
   const [searchType, setSearchType] = useState('작성자');
@@ -165,8 +158,22 @@ export default function AdminCommentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedComment, setSelectedComment] = useState<any>(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
 
   const totalCount = 12345;
+  const totalPages = 10;
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleRowClick = (comment: any) => {
     setSelectedComment(comment);
@@ -180,123 +187,156 @@ export default function AdminCommentsPage() {
 
   const handleStatusChange = (commentId: string, newStatus: string) => {
     // 실제 구현에서는 API 호출을 통해 상태를 변경
-    console.log('댓글 상태 변경:', commentId, newStatus);
     // 로컬 상태 업데이트 (선택사항)
     if (selectedComment) {
       setSelectedComment({ ...selectedComment, status: newStatus });
     }
   };
 
+  const handleReset = () => {
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
+    setCategory('전체');
+    setStatus('전체');
+    setSearchType('작성자');
+    setSearchTerm('');
+    setItemsPerPage('10개씩 보기');
+    setCurrentPage(1);
+  };
+
+  // 외부 클릭 시 날짜 피커 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
+
+    if (showStartDatePicker || showEndDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showStartDatePicker, showEndDatePicker]);
+
   return (
     <div className="flex w-full flex-col items-center gap-[34px] p-11">
       {/* 제목 */}
       <div className="self-stretch">
-        <h1 className="font-pretendard text-2xl font-semibold leading-8 text-gray-1">
-          댓글 관리
-        </h1>
+        <h1 className="font-pretendard text-2xl font-semibold leading-8 text-gray-1">댓글 관리</h1>
       </div>
 
       {/* 필터 섹션 */}
-      <div className="flex flex-col items-start gap-[18px] self-stretch rounded-lg bg-[#FAF8F6] p-8">
+      <div className="flex flex-col gap-4 self-stretch rounded-lg bg-[#FAF8F6] p-8">
         {/* 첫 번째 행: 가입일, 구분, 상태 */}
-        <div className="flex items-start gap-6 self-stretch">
+        <div className="flex items-start gap-6">
           {/* 가입일 */}
           <div className="flex items-center gap-2">
-            <div className="font-pretendard text-base font-semibold leading-6 text-gray-2">
-              가입일
-            </div>
-            <div className="flex w-[306px] items-center gap-[10px]">
-              <div className="flex h-12 w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3">
-                <div className="font-pretendard text-xs font-semibold text-primary">
-                  {startDate || '날짜 입력'}
-                </div>
-                <Calendar size={12} color="#727272" />
+            <span className="text-base font-bold text-gray-2">가입일</span>
+            <div className="flex items-center gap-2.5">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-bold text-primary">{formatDate(startDate)}</span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate || new Date()}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartDatePicker(false);
+                      }}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
-              <div className="font-pretendard text-xs font-semibold text-[#727272]">-</div>
-              <div className="flex h-12 w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3">
-                <div className="font-pretendard text-xs font-medium text-[#727272]">
-                  {endDate || '날짜 입력'}
-                </div>
-                <Calendar size={12} color="#727272" />
+              <span className="text-xs font-bold text-[#727272]">-</span>
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-medium text-[#727272]">
+                    {formatDate(endDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndDatePicker(false);
+                      }}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           {/* 구분 */}
           <div className="flex flex-1 items-center gap-2">
-            <div className="font-pretendard text-base font-semibold leading-6 text-gray-2">
-              구분
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <div className="font-pretendard text-xs font-bold text-primary">
-                    {category}
-                  </div>
-                  <ChevronDown size={10} className="text-primary" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => setCategory('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setCategory('동료찾기')}>동료찾기</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setCategory('커뮤니티')}>커뮤니티</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setCategory('작가')}>작가</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setCategory('희곡')}>희곡</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <span className="text-base font-bold text-gray-2">구분</span>
+            <FilterDropdown
+              value={category}
+              options={['전체', '동료찾기', '커뮤니티', '작가', '희곡']}
+              onChange={setCategory}
+            />
           </div>
 
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
-            <div className="font-pretendard text-base font-semibold leading-6 text-gray-2">
-              상태
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <div className="font-pretendard text-xs font-bold text-primary">
-                    {status}
-                  </div>
-                  <ChevronDown size={10} className="text-primary" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => setStatus('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setStatus('노출중')}>노출중</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setStatus('비공개')}>비공개</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <span className="text-base font-bold text-gray-2">상태</span>
+            <FilterDropdown
+              value={status}
+              options={['전체', '노출중', '비공개']}
+              onChange={setStatus}
+            />
           </div>
         </div>
 
         {/* 두 번째 행: 검색 */}
-        <div className="flex items-center gap-6 self-stretch">
-          <div className="flex flex-1 items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <div className="font-pretendard text-xs font-bold text-primary">
-                {searchType}
-              </div>
-              <ChevronDown size={10} className="text-primary" />
-            </div>
-            <Input
-              placeholder="검색조건을 입력해주세요"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-auto border-0 bg-transparent p-0 font-pretendard text-xs font-medium text-[#727272] placeholder:text-[#727272] focus-visible:ring-0"
-            />
-          </div>
+        <div className="flex items-center gap-6">
+          {/* 검색 입력 */}
+          <SearchInputWithFilter
+            filterValue={searchType}
+            filterOptions={['작성자', '제목']}
+            onFilterChange={setSearchType}
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            placeholder="검색조건을 입력해주세요"
+          />
+
+          {/* 검색/초기화 버튼 */}
           <div className="flex items-center gap-2">
-            <Button className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-3">
+            <button className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-primary text-white hover:bg-primary/90">
               <Search size={16} color="white" />
-              <div className="font-pretendard text-base font-semibold text-white">검색</div>
-            </Button>
-            <Button
-              variant="outline"
-              className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded border-[1.3px] border-primary bg-white px-0 py-3"
+              <span className="text-base font-bold">검색</span>
+            </button>
+            <button
+              onClick={handleReset}
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white text-primary hover:bg-[#FFF5F2]"
             >
               <Refresh size={16} color="#911A00" />
-              <div className="font-pretendard text-base font-semibold text-primary">초기화</div>
-            </Button>
+              <span className="text-base font-bold text-primary">초기화</span>
+            </button>
           </div>
         </div>
       </div>
@@ -313,14 +353,14 @@ export default function AdminCommentsPage() {
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
-                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-[10px]"
+                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white w-[127px] h-[36px] hover:bg-white/90"
               >
                 <Excel size={16} color="#4CA452" />
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-[#4CA452]">
                   엑셀 다운로드
                 </div>
               </Button>
-              <Button className="flex h-12 w-[120px] items-center justify-center bg-primary px-0 py-[10px]">
+              <Button className="flex h-12 w-[120px] items-center justify-center bg-primary w-[120px] h-[36px]">
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-white">
                   커뮤니티 등록
                 </div>
@@ -330,183 +370,100 @@ export default function AdminCommentsPage() {
         </div>
 
         {/* 테이블 */}
-        <div className="flex flex-col items-start gap-6 self-stretch">
-          <div className="flex flex-col items-start self-stretch">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
             {/* 테이블 헤더 */}
-            <div className="flex h-[50px] items-center justify-between self-stretch rounded-sm bg-[#EEE] px-4">
-              <div className="flex w-10 items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">NO</div>
-              </div>
-              <div className="flex w-[60px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">댓글ID</div>
-              </div>
-              <div className="flex w-[60px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">구분</div>
-              </div>
-              <div className="flex w-[160px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">원문</div>
-              </div>
-              <div className="flex w-[160px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">내용 미리보기</div>
-              </div>
-              <div className="flex w-[88px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">작성자</div>
-              </div>
-              <div className="flex w-[100px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">상태</div>
-              </div>
-              <div className="flex w-11 items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">좋아요</div>
-              </div>
-              <div className="flex w-11 items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">신고</div>
-              </div>
-              <div className="flex w-[114px] items-center justify-center">
-                <div className="font-pretendard text-xs font-bold text-[#515151]">작성일시</div>
-              </div>
-            </div>
+            <thead>
+              <tr className="h-[50px] bg-[#EEE]">
+                <th className="px-2.5 text-xs font-bold text-[#515151]">NO</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">댓글ID</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">구분</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">원문</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">내용 미리보기</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">작성자</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">상태</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">좋아요</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">신고</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">작성일시</th>
+              </tr>
+            </thead>
 
-            {/* 테이블 데이터 */}
-            {commentData.map((comment, index) => (
-              <div
-                key={index}
-                onClick={() => handleRowClick(comment)}
-                className={`flex h-[50px] items-center justify-between self-stretch px-4 cursor-pointer hover:bg-gray-50 ${
-                  comment.isSelected ? 'rounded-sm bg-red-3' : ''
-                }`}
-              >
-                <div className="flex w-10 items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+            {/* 테이블 바디 */}
+            <tbody>
+              {commentData.map((comment, index) => (
+                <tr
+                  key={index}
+                  onClick={() => handleRowClick(comment)}
+                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                >
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.id}
-                  </div>
-                </div>
-                <div className="flex w-[60px] items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.commentId}
-                  </div>
-                </div>
-                <div className="flex w-[60px] items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.category}
-                  </div>
-                </div>
-                <div className="flex w-[160px] items-center justify-center">
-                  <div className={`w-full truncate text-center font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.originalText}
-                  </div>
-                </div>
-                <div className="flex w-[160px] items-center justify-center">
-                  <div className={`w-full truncate text-center font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.content}
-                  </div>
-                </div>
-                <div className="flex w-[88px] items-center justify-center">
-                  <div className={`w-full truncate text-center font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.author}
-                  </div>
-                </div>
-                <div className="flex w-[100px] items-center justify-center">
-                  {comment.status === '노출중' ? (
-                    <Badge
-                      variant="outline"
-                      size="md"
-                      className="rounded-full border-[#B0D5F2] bg-[#F6FBFF] text-[#2581F9]"
-                    >
-                      노출중
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="lightMd"
-                      size="md"
-                      className="rounded-full bg-gray-5 text-gray-1"
-                    >
-                      비공개
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex w-11 items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="px-2.5 text-center">
+                    <div className="flex justify-center">
+                      {comment.status === '노출중' ? (
+                        <Badge
+                          variant="outline"
+                          size="md"
+                          className="rounded-full border-[#B0D5F2] bg-[#F6FBFF] text-[#2581F9]"
+                        >
+                          노출중
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="lightMd"
+                          size="md"
+                          className="rounded-full bg-gray-5 text-gray-1"
+                        >
+                          비공개
+                        </Badge>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.likes}
-                  </div>
-                </div>
-                <div className="flex w-11 items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.reports}
-                  </div>
-                </div>
-                <div className="flex w-[114px] items-center justify-center">
-                  <div className={`font-pretendard text-xs font-medium ${
-                    comment.isSelected ? 'text-primary' : 'text-[#686868]'
-                  }`}>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {comment.createdAt}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* 페이지네이션 */}
         <div className="flex items-center justify-between self-stretch">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                <div className="font-pretendard text-xs font-bold text-primary">
-                  {itemsPerPage}
-                </div>
-                <ChevronDown size={10} className="text-primary" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => setItemsPerPage('10개씩 보기')}>
-                10개씩 보기
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setItemsPerPage('20개씩 보기')}>
-                20개씩 보기
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setItemsPerPage('50개씩 보기')}>
-                50개씩 보기
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <FilterDropdown
+            value={itemsPerPage}
+            options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+            onChange={setItemsPerPage}
+            width="w-[140px]"
+          />
 
-          <div className="flex items-center gap-4">
-            <Arrow direction="left" size={24} color="#A0A0A0" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary">
-                <div className="font-pretendard text-sm font-medium text-white">1</div>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center">
-                <div className="font-pretendard text-sm font-medium text-orange-3">2</div>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center">
-                <div className="font-pretendard text-sm font-medium text-orange-3">...</div>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center">
-                <div className="font-pretendard text-sm font-medium text-orange-3">9</div>
-              </div>
-              <div className="flex h-6 w-6 items-center justify-center">
-                <div className="font-pretendard text-sm font-medium text-orange-3">10</div>
-              </div>
-            </div>
-            <Arrow direction="right" size={24} color="#911A00" />
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 

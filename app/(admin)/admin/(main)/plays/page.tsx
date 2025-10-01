@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Calendar, Search, Refresh, Excel, UpArrow, Arrow } from '@/components/icons';
+import Calendar from '@/components/icons/Calendar';
+import Search from '@/components/icons/Search';
+import Refresh from '@/components/icons/Refresh';
+import Excel from '@/components/icons/Excel';
 
 // 상태 뱃지 컴포넌트
 function StatusBadge({ status }: { status: string }) {
@@ -50,39 +51,6 @@ function StatCard({ icon, title, value }: { icon: React.ReactNode; title: string
         {value}
       </div>
     </div>
-  );
-}
-
-// 드롭다운 선택기 컴포넌트
-function FilterDropdown({
-  value,
-  placeholder,
-  options,
-  onChange,
-}: {
-  value: string;
-  placeholder: string;
-  options: string[];
-  onChange: (value: string) => void;
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-          <span className={`text-xs font-bold ${value ? 'text-primary' : 'text-gray-4'}`}>
-            {value || placeholder}
-          </span>
-          <UpArrow size={10} />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        {options.map((option) => (
-          <DropdownMenuItem key={option} onClick={() => onChange(option)}>
-            {option}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }
 
@@ -179,27 +147,64 @@ const sampleData: PlayData[] = [
 ];
 
 export default function AdminPlaysPage() {
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [tagCategory, setTagCategory] = useState('전체');
   const [status, setStatus] = useState('전체');
   const [searchType, setSearchType] = useState('작품명');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState('10개씩 보기');
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = 10;
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleSearch = () => {
-    console.log('검색 실행');
+    // 검색 로직 구현
   };
 
   const handleReset = () => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
     setTagCategory('전체');
     setStatus('전체');
     setSearchType('작품명');
     setSearchQuery('');
+    setItemsPerPage('10개씩 보기');
+    setCurrentPage(1);
   };
+
+  // 외부 클릭 시 날짜 피커 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
+
+    if (showStartDatePicker || showEndDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showStartDatePicker, showEndDatePicker]);
 
   return (
     <div className="flex w-full flex-col items-center gap-8 p-11">
@@ -207,21 +212,61 @@ export default function AdminPlaysPage() {
       <h1 className="self-stretch text-2xl font-semibold leading-8 text-gray-1">희곡 관리</h1>
 
       {/* 필터 섹션 */}
-      <div className="flex flex-col items-start gap-4 self-stretch rounded-lg bg-background p-8">
+      <div className="flex flex-col gap-4 self-stretch rounded-lg bg-background p-8">
         {/* 첫 번째 행: 등록일자, 태그분류, 상태 */}
         <div className="flex items-start gap-6 self-stretch">
           {/* 등록일자 */}
           <div className="flex items-center gap-2">
             <span className="text-base font-semibold text-gray-2">등록일자</span>
-            <div className="flex w-[306px] items-center gap-2.5">
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                <span className="text-xs font-semibold text-primary">{startDate}</span>
-                <Calendar size={12} />
+            <div className="flex items-center gap-2.5">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-semibold text-primary">{formatDate(startDate)}</span>
+                  <Calendar size={12} />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate || new Date()}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartDatePicker(false);
+                      }}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
               <span className="text-xs font-semibold text-gray-4">-</span>
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                <span className="text-xs font-medium text-gray-4">{endDate || '날짜 입력'}</span>
-                <Calendar size={12} />
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-medium text-gray-4">
+                    {formatDate(endDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndDatePicker(false);
+                      }}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -231,7 +276,6 @@ export default function AdminPlaysPage() {
             <span className="text-base font-semibold text-gray-2">태그분류</span>
             <FilterDropdown
               value={tagCategory}
-              placeholder="전체"
               options={['전체', '로맨스', '코미디', '드라마']}
               onChange={setTagCategory}
             />
@@ -242,7 +286,6 @@ export default function AdminPlaysPage() {
             <span className="text-base font-semibold text-gray-2">상태</span>
             <FilterDropdown
               value={status}
-              placeholder="전체"
               options={['전체', '노출중', '비공개', '승인대기', '반려']}
               onChange={setStatus}
             />
@@ -251,19 +294,14 @@ export default function AdminPlaysPage() {
 
         {/* 두 번째 행: 검색 */}
         <div className="flex items-center gap-6 self-stretch">
-          <div className="flex flex-1 items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-primary">{searchType}</span>
-              <UpArrow size={10} />
-            </div>
-            <input
-              type="text"
-              placeholder="검색조건을 입력해주세요"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-transparent text-xs font-medium text-gray-4 outline-none placeholder:text-gray-4"
-            />
-          </div>
+          <SearchInputWithFilter
+            filterValue={searchType}
+            filterOptions={['작품명', '작가명']}
+            onFilterChange={setSearchType}
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            placeholder="검색조건을 입력해주세요"
+          />
           <div className="flex items-center gap-2">
             <Button
               onClick={handleSearch}
@@ -326,7 +364,7 @@ export default function AdminPlaysPage() {
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              className="flex h-auto items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5"
+              className="flex h-auto items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5 hover:bg-white/90"
             >
               <Excel size={16} />
               <span className="text-sm font-semibold leading-4 tracking-[-0.28px] text-[#4CA452]">
@@ -342,182 +380,81 @@ export default function AdminPlaysPage() {
         </div>
 
         {/* 테이블 */}
-        <div className="flex flex-col items-start gap-6 self-stretch">
-          <div className="flex flex-col items-start self-stretch">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
             {/* 테이블 헤더 */}
-            <div className="flex h-[50px] items-center justify-between self-stretch rounded-sm bg-[#EEE] px-4">
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-10 text-center text-xs font-bold text-[#515151]">NO</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-[100px] text-center text-xs font-bold text-[#515151]">
-                  작품ID
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-40 text-center text-xs font-bold text-[#515151]">작품명</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-[100px] text-center text-xs font-bold text-[#515151]">
-                  작가명
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-24 text-center text-xs font-bold text-[#515151]">등록일자</span>
-              </div>
-              <div className="flex w-[100px] items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-20 text-center text-xs font-bold text-[#515151]">상태</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-[124px] text-center text-xs font-bold text-[#515151]">태그</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-11 text-center text-xs font-bold text-[#515151]">조회수</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-11 text-center text-xs font-bold text-[#515151]">메모수</span>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <span className="w-11 text-center text-xs font-bold text-[#515151]">스크랩수</span>
-              </div>
-            </div>
+            <thead>
+              <tr className="h-[50px] bg-[#EEE]">
+                <th className="px-2.5 text-xs font-bold text-[#515151]">NO</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">작품ID</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">작품명</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">작가명</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">등록일자</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">상태</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">태그</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">조회수</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">메모수</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">스크랩수</th>
+              </tr>
+            </thead>
 
-            {/* 테이블 행들 */}
-            {sampleData.map((row, index) => (
-              <div
-                key={index}
-                className={`flex h-[50px] items-center justify-between self-stretch rounded px-4 ${
-                  row.isHighlighted ? 'bg-[#EBE1DF]' : ''
-                }`}
-              >
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-10 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
-                    {row.no}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-[100px] text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+            {/* 테이블 바디 */}
+            <tbody>
+              {sampleData.map((row, index) => (
+                <tr
+                  key={index}
+                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                >
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">{row.no}</td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.playId}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-40 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.title}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`max-h-[14px] w-[100px] max-w-[100px] text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="max-w-[100px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.author}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-24 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.registrationDate}
-                  </span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center gap-2.5 px-2.5 py-0">
-                  <StatusBadge status={row.status} />
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-[124px] text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center">
+                    <div className="flex justify-center">
+                      <StatusBadge status={row.status} />
+                    </div>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.tags}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-11 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.views || '-'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-11 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.memos || '-'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <span
-                    className={`w-11 text-center text-xs font-medium ${
-                      row.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.scraps || '-'}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          {/* 페이지네이션 */}
-          <div className="flex items-center justify-between self-stretch">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{itemsPerPage}</span>
-                  <UpArrow size={10} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {['10개씩 보기', '20개씩 보기', '50개씩 보기'].map((option) => (
-                  <DropdownMenuItem key={option} onClick={() => setItemsPerPage(option)}>
-                    {option}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+        {/* 페이지네이션 */}
+        <div className="flex items-center justify-between self-stretch">
+          <FilterDropdown
+            value={itemsPerPage}
+            options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+            onChange={setItemsPerPage}
+            width="w-[140px]"
+          />
 
-            <div className="flex items-center gap-4">
-              <Arrow direction="left" size={24} color="#A0A0A0" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 flex-col items-center justify-center gap-2.5 rounded-sm bg-primary">
-                  <span className="text-center text-sm font-medium text-white">1</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center gap-2.5">
-                  <span className="text-center text-sm font-medium text-orange-3">2</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center gap-2.5">
-                  <span className="text-center text-sm font-medium text-orange-3">...</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center gap-2.5">
-                  <span className="text-center text-sm font-medium text-orange-3">9</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center gap-2.5">
-                  <span className="text-center text-sm font-medium text-orange-3">10</span>
-                </div>
-              </div>
-              <Arrow direction="right" size={24} color="#911A00" />
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

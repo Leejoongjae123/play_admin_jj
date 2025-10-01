@@ -17,7 +17,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: '회원 관리',
-    subItems: ['회원 관리', '회원 제재 이력', '멤버십 구독관리'],
+    subItems: ['회원 관리', '회원 제재 이력'],
   },
   {
     title: 'DB 관리',
@@ -56,7 +56,7 @@ export default function AdminSidebar() {
     대시보드: '/admin/dashboard',
     '회원 관리': '/admin/members',
     '회원 제재 이력': '/admin/members/sanctions',
-    '멤버십 구독관리': '/admin/members/membership-subscriptions',
+    // '멤버십 구독관리': '/admin/members/membership-subscriptions',
     '희곡 관리': '/admin/plays',
     '작가 관리': '/admin/writers',
     '프로그램 목록': '/admin/programs',
@@ -67,7 +67,7 @@ export default function AdminSidebar() {
     '신고 관리': '/admin/reports',
     '메인 구성 관리': '/admin/main-config',
     '시스템 알림 발송': '/admin/notifications/send',
-    '알림 템플릿 관리': '/admin/notifications/templates',
+    '알림 템플릿 관리': '/admin/notifications/template',
     '회원별 참여 패턴': '/admin/participation-patterns',
     '팝업 관리': '/admin/settings/popups',
     '관리자 계정/권한': '/admin/settings/admin-accounts-permissions',

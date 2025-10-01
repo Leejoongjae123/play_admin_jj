@@ -47,7 +47,9 @@ export default function ParticipationChart({ data }: ParticipationChartProps) {
       {
         label: '참여 수',
         data: chartData.map((item) => item.value),
-        backgroundColor: chartData.map((item) => (item.isHighlighted ? '#FE6112' : '#E6E6E6')),
+        backgroundColor: chartData.map((item) =>
+          item.isHighlighted ? '#911A00' : '#E6E6E6',
+        ),
         borderRadius: 0,
         barThickness: 'flex' as const,
         maxBarThickness: 50,

@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Calendar, Search, Refresh, UpArrow, Arrow } from '@/components/icons';
+import { Calendar, Search, Refresh } from '@/components/icons';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
+import DateEdit from '@/components/ui/date-edit';
 import PopupStatusBadge from './components/PopupStatusBadge';
 import type { Popup, PopupFilter } from './types';
 
@@ -101,6 +106,7 @@ const mockPopups: Popup[] = [
 ];
 
 export default function AdminPopupsPage() {
+  const router = useRouter();
   const [filters, setFilters] = useState<PopupFilter>({
     startDate: '2025-08-08',
     endDate: '',
@@ -110,27 +116,49 @@ export default function AdminPopupsPage() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
 
   const totalCount = 12345;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
-  const handleStatusDropdownToggle = () => {
-    // 상태 드롭다운 토글 처리
+  const statusOptions = ['전체', '대기', '진행중', '종료'];
+  const searchOptions = ['전체', '팝업ID', '제목'];
+  const itemsPerPageOptions = ['10개씩 보기', '20개씩 보기', '30개씩 보기', '50개씩 보기'];
+
+  // 날짜를 YYYY-MM-DD 형식으로 변환
+  const formatDateToString = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
-  const handleSearchDropdownToggle = () => {
-    // 검색 드롭다운 토글 처리
-  };
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
 
-  const handleItemsPerPageToggle = () => {
-    // 항목 수 드롭다운 토글 처리
-  };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = () => {
     // 검색 처리
   };
 
   const handleReset = () => {
-    // 초기화 처리
     setFilters({
       startDate: '',
       endDate: '',
@@ -138,10 +166,21 @@ export default function AdminPopupsPage() {
       searchCategory: '전체',
       searchQuery: '',
     });
+    setCurrentPage(1);
   };
 
   const handleRegisterPopup = () => {
-    // 팝업 등록 처리
+    router.push('/admin/settings/popups/edit');
+  };
+
+  const handleStartDateConfirm = (date: Date) => {
+    setFilters((prev) => ({ ...prev, startDate: formatDateToString(date) }));
+    setShowStartDatePicker(false);
+  };
+
+  const handleEndDateConfirm = (date: Date) => {
+    setFilters((prev) => ({ ...prev, endDate: formatDateToString(date) }));
+    setShowEndDatePicker(false);
   };
 
   return (
@@ -157,18 +196,66 @@ export default function AdminPopupsPage() {
           <div className="flex items-center gap-2">
             <span className="font-pretendard text-base font-bold text-gray-2">등록일</span>
             <div className="flex w-[306px] items-center gap-2">
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-                <span className="font-pretendard text-xs font-bold text-primary">
-                  {filters.startDate || '2025-08-08'}
-                </span>
-                <Calendar size={12} color="#727272" />
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowStartDatePicker(!showStartDatePicker);
+                    setShowEndDatePicker(false);
+                  }}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 transition-colors hover:border-primary"
+                >
+                  <span
+                    className={`font-pretendard text-xs ${
+                      filters.startDate ? 'font-bold text-primary' : 'font-medium text-[#727272]'
+                    }`}
+                  >
+                    {filters.startDate || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={filters.startDate ? new Date(filters.startDate) : new Date()}
+                      onConfirm={handleStartDateConfirm}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
+
               <span className="font-pretendard text-xs font-bold text-[#727272]">-</span>
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-                <span className="font-pretendard text-xs font-medium text-[#727272]">
-                  날짜 입력
-                </span>
-                <Calendar size={12} color="#727272" />
+
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEndDatePicker(!showEndDatePicker);
+                    setShowStartDatePicker(false);
+                  }}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 transition-colors hover:border-primary"
+                >
+                  <span
+                    className={`font-pretendard text-xs ${
+                      filters.endDate ? 'font-bold text-primary' : 'font-medium text-[#727272]'
+                    }`}
+                  >
+                    {filters.endDate || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={filters.endDate ? new Date(filters.endDate) : new Date()}
+                      onConfirm={handleEndDateConfirm}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -176,37 +263,30 @@ export default function AdminPopupsPage() {
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="font-pretendard text-base font-bold text-gray-2">상태</span>
-            <div 
-              className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3"
-              onClick={handleStatusDropdownToggle}
-            >
-              <span className="font-pretendard text-xs font-bold text-primary">전체</span>
-              <UpArrow size={10} color="#911A00" />
-            </div>
+            <FilterDropdown
+              value={filters.status}
+              options={statusOptions}
+              onChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
+            />
           </div>
         </div>
 
         {/* 두 번째 행 - 검색 */}
         <div className="flex w-full items-center gap-6">
           {/* 검색 영역 */}
-          <div className="flex flex-1 items-center rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <span className="font-pretendard text-xs font-bold text-primary">전체</span>
-              <UpArrow size={10} color="#911A00" />
-            </div>
-            <input
-              type="text"
-              className="ml-3 flex-1 font-pretendard text-xs font-medium text-[#727272] placeholder:text-[#727272] focus:outline-none"
-              placeholder="검색조건을 입력해주세요"
-              value={filters.searchQuery}
-              onChange={(e) => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
-            />
-          </div>
+          <SearchInputWithFilter
+            filterValue={filters.searchCategory}
+            filterOptions={searchOptions}
+            onFilterChange={(value) => setFilters((prev) => ({ ...prev, searchCategory: value }))}
+            searchValue={filters.searchQuery}
+            onSearchChange={(value) => setFilters((prev) => ({ ...prev, searchQuery: value }))}
+            placeholder="검색조건을 입력해주세요"
+          />
 
           {/* 버튼들 */}
           <div className="flex items-center gap-2">
-            <Button 
-              className="flex h-12 w-[120px] items-center justify-center gap-2 rounded bg-primary px-0 py-3"
+            <Button
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2 rounded bg-primary px-0 py-3"
               onClick={handleSearch}
             >
               <Search size={16} color="white" />
@@ -214,7 +294,7 @@ export default function AdminPopupsPage() {
             </Button>
             <Button
               variant="outline"
-              className="flex h-12 w-[120px] items-center justify-center gap-2 rounded border-[1.3px] border-primary bg-white px-0 py-3 hover:bg-gray-50"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2 rounded border-[1.3px] border-primary bg-white px-0 py-3 hover:bg-gray-50"
               onClick={handleReset}
             >
               <Refresh size={16} color="#911A00" />
@@ -235,7 +315,7 @@ export default function AdminPopupsPage() {
             </span>
             명
           </div>
-          <Button 
+          <Button
             className="flex h-10 w-[120px] items-center justify-center rounded bg-primary px-0 py-2.5"
             onClick={handleRegisterPopup}
           >
@@ -271,46 +351,28 @@ export default function AdminPopupsPage() {
             </div>
 
             {/* 테이블 본문 */}
-            {mockPopups.map((popup, index) => (
+            {mockPopups.map((popup) => (
               <div
                 key={popup.id}
-                className={`flex h-[50px] w-full items-center justify-between px-4 ${
-                  index === 2 ? 'rounded-sm bg-[#EBE1DF]' : ''
-                }`}
+                className="group flex h-[50px] w-full cursor-pointer items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
               >
                 <div className="flex w-10 items-center justify-center p-2">
-                  <span
-                    className={`font-pretendard text-xs font-medium ${
-                      index === 2 ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
                     {popup.id}
                   </span>
                 </div>
                 <div className="flex w-[100px] items-center justify-center p-2">
-                  <span
-                    className={`font-pretendard text-xs font-medium ${
-                      index === 2 ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
                     {popup.popupId}
                   </span>
                 </div>
                 <div className="flex w-[318px] max-w-[318px] items-center justify-center p-2">
-                  <span
-                    className={`font-pretendard text-xs font-medium text-center max-h-4 ${
-                      index === 2 ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  <span className="max-h-4 text-center font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
                     {popup.title}
                   </span>
                 </div>
                 <div className="flex w-[180px] max-w-[180px] items-center justify-center p-2">
-                  <span
-                    className={`font-pretendard text-xs font-medium ${
-                      index === 2 ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
                     {popup.startDate} ~ {popup.endDate}
                   </span>
                 </div>
@@ -318,11 +380,7 @@ export default function AdminPopupsPage() {
                   <PopupStatusBadge status={popup.status} />
                 </div>
                 <div className="flex w-[124px] items-center justify-center p-2">
-                  <span
-                    className={`font-pretendard text-xs font-medium ${
-                      index === 2 ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
                     {popup.createdAt}
                   </span>
                 </div>
@@ -333,36 +391,23 @@ export default function AdminPopupsPage() {
           {/* 페이지네이션 */}
           <div className="flex w-full items-center justify-between">
             {/* 항목 수 선택 */}
-            <div 
-              className="flex cursor-pointer items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3"
-              onClick={handleItemsPerPageToggle}
-            >
-              <span className="font-pretendard text-xs font-bold text-primary">10개씩 보기</span>
-              <UpArrow size={10} color="#911A00" />
-            </div>
+            <FilterDropdown
+              value={`${itemsPerPage}개씩 보기`}
+              options={itemsPerPageOptions}
+              onChange={(value) => {
+                const count = parseInt(value.replace('개씩 보기', ''));
+                setItemsPerPage(count);
+                setCurrentPage(1);
+              }}
+              width="w-[104px]"
+            />
 
             {/* 페이지 번호 */}
-            <div className="flex items-center gap-4">
-              <Arrow direction="left" size={24} color="#A0A0A0" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 flex-col items-center justify-center rounded-sm bg-primary">
-                  <span className="font-pretendard text-sm font-medium text-white">1</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">2</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">...</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">9</span>
-                </div>
-                <div className="flex h-6 w-6 flex-col items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">10</span>
-                </div>
-              </div>
-              <Arrow direction="right" size={24} color="#911A00" />
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
       </div>

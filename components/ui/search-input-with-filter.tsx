@@ -30,8 +30,8 @@ export default function SearchInputWithFilter({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex h-[43px] flex-1 items-center gap-2 rounded-md border border-[#EBEBEB] bg-white px-3">
-      <DropdownMenu open={open} onOpenChange={setOpen}>
+    <div className="relative flex h-[43px] flex-1 items-center gap-2 rounded-md border border-[#EBEBEB] bg-white px-3">
+      <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="flex shrink-0 items-center gap-1 transition-colors hover:bg-transparent focus:outline-none">
             <span className="whitespace-nowrap font-pretendard text-xs font-bold text-[#911A00]">
@@ -42,7 +42,8 @@ export default function SearchInputWithFilter({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="start"
-          sideOffset={4}
+          alignOffset={-12}
+          sideOffset={16}
           className="w-[120px] rounded-md border border-[#EBEBEB] bg-white shadow-lg"
         >
           {filterOptions.map((option) => (

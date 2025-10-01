@@ -1,21 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { useState, useRef, useEffect } from 'react';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
 import MemoStatusBadge from '@/components/ui/MemoStatusBadge';
 import Calendar from '@/components/icons/Calendar';
 import Search from '@/components/icons/Search';
 import Refresh from '@/components/icons/Refresh';
 import Excel from '@/components/icons/Excel';
-import UpArrow from '@/components/icons/UpArrow';
-import Arrow from '@/components/icons/Arrow';
 
 interface MemoData {
   id: number;
@@ -168,38 +162,72 @@ const sampleData: MemoData[] = [
 ];
 
 export default function AdminMemosPage() {
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [exposureFilter, setExposureFilter] = useState('전체');
   const [statusFilter, setStatusFilter] = useState('전체');
   const [authorFilter, setAuthorFilter] = useState('작성자');
   const [searchTerm, setSearchTerm] = useState('');
   const [itemsPerPage, setItemsPerPage] = useState('10개씩 보기');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = 10;
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleSearch = () => {
     // 검색 로직 구현
-    console.log('검색 실행');
   };
 
   const handleReset = () => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
     setExposureFilter('전체');
     setStatusFilter('전체');
     setAuthorFilter('작성자');
     setSearchTerm('');
+    setItemsPerPage('10개씩 보기');
+    setCurrentPage(1);
   };
 
   const handleExcelDownload = () => {
     // 엑셀 다운로드 로직 구현
-    console.log('엑셀 다운로드');
   };
 
   const handlePlayRegister = () => {
     // 희곡 등록 로직 구현
-    console.log('희곡 등록');
   };
+
+  // 외부 클릭 시 날짜 피커 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
+
+    if (showStartDatePicker || showEndDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showStartDatePicker, showEndDatePicker]);
 
   return (
     <div className="flex w-full flex-col items-center gap-[34px] p-11">
@@ -209,25 +237,63 @@ export default function AdminMemosPage() {
       </div>
 
       {/* 필터 섹션 */}
-      <div className="flex w-full flex-col items-start gap-[18px] rounded-lg bg-[#FAF8F6] p-8">
-        {/* 첫 번째 행: 가입일, 노출���부, 상태 */}
+      <div className="flex w-full flex-col gap-4 rounded-lg bg-[#FAF8F6] p-8">
+        {/* 첫 번째 행: 가입일, 노출여부, 상태 */}
         <div className="flex w-full items-start gap-6">
           {/* 가입일 */}
           <div className="flex items-center gap-2">
             <span className="font-pretendard text-base font-bold text-gray-2">가입일</span>
-            <div className="flex w-[306px] items-center gap-[10px]">
-              <div className="flex h-12 w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3">
-                <span className="font-pretendard text-xs font-bold text-primary">
-                  {startDate || '날짜 입력'}
-                </span>
-                <Calendar size={12} color="#727272" />
+            <div className="flex items-center gap-2.5">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="font-pretendard text-xs font-bold text-primary">
+                    {formatDate(startDate)}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate || new Date()}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartDatePicker(false);
+                      }}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
               <span className="font-pretendard text-xs font-bold text-[#727272]">-</span>
-              <div className="flex h-12 w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3">
-                <span className="font-pretendard text-xs font-medium text-[#727272]">
-                  {endDate || '날짜 입력'}
-                </span>
-                <Calendar size={12} color="#727272" />
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="font-pretendard text-xs font-medium text-[#727272]">
+                    {formatDate(endDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndDatePicker(false);
+                      }}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -235,93 +301,50 @@ export default function AdminMemosPage() {
           {/* 노출여부 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="font-pretendard text-base font-bold text-gray-2">노출여부</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="font-pretendard text-xs font-bold text-primary">
-                    {exposureFilter}
-                  </span>
-                  <UpArrow size={10} color="#911A00" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setExposureFilter('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setExposureFilter('노출중')}>
-                  노출중
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setExposureFilter('비공개')}>
-                  비공개
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              value={exposureFilter}
+              options={['전체', '노출중', '비공개']}
+              onChange={setExposureFilter}
+            />
           </div>
 
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="font-pretendard text-base font-bold text-gray-2">상태</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="font-pretendard text-xs font-bold text-primary">
-                    {statusFilter}
-                  </span>
-                  <UpArrow size={10} color="#911A00" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setStatusFilter('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter('정상')}>정상</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter('신고됨')}>신고됨</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              value={statusFilter}
+              options={['전체', '정상', '신고됨']}
+              onChange={setStatusFilter}
+            />
           </div>
         </div>
 
         {/* 두 번째 행: 검색 */}
         <div className="flex w-full items-center gap-6">
-          <div className="flex flex-1 items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <span className="font-pretendard text-xs font-bold text-primary">
-                      {authorFilter}
-                    </span>
-                    <UpArrow size={10} color="#911A00" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setAuthorFilter('작성자')}>작성자</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setAuthorFilter('제목')}>제목</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setAuthorFilter('내용')}>내용</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <input
-              type="text"
-              placeholder="검색조건을 입력해주세요"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 bg-transparent font-pretendard text-xs font-medium text-[#727272] outline-none placeholder:text-[#727272]"
-            />
-          </div>
+          <SearchInputWithFilter
+            filterValue={authorFilter}
+            filterOptions={['작성자', '제목', '내용']}
+            onFilterChange={setAuthorFilter}
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            placeholder="검색조건을 입력해주세요"
+          />
 
           <div className="flex items-center gap-2">
-            <Button
+            <button
               onClick={handleSearch}
-              className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-primary text-white hover:bg-primary/90"
             >
               <Search size={16} color="white" />
-              <span className="font-pretendard text-base font-bold text-white">검색</span>
-            </Button>
-            <Button
+              <span className="font-pretendard text-base font-bold">검색</span>
+            </button>
+            <button
               onClick={handleReset}
-              variant="outline"
-              className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded border-[1.3px] border-primary bg-white px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white text-primary hover:bg-[#FFF5F2]"
             >
               <Refresh size={16} color="#911A00" />
-              <span className="font-pretendard text-base font-bold text-primary">초기화</span>
-            </Button>
+              <span className="font-pretendard text-base font-bold">초기화</span>
+            </button>
           </div>
         </div>
       </div>
@@ -336,17 +359,16 @@ export default function AdminMemosPage() {
               <span className="text-[#6D6D6D]">명</span>
             </div>
             <div className="flex items-center gap-3">
-              <Button
+              <button
                 onClick={handleExcelDownload}
-                variant="outline"
                 className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5"
               >
                 <Excel size={16} color="#4CA452" />
-                <span className="font-pretendard text-sm font-bold leading-4 tracking-[-0.28px] text-[#4CA452]">
+                <span className="w- font-pretendard text-sm font-bold leading-4 tracking-[-0.28px] text-[#4CA452]">
                   엑셀 다운로드
                 </span>
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={handlePlayRegister}
                 className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-2.5"
               >
@@ -365,212 +387,104 @@ export default function AdminMemosPage() {
                   </g>
                   <defs>
                     <clipPath id="clip0_861_7463">
-                      <rect width="16" height="16" fill="white" transform="translate(0.5 0.472656)" />
+                      <rect
+                        width="16"
+                        height="16"
+                        fill="white"
+                        transform="translate(0.5 0.472656)"
+                      />
                     </clipPath>
                   </defs>
                 </svg>
                 <span className="font-pretendard text-sm font-bold leading-4 tracking-[-0.28px] text-white">
                   희곡 등록
                 </span>
-              </Button>
+              </button>
             </div>
           </div>
 
           {/* 테이블 */}
-          <div className="flex w-full flex-col items-start gap-6">
-            <div className="flex w-full flex-col items-start">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full">
               {/* 테이블 헤더 */}
-              <div className="flex h-[50px] w-full items-center justify-between rounded-sm bg-[#EEE] px-4">
-                <div className="flex w-10 items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">NO</span>
-                </div>
-                <div className="flex w-[60px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">메모ID</span>
-                </div>
-                <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">구분</span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">대상</span>
-                </div>
-                <div className="flex w-[88px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">작성자(ID)</span>
-                </div>
-                <div className="flex w-[160px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">메모내용 (요약)</span>
-                </div>
-                <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">좋아요</span>
-                </div>
-                <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">댓글</span>
-                </div>
-                <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">신고</span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">상태</span>
-                </div>
-                <div className="flex w-[114px] items-center justify-center px-2.5 py-4">
-                  <span className="font-pretendard text-xs font-bold text-[#515151]">등록일시</span>
-                </div>
-              </div>
+              <thead>
+                <tr className="h-[50px] bg-[#EEE]">
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">NO</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">메모ID</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">구분</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">대상</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">작성자(ID)</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">메모내용 (요약)</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">좋아요</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">댓글</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">신고</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">상태</th>
+                  <th className="px-2.5 text-xs font-bold text-[#515151]">등록일시</th>
+                </tr>
+              </thead>
 
-              {/* 테이블 데이터 */}
-              {sampleData.map((memo, index) => (
-                <div
-                  key={index}
-                  className={`flex h-[50px] w-full items-center justify-between px-4 ${
-                    memo.isHighlighted ? 'rounded-sm bg-[#EBE1DF]' : ''
-                  }`}
-                >
-                  <div className="flex w-10 items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+              {/* 테이블 바디 */}
+              <tbody>
+                {sampleData.map((memo, index) => (
+                  <tr
+                    key={index}
+                    className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  >
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.id}
-                    </span>
-                  </div>
-                  <div className="flex w-[60px] items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.memoId}
-                    </span>
-                  </div>
-                  <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.category}
-                    </span>
-                  </div>
-                  <div className="flex w-[100px] items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.target}
-                    </span>
-                  </div>
-                  <div className="flex w-[88px] items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      } overflow-hidden text-ellipsis whitespace-nowrap`}
-                    >
+                    </td>
+                    <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.authorId}
-                    </span>
-                  </div>
-                  <div className="flex w-[160px] items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      } overflow-hidden text-ellipsis whitespace-nowrap`}
-                    >
+                    </td>
+                    <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.content}
-                    </span>
-                  </div>
-                  <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.likes}
-                    </span>
-                  </div>
-                  <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.comments}
-                    </span>
-                  </div>
-                  <div className="flex w-11 items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.reports}
-                    </span>
-                  </div>
-                  <div className="flex w-[100px] items-center justify-center px-2.5 py-0">
-                    <MemoStatusBadge status={memo.status} />
-                  </div>
-                  <div className="flex w-[114px] items-center justify-center px-2.5 py-4">
-                    <span
-                      className={`font-pretendard text-xs font-medium ${
-                        memo.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                    </td>
+                    <td className="px-2.5 text-center">
+                      <div className="flex justify-center">
+                        <MemoStatusBadge status={memo.status} />
+                      </div>
+                    </td>
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                       {memo.createdAt}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-            {/* 페이지네이션 */}
-            <div className="flex w-full items-center justify-between">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="flex cursor-pointer items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                    <span className="font-pretendard text-xs font-bold text-primary">
-                      {itemsPerPage}
-                    </span>
-                    <UpArrow size={10} color="#911A00" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setItemsPerPage('10개씩 보기')}>
-                    10개씩 보기
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setItemsPerPage('20개씩 보기')}>
-                    20개씩 보기
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setItemsPerPage('50개씩 보기')}>
-                    50개씩 보기
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+          {/* 페이지네이션 */}
+          <div className="flex w-full items-center justify-between">
+            <FilterDropdown
+              value={itemsPerPage}
+              options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+              onChange={setItemsPerPage}
+              width="w-[140px]"
+            />
 
-              <div className="flex items-center gap-4">
-                <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}>
-                  <Arrow direction="left" size={24} color="#A0A0A0" />
-                </button>
-                <div className="flex items-center gap-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary">
-                    <span className="font-pretendard text-sm font-medium text-white">1</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <span className="font-pretendard text-sm font-medium text-[#CCBCAB]">2</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <span className="font-pretendard text-sm font-medium text-[#CCBCAB]">...</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <span className="font-pretendard text-sm font-medium text-[#CCBCAB]">9</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <span className="font-pretendard text-sm font-medium text-[#CCBCAB]">10</span>
-                  </div>
-                </div>
-                <button onClick={() => setCurrentPage(currentPage + 1)}>
-                  <Arrow direction="right" size={24} color="#911A00" />
-                </button>
-              </div>
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
       </div>

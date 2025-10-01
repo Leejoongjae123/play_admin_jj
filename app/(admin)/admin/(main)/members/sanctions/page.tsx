@@ -1,19 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import Calendar from '@/components/icons/Calendar';
 import Search from '@/components/icons/Search';
 import Refresh from '@/components/icons/Refresh';
 import Excel from '@/components/icons/Excel';
-import UpArrow from '@/components/icons/UpArrow';
 import SanctionStatusBadge from './components/SanctionStatusBadge';
 import SanctionDetailModal from './components/SanctionDetailModal';
 
@@ -167,8 +163,8 @@ const mockData: SanctionRecord[] = [
 ];
 
 export default function AdminMemberSanctionsPage() {
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [sanctionType, setSanctionType] = useState('전체');
   const [status, setStatus] = useState('전체');
   const [searchType, setSearchType] = useState('회원 ID');
@@ -177,8 +173,22 @@ export default function AdminMemberSanctionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSanction, setSelectedSanction] = useState<SanctionRecord | null>(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
 
   const totalCount = 12345;
+  const totalPages = 10;
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleRowClick = (record: SanctionRecord) => {
     setSelectedSanction(record);
@@ -192,8 +202,44 @@ export default function AdminMemberSanctionsPage() {
 
   const handleReleaseSanction = (sanctionId: number) => {
     // TODO: API 호출로 제재 해제 처리
+    // eslint-disable-next-line no-console
     console.log('제재 해제:', sanctionId);
   };
+
+  const handleSearch = () => {
+    // 검색 로직 구현
+  };
+
+  const handleReset = () => {
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
+    setSanctionType('전체');
+    setStatus('전체');
+    setSearchType('회원 ID');
+    setSearchValue('');
+    setItemsPerPage('10개씩 보기');
+    setCurrentPage(1);
+  };
+
+  // 외부 클릭 시 날짜 피커 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
+
+    if (showStartDatePicker || showEndDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showStartDatePicker, showEndDatePicker]);
 
   return (
     <div className="flex w-full flex-col items-start gap-[34px] p-11">
@@ -201,23 +247,61 @@ export default function AdminMemberSanctionsPage() {
       <h1 className="text-2xl font-bold leading-8 text-gray-1">회원 제재 이력</h1>
 
       {/* 검색 필터 섹션 */}
-      <div className="flex w-full flex-col items-start gap-[18px] rounded-lg bg-white p-8">
+      <div className="flex w-full flex-col gap-4 rounded-lg bg-[#FAF8F6] p-8">
         {/* 첫 번째 행: 제재일자, 제재유형, 상태 */}
         <div className="flex w-full items-start gap-6">
           {/* 제재일자 */}
           <div className="flex items-center gap-2">
             <span className="text-base font-bold text-gray-2">제재일자</span>
-            <div className="flex w-[306px] items-center gap-2.5">
-              <div className="flex w-[140px] cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                <span className="text-xs font-bold text-primary">{startDate}</span>
-                <Calendar size={12} color="#727272" />
+            <div className="flex items-center gap-2.5">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-bold text-primary">{formatDate(startDate)}</span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate || new Date()}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartDatePicker(false);
+                      }}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
               <span className="text-xs font-bold text-[#727272]">-</span>
-              <div className="flex w-[140px] cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                <span className="text-xs font-medium text-[#727272]">
-                  {endDate || '날짜 입력'}
-                </span>
-                <Calendar size={12} color="#727272" />
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
+                >
+                  <span className="text-xs font-medium text-[#727272]">
+                    {formatDate(endDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndDatePicker(false);
+                      }}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -225,66 +309,42 @@ export default function AdminMemberSanctionsPage() {
           {/* 제재유형 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="text-base font-bold text-gray-2">제재유형</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{sanctionType}</span>
-                  <UpArrow size={10} color="#911A00" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setSanctionType('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSanctionType('활동정지')}>
-                  활동정지
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSanctionType('블랙리스트')}>
-                  블랙리스트
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              value={sanctionType}
+              options={['전체', '활동정지', '블랙리스트']}
+              onChange={setSanctionType}
+            />
           </div>
 
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="text-base font-bold text-gray-2">상태</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{status}</span>
-                  <UpArrow size={10} color="#911A00" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setStatus('전체')}>전체</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus('제재중')}>제재중</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus('해제됨')}>해제됨</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown value={status} options={['전체', '제재중', '해제됨']} onChange={setStatus} />
           </div>
         </div>
 
         {/* 두 번째 행: 검색 */}
         <div className="flex w-full items-center gap-6">
-          <div className="flex flex-1 items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-primary">{searchType}</span>
-              <UpArrow size={10} color="#911A00" />
-            </div>
-            <Input
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="검색조건을 입력해주세요"
-              className="h-auto border-0 bg-transparent p-0 text-xs font-medium text-[#727272] placeholder:text-[#727272] focus-visible:ring-0"
-            />
-          </div>
+          <SearchInputWithFilter
+            filterValue={searchType}
+            filterOptions={['회원 ID', '닉네임']}
+            onFilterChange={setSearchType}
+            searchValue={searchValue}
+            onSearchChange={setSearchValue}
+            placeholder="검색조건을 입력해주세요"
+          />
           <div className="flex items-center gap-2">
-            <Button className="flex h-12 w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3">
+            <Button
+              onClick={handleSearch}
+              className="flex h-12 w-[120px] h-[43px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3 hover:bg-primary/90"
+            >
               <Search size={16} color="white" />
               <span className="text-base font-bold text-white">검색</span>
             </Button>
             <Button
+              onClick={handleReset}
               variant="outline"
-              className="flex h-12 w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3"
+              className="flex h-12 w-[120px] h-[43px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3 hover:bg-[#FFF5F2]"
             >
               <Refresh size={16} />
               <span className="text-base font-bold text-primary">초기화</span>
@@ -303,7 +363,7 @@ export default function AdminMemberSanctionsPage() {
           </div>
           <Button
             variant="outline"
-            className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5"
+            className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5 hover:bg-white/90 h-[36px] w-[128px]"
           >
             <Excel size={16} color="#4CA452" />
             <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-[#4CA452]">
@@ -313,207 +373,84 @@ export default function AdminMemberSanctionsPage() {
         </div>
 
         {/* 테이블 */}
-        <div className="flex w-full flex-col items-start gap-6">
-          <div className="flex w-full flex-col">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
             {/* 테이블 헤더 */}
-            <div className="flex h-[50px] items-center justify-between bg-[#EEE] px-4">
-              <div className="flex w-[40px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">NO</span>
-              </div>
-              <div className="flex w-[100px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">회원 ID</span>
-              </div>
-              <div className="flex w-[100px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">닉네임</span>
-              </div>
-              <div className="flex w-[52px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">제재유형</span>
-              </div>
-              <div className="flex w-[120px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">제재 사유</span>
-              </div>
-              <div className="flex w-[44px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">제재기간</span>
-              </div>
-              <div className="flex w-[100px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">상태</span>
-              </div>
-              <div className="flex w-[124px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">제재일자</span>
-              </div>
-              <div className="flex w-[124px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">해제일자</span>
-              </div>
-              <div className="flex w-[60px] items-center justify-center">
-                <span className="text-xs font-bold text-[#515151]">운영자</span>
-              </div>
-            </div>
+            <thead>
+              <tr className="h-[50px] bg-[#EEE]">
+                <th className="px-2.5 text-xs font-bold text-[#515151]">NO</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">회원 ID</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">닉네임</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">제재유형</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">제재 사유</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">제재기간</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">상태</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">제재일자</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">해제일자</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">운영자</th>
+              </tr>
+            </thead>
 
             {/* 테이블 바디 */}
-            {mockData.map((record, index) => (
-              <div
-                key={index}
-                onClick={() => handleRowClick(record)}
-                className={`flex h-[50px] cursor-pointer items-center justify-between px-4 hover:bg-gray-50 ${
-                  record.isHighlighted ? 'bg-red-3' : ''
-                }`}
-              >
-                <div className="flex w-[40px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+            <tbody>
+              {mockData.map((record, index) => (
+                <tr
+                  key={index}
+                  onClick={() => handleRowClick(record)}
+                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                >
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.id}
-                  </span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.memberId}
-                  </span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.nickname}
-                  </span>
-                </div>
-                <div className="flex w-[52px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.sanctionType}
-                  </span>
-                </div>
-                <div className="flex w-[120px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.reason}
-                  </span>
-                </div>
-                <div className="flex w-[44px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.period}
-                  </span>
-                </div>
-                <div className="flex w-[100px] items-center justify-center">
-                  <SanctionStatusBadge status={record.status} />
-                </div>
-                <div className="flex w-[124px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center">
+                    <div className="flex justify-center">
+                      <SanctionStatusBadge status={record.status} />
+                    </div>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.sanctionDate}
-                  </span>
-                </div>
-                <div className="flex w-[124px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.releaseDate}
-                  </span>
-                </div>
-                <div className="flex w-[60px] items-center justify-center">
-                  <span
-                    className={`text-xs font-medium ${
-                      record.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {record.admin}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          {/* 페이지네이션 */}
-          <div className="flex w-full items-center justify-between">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex cursor-pointer items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{itemsPerPage}</span>
-                  <UpArrow size={10} color="#911A00" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setItemsPerPage('10개씩 보기')}>
-                  10개씩 보기
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setItemsPerPage('20개씩 보기')}>
-                  20개씩 보기
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setItemsPerPage('50개씩 보기')}>
-                  50개씩 보기
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+        {/* 페이지네이션 */}
+        <div className="flex w-full items-center justify-between">
+          <FilterDropdown
+            value={itemsPerPage}
+            options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+            onChange={setItemsPerPage}
+            width="w-[140px]"
+          />
 
-            <div className="flex items-center gap-4">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14.8252 17.9999L9.17487 11.9903L14.8252 6"
-                  stroke="#A0A0A0"
-                  strokeWidth="1.2"
-                />
-              </svg>
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary">
-                  <span className="text-sm font-medium text-white">1</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-medium text-orange-3">2</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-medium text-orange-3">...</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-medium text-orange-3">9</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-medium text-orange-3">10</span>
-                </div>
-              </div>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.1748 17.9999L14.8251 11.9903L9.1748 6"
-                  stroke="#911A00"
-                  strokeWidth="1.2"
-                />
-              </svg>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 

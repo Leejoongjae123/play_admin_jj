@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-import DatePicker from '@/components/ui/date-picker';
+import DateEdit from '@/components/ui/date-edit';
 import ParticipationChart from './components/ParticipationChart';
+import Calendar from '@/components/icons/Calendar';
 
 type MemberType = '일반회원' | '작가회원' | '멤버십회원' | '비회원';
 type PeriodType = '일간' | '주간' | '월간';
@@ -11,8 +12,13 @@ type PeriodType = '일간' | '주간' | '월간';
 export default function AdminParticipationPatternsPage() {
   const [activeMemberType, setActiveMemberType] = useState<MemberType>('일반회원');
   const [activePeriod, setActivePeriod] = useState<PeriodType>('일간');
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date>(new Date(2025, 7, 8)); // 2025-08-08
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [isStartDateOpen, setIsStartDateOpen] = useState(false);
+  const [isEndDateOpen, setIsEndDateOpen] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
 
   const memberTypes: MemberType[] = ['일반회원', '작가회원'];
   const periods: PeriodType[] = ['일간', '주간', '월간'];
@@ -24,8 +30,34 @@ export default function AdminParticipationPatternsPage() {
     { title: '커뮤니티 게시글 작성', id: 'community' },
   ];
 
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setIsStartDateOpen(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setIsEndDateOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // 날짜 포맷팅 함수
+  const formatDate = (date: Date | null) => {
+    if (!date) return '날짜 입력';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   return (
-    <div className='p-8'>
+    <div className="p-8">
       <div className="flex w-full flex-col gap-8 rounded-[5px] bg-white p-11">
         {/* 헤더 */}
         <div className="flex flex-col gap-8">
@@ -82,16 +114,63 @@ export default function AdminParticipationPatternsPage() {
                   기간 선택
                 </span>
                 <div className="flex w-[306px] items-center gap-2.5">
-                  <DatePicker value={startDate} onChange={setStartDate} className="w-[140px]" />
+                  {/* 시작일 */}
+                  <div ref={startDateRef} className="relative">
+                    <button
+                      onClick={() => {
+                        setIsStartDateOpen(!isStartDateOpen);
+                        setIsEndDateOpen(false);
+                      }}
+                      className="flex h-10 w-[140px] items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50"
+                    >
+                      <span className="font-bold text-primary">{formatDate(startDate)}</span>
+                      <Calendar className="h-4 w-4 text-gray-500" />
+                    </button>
+                    {isStartDateOpen && (
+                      <div className="absolute left-0 top-12 z-50">
+                        <DateEdit
+                          value={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          onConfirm={(date) => {
+                            setStartDate(date);
+                            setIsStartDateOpen(false);
+                          }}
+                          onCancel={() => setIsStartDateOpen(false)}
+                        />
+                      </div>
+                    )}
+                  </div>
                   <span className="text-center font-pretendard text-xs font-bold leading-normal text-gray-3">
                     -
                   </span>
-                  <DatePicker
-                    value={endDate}
-                    onChange={setEndDate}
-                    placeholder="날짜 입력"
-                    className="w-[140px]"
-                  />
+                  {/* 종료일 */}
+                  <div ref={endDateRef} className="relative">
+                    <button
+                      onClick={() => {
+                        setIsEndDateOpen(!isEndDateOpen);
+                        setIsStartDateOpen(false);
+                      }}
+                      className="flex h-10 w-[140px] items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm hover:bg-gray-50"
+                    >
+                      <span className={endDate ? 'font-bold text-primary' : 'text-gray-400'}>
+                        {formatDate(endDate)}
+                      </span>
+                      <Calendar className="h-4 w-4 text-gray-500" />
+                    </button>
+                    {isEndDateOpen && (
+                      <div className="absolute left-0 top-12 z-50">
+                        <DateEdit
+                          value={endDate || new Date()}
+                          onChange={(date) => setEndDate(date)}
+                          onConfirm={(date) => {
+                            setEndDate(date);
+                            setIsEndDateOpen(false);
+                          }}
+                          onCancel={() => setIsEndDateOpen(false)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

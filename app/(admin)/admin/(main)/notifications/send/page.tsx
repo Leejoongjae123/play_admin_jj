@@ -1,17 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import DatePicker from '@/components/ui/date-picker';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Search, Refresh, Excel, UpArrow, Arrow } from '@/components/icons';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
+import { Search, Refresh, Excel, Calendar } from '@/components/icons';
 
 // 알림 데이터 타입
 interface NotificationData {
@@ -41,13 +37,37 @@ const mockData: NotificationData[] = Array.from({ length: 12 }, (_, index) => ({
 
 export default function AdminNotificationsSendPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFilter, setSearchFilter] = useState('내용');
   const [selectedType, setSelectedType] = useState('전체');
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
+  const [showEndCalendar, setShowEndCalendar] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const totalItems = 12345;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartCalendar(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndCalendar(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = () => {
     console.log('검색 실행');
@@ -55,9 +75,18 @@ export default function AdminNotificationsSendPage() {
 
   const handleReset = () => {
     setSearchQuery('');
+    setSearchFilter('내용');
     setSelectedType('전체');
-    setStartDate('');
-    setEndDate('');
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
+  };
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const handleExcelDownload = () => {
@@ -71,9 +100,7 @@ export default function AdminNotificationsSendPage() {
   return (
     <div className="flex w-full flex-col items-center gap-[34px] p-11">
       {/* 페이지 제목 */}
-      <h1 className="self-stretch text-2xl font-bold leading-8 text-gray-1">
-        시스템 알림 발송
-      </h1>
+      <h1 className="self-stretch text-2xl font-bold leading-8 text-gray-1">시스템 알림 발송</h1>
 
       {/* 필터 섹션 */}
       <div className="flex w-full flex-col items-start gap-[18px] rounded-lg bg-[#FAF8F6] p-8">
@@ -81,66 +108,104 @@ export default function AdminNotificationsSendPage() {
           {/* 가입일 */}
           <div className="flex items-center gap-2">
             <span className="text-base font-bold text-gray-2">가입일</span>
-            <div className="flex w-[306px] items-center gap-[10px]">
-              <DatePicker
-                value={startDate}
-                onChange={setStartDate}
-                className="w-[140px]"
-              />
-              <span className="text-xs font-bold text-gray-4">-</span>
-              <DatePicker
-                value={endDate}
-                onChange={setEndDate}
-                placeholder="날짜 입력"
-                className="w-[140px]"
-              />
+            <div className="flex w-[306px] items-center gap-2">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowStartCalendar(!showStartCalendar);
+                    setShowEndCalendar(false);
+                  }}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 transition-colors hover:border-primary"
+                >
+                  <span
+                    className={`font-pretendard text-xs ${
+                      startDate ? 'font-bold text-primary' : 'font-medium text-[#727272]'
+                    }`}
+                  >
+                    {formatDate(startDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartCalendar && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartCalendar(false);
+                      }}
+                      onCancel={() => setShowStartCalendar(false)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <span className="font-pretendard text-xs font-bold text-[#727272]">-</span>
+
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEndCalendar(!showEndCalendar);
+                    setShowStartCalendar(false);
+                  }}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 transition-colors hover:border-primary"
+                >
+                  <span
+                    className={`font-pretendard text-xs ${
+                      endDate ? 'font-bold text-primary' : 'font-medium text-[#727272]'
+                    }`}
+                  >
+                    {formatDate(endDate) || '날짜 입력'}
+                  </span>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndCalendar && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndCalendar(false);
+                      }}
+                      onCancel={() => setShowEndCalendar(false)}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* 유형 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="text-base font-bold text-gray-2">유형</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{selectedType}</span>
-                  <UpArrow size={10} color="#911A00" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full">
-                <DropdownMenuItem onClick={() => setSelectedType('전체')}>
-                  전체
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedType('프로그램')}>
-                  프로그램
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedType('댓글')}>
-                  댓글
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              value={selectedType}
+              options={['전체', '프로그램', '댓글']}
+              onChange={setSelectedType}
+            />
           </div>
         </div>
 
         {/* 검색 영역 */}
         <div className="flex w-full items-center gap-6">
-          <div className="flex flex-1 items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-primary">내용</span>
-              <UpArrow size={10} color="#911A00" />
-            </div>
-            <input
-              type="text"
-              placeholder="검색조건을 입력해주세요"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 text-xs font-normal text-gray-4 outline-none placeholder:text-gray-4"
-            />
-          </div>
+          <SearchInputWithFilter
+            filterValue={searchFilter}
+            filterOptions={['내용', '발신자', '알림ID']}
+            onFilterChange={setSearchFilter}
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            placeholder="검색조건을 입력해주세요"
+          />
           <div className="flex items-center gap-2">
             <Button
               onClick={handleSearch}
-              className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0"
             >
               <Search size={16} color="white" />
               <span className="text-base font-bold text-white">검색</span>
@@ -148,7 +213,7 @@ export default function AdminNotificationsSendPage() {
             <Button
               onClick={handleReset}
               variant="outline"
-              className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded border-[1.3px] border-primary bg-white px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-[10px] rounded border-[1.3px] border-primary bg-white hover:bg-white/90"
             >
               <Refresh size={16} color="#911A00" />
               <span className="text-base font-bold text-primary">초기화</span>
@@ -169,17 +234,17 @@ export default function AdminNotificationsSendPage() {
               <Button
                 onClick={handleExcelDownload}
                 variant="outline"
-                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-[10px]"
+                className="flex h-[36px] w-[127px] items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white hover:bg-white/90"
               >
                 <Excel size={16} color="#4CA452" />
-                <span className="text-sm font-bold text-[#4CA452]">엑셀 다���로드</span>
+                <span className="text-sm font-bold text-[#4CA452]">엑셀 다운로드</span>
               </Button>
-              <Button
+              {/* <Button
                 onClick={handleRegister}
-                className="flex h-10 w-[120px] items-center justify-center rounded bg-primary px-0 py-[10px]"
+                className="flex h-10 h-[36px] w-[120px] items-center justify-center rounded bg-primary"
               >
                 <span className="text-sm font-bold text-white">커뮤니티 등록</span>
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -220,34 +285,22 @@ export default function AdminNotificationsSendPage() {
             {mockData.map((item, index) => (
               <div
                 key={index}
-                className={`flex h-[50px] items-center justify-between px-4 ${
-                  index === 1 ? 'rounded-sm bg-[#EBE1DF]' : ''
-                }`}
+                className="flex h-[50px] items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
               >
                 <div className="flex w-10 justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.no}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.no}</span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.id}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.id}</span>
                 </div>
                 <div className="flex w-[100px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.type}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.type}</span>
                 </div>
                 <div className="flex w-[240px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.content}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.content}</span>
                 </div>
                 <div className="flex w-[88px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.sender}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.sender}</span>
                 </div>
                 <div className="flex w-[100px] justify-center">
                   <Badge className="rounded-full border border-[#B0D5F2] bg-[#F6FBFF] px-3 py-[6px] text-sm font-normal text-[#2581F9]">
@@ -255,19 +308,13 @@ export default function AdminNotificationsSendPage() {
                   </Badge>
                 </div>
                 <div className="flex w-[114px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.createdAt}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.createdAt}</span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.state}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.state}</span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className={`text-xs font-normal ${index === 1 ? 'text-primary' : 'text-[#686868]'}`}>
-                    {item.successFail}
-                  </span>
+                  <span className="text-xs font-normal text-[#686868]">{item.successFail}</span>
                 </div>
               </div>
             ))}
@@ -275,47 +322,18 @@ export default function AdminNotificationsSendPage() {
 
           {/* 페이지네이션 */}
           <div className="flex w-full items-center justify-between">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-md border border-[#EBEBEB] bg-white px-3 py-3">
-                  <span className="text-xs font-bold text-primary">{itemsPerPage}개씩 보기</span>
-                  <UpArrow size={10} color="#911A00" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setItemsPerPage(10)}>
-                  10개씩 보기
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setItemsPerPage(20)}>
-                  20개씩 보기
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setItemsPerPage(50)}>
-                  50개씩 보기
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              value={`${itemsPerPage}개씩 보기`}
+              options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+              onChange={(value) => setItemsPerPage(parseInt(value.replace('개씩 보기', '')))}
+              width="w-auto min-w-[130px]"
+            />
 
-            <div className="flex items-center gap-4">
-              <Arrow size={24} color="#A0A0A0" direction="left" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary">
-                  <span className="text-sm font-normal text-white">1</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-normal text-[#CCBCAB]">2</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-normal text-[#CCBCAB]">...</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-normal text-[#CCBCAB]">9</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="text-sm font-normal text-[#CCBCAB]">10</span>
-                </div>
-              </div>
-              <Arrow size={24} color="#911A00" direction="right" />
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
       </div>

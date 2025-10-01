@@ -1,9 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useRef, useEffect } from 'react';
+import DateEdit from '@/components/ui/date-edit';
+import FilterDropdown from '@/components/ui/filter-dropdown';
+import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
+import Pagination from '@/components/ui/pagination';
 import ReportStatusBadge from '@/components/ui/ReportStatusBadge';
-import { Calendar, UpArrow, Search, Refresh, Excel, Arrow } from '@/components/icons';
+import Calendar from '@/components/icons/Calendar';
+import Search from '@/components/icons/Search';
+import Refresh from '@/components/icons/Refresh';
+import Excel from '@/components/icons/Excel';
 
 interface ReportData {
   id: number;
@@ -137,9 +143,56 @@ export default function AdminReportsPage() {
   const [selectedStatus, setSelectedStatus] = useState('전체');
   const [searchBy, setSearchBy] = useState('작성자');
   const [searchTerm, setSearchTerm] = useState('');
-  const [startDate, setStartDate] = useState('2025-08-08');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [itemsPerPage, setItemsPerPage] = useState('10개씩 보기');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
+
+  const totalPages = 10;
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleReset = () => {
+    setStartDate(new Date(2025, 7, 8));
+    setEndDate(null);
+    setSelectedCategory('전체');
+    setSelectedStatus('전체');
+    setSearchBy('작성자');
+    setSearchTerm('');
+    setItemsPerPage('10개씩 보기');
+    setCurrentPage(1);
+  };
+
+  // 외부 클릭 시 날짜 피커 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setShowStartDatePicker(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setShowEndDatePicker(false);
+      }
+    };
+
+    if (showStartDatePicker || showEndDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showStartDatePicker, showEndDatePicker]);
 
   return (
     <div className="flex w-full flex-col items-center gap-[34px] p-11">
@@ -149,25 +202,63 @@ export default function AdminReportsPage() {
       </div>
 
       {/* 필터 섹션 */}
-      <div className="flex flex-col items-start gap-[18px] self-stretch rounded-lg bg-[#FAF8F6] p-8">
+      <div className="flex flex-col gap-4 self-stretch rounded-lg bg-[#FAF8F6] p-8">
         {/* 첫 번째 행 */}
         <div className="flex items-start gap-6 self-stretch">
           {/* 신고일시 */}
           <div className="flex items-center gap-2">
             <div className="text-base font-bold leading-6 text-[#555]">신고일시</div>
-            <div className="flex w-[306px] items-center gap-2.5">
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-                <div className="text-xs font-bold leading-normal text-[#911A00]">
-                  {startDate || '날짜 입력'}
-                </div>
-                <Calendar size={12} color="#727272" />
+            <div className="flex items-center gap-2.5">
+              {/* 시작일 */}
+              <div className="relative" ref={startDateRef}>
+                <button
+                  onClick={() => setShowStartDatePicker(!showStartDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 hover:bg-[#FFF5F2]"
+                >
+                  <div className="text-xs font-bold leading-normal text-[#911A00]">
+                    {formatDate(startDate)}
+                  </div>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showStartDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={startDate || new Date()}
+                      onChange={setStartDate}
+                      onConfirm={(date) => {
+                        setStartDate(date);
+                        setShowStartDatePicker(false);
+                      }}
+                      onCancel={() => setShowStartDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
               <div className="text-center text-xs font-bold leading-normal text-[#727272]">-</div>
-              <div className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-                <div className="text-xs font-medium leading-normal text-[#727272]">
-                  {endDate || '날짜 입력'}
-                </div>
-                <Calendar size={12} color="#727272" />
+              {/* 종료일 */}
+              <div className="relative" ref={endDateRef}>
+                <button
+                  onClick={() => setShowEndDatePicker(!showEndDatePicker)}
+                  className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 hover:bg-[#FFF5F2]"
+                >
+                  <div className="text-xs font-medium leading-normal text-[#727272]">
+                    {formatDate(endDate) || '날짜 입력'}
+                  </div>
+                  <Calendar size={12} color="#727272" />
+                </button>
+                {showEndDatePicker && (
+                  <div className="absolute left-0 top-full z-50 mt-2">
+                    <DateEdit
+                      value={endDate || new Date()}
+                      onChange={setEndDate}
+                      onConfirm={(date) => {
+                        setEndDate(date);
+                        setShowEndDatePicker(false);
+                      }}
+                      onCancel={() => setShowEndDatePicker(false)}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -175,42 +266,46 @@ export default function AdminReportsPage() {
           {/* 구분 */}
           <div className="flex flex-1 items-center gap-2">
             <div className="text-base font-bold leading-6 text-[#555]">구분</div>
-            <div className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-              <div className="text-xs font-bold leading-normal text-[#911A00]">{selectedCategory}</div>
-              <UpArrow size={10} color="#911A00" />
-            </div>
+            <FilterDropdown
+              value={selectedCategory}
+              options={['전체', '댓글', '게시물', '메모']}
+              onChange={setSelectedCategory}
+            />
           </div>
 
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
             <div className="text-base font-bold leading-6 text-[#555]">상태</div>
-            <div className="flex flex-1 items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3">
-              <div className="text-xs font-bold leading-normal text-[#911A00]">{selectedStatus}</div>
-              <UpArrow size={10} color="#911A00" />
-            </div>
+            <FilterDropdown
+              value={selectedStatus}
+              options={['전체', '처리완료', '대기중', '무효']}
+              onChange={setSelectedStatus}
+            />
           </div>
         </div>
 
         {/* 두 번째 행 */}
         <div className="flex items-center gap-6 self-stretch">
           {/* 검색 필드 */}
-          <div className="flex flex-1 items-center gap-3 self-stretch rounded-md border border-[#EBEBEB] bg-white p-3">
-            <div className="flex items-center gap-2">
-              <div className="text-xs font-bold leading-normal text-[#911A00]">{searchBy}</div>
-              <UpArrow size={10} color="#911A00" />
-            </div>
-            <div className="text-xs font-medium leading-normal text-[#727272]">
-              {searchTerm || '검색조건을 입력해주세요'}
-            </div>
-          </div>
+          <SearchInputWithFilter
+            filterValue={searchBy}
+            filterOptions={['작성자', '신고자']}
+            onFilterChange={setSearchBy}
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            placeholder="검색조건을 입력해주세요"
+          />
 
           {/* 버튼들 */}
           <div className="flex items-center gap-2">
-            <button className="flex w-[120px] items-center justify-center gap-2.5 rounded bg-[#911A00] py-3">
+            <button className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-[#911A00] text-white hover:bg-[#911A00]/90">
               <Search size={16} color="#FFF" />
-              <div className="text-base font-bold leading-normal text-white">검색</div>
+              <div className="text-base font-bold leading-normal">검색</div>
             </button>
-            <button className="flex w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-[#911A00] py-3">
+            <button
+              onClick={handleReset}
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-[#911A00] bg-white hover:bg-[#FFF5F2]"
+            >
               <Refresh size={16} color="#911A00" />
               <div className="text-base font-bold leading-normal text-[#911A00]">초기화</div>
             </button>
@@ -244,170 +339,79 @@ export default function AdminReportsPage() {
         </div>
 
         {/* 테이블 */}
-        <div className="flex flex-col items-start gap-6 self-stretch">
-          <div className="flex flex-col items-start self-stretch">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
             {/* 테이블 헤더 */}
-            <div className="flex h-[50px] items-center justify-between self-stretch rounded-[2px] bg-[#EEE] px-4">
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-10 text-center text-xs font-bold leading-normal text-[#515151]">NO</div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[60px] max-w-[60px] text-center text-xs font-bold leading-normal text-[#515151]">
-                  신고ID
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[60px] max-w-[60px] text-center text-xs font-bold leading-normal text-[#515151]">
-                  구분
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[60px] max-w-[60px] text-center text-xs font-bold leading-normal text-[#515151]">
-                  대상ID
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[260px] max-w-[260px] text-center text-xs font-bold leading-normal text-[#515151]">
-                  내용 미리보기
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[88px] max-w-[88px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-bold leading-normal text-[#515151]">
-                  신고자
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[88px] max-w-[88px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-bold leading-normal text-[#515151]">
-                  신고유형
-                </div>
-              </div>
-              <div className="flex w-[100px] items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-20 flex-shrink-0 text-center text-xs font-bold leading-normal text-[#515151]">
-                  상태
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                <div className="w-[114px] text-center text-xs font-bold leading-normal text-[#515151]">
-                  신고일시
-                </div>
-              </div>
-            </div>
+            <thead>
+              <tr className="h-[50px] bg-[#EEE]">
+                <th className="px-2.5 text-xs font-bold text-[#515151]">NO</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">신고ID</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">구분</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">대상ID</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">내용 미리보기</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">신고자</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">신고유형</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">상태</th>
+                <th className="px-2.5 text-xs font-bold text-[#515151]">신고일시</th>
+              </tr>
+            </thead>
 
-            {/* 테이블 데이터 */}
-            {mockData.map((item, index) => (
-              <div
-                key={index}
-                className={`flex h-[50px] items-center justify-between self-stretch px-4 ${
-                  item.isHighlighted ? 'rounded-[2px] bg-[#EBE1DF]' : 'rounded'
-                }`}
-              >
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-10 text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+            {/* 테이블 바디 */}
+            <tbody>
+              {mockData.map((item, index) => (
+                <tr
+                  key={index}
+                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                >
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.id}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[60px] max-w-[60px] text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.reportId}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[60px] max-w-[60px] text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.category}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[60px] max-w-[60px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.targetId}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[260px] max-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="max-w-[260px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.preview}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[88px] max-w-[88px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.reporter}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[88px] max-w-[88px] overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.reportType}
-                  </div>
-                </div>
-                <div className="flex w-[100px] items-center justify-center gap-2.5 px-2.5 py-0 self-stretch">
-                  <ReportStatusBadge status={item.status} />
-                </div>
-                <div className="flex items-center justify-center gap-2.5 px-2.5 py-4">
-                  <div
-                    className={`w-[114px] text-center text-xs font-medium leading-normal ${
-                      item.isHighlighted ? 'text-[#911A00]' : 'text-[#686868]'
-                    }`}
-                  >
+                  </td>
+                  <td className="px-2.5 text-center">
+                    <div className="flex justify-center">
+                      <ReportStatusBadge status={item.status} />
+                    </div>
+                  </td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {item.date}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          {/* 페이징 */}
-          <div className="flex items-center justify-between self-stretch">
-            <div className="flex items-center gap-3 rounded-md border border-[#EBEBEB] bg-white p-3">
-              <div className="text-xs font-bold leading-normal text-[#911A00]">{itemsPerPage}</div>
-              <UpArrow size={10} color="#911A00" />
-            </div>
-            <div className="flex items-center gap-4">
-              <Arrow direction="left" size={24} color="#A0A0A0" />
-              <div className="flex items-center gap-2">
-                <div className="flex size-6 flex-col items-center justify-center gap-2.5 rounded-[2px] bg-[#911A00]">
-                  <div className="text-center text-sm font-medium leading-4 text-white">1</div>
-                </div>
-                <div className="flex size-6 flex-col items-center justify-center gap-2.5">
-                  <div className="text-center text-sm font-medium leading-4 text-[#CCBCAB]">2</div>
-                </div>
-                <div className="flex size-6 flex-col items-center justify-center gap-2.5">
-                  <div className="text-center text-sm font-medium leading-4 text-[#CCBCAB]">...</div>
-                </div>
-                <div className="flex size-6 flex-col items-center justify-center gap-2.5">
-                  <div className="text-center text-sm font-medium leading-4 text-[#CCBCAB]">9</div>
-                </div>
-                <div className="flex size-6 flex-col items-center justify-center gap-2.5">
-                  <div className="text-center text-sm font-medium leading-4 text-[#CCBCAB]">10</div>
-                </div>
-              </div>
-              <Arrow direction="right" size={24} color="#911A00" />
-            </div>
-          </div>
+        {/* 페이징 */}
+        <div className="flex items-center justify-between self-stretch">
+          <FilterDropdown
+            value={itemsPerPage}
+            options={['10개씩 보기', '20개씩 보기', '50개씩 보기']}
+            onChange={setItemsPerPage}
+            width="w-[140px]"
+          />
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>
