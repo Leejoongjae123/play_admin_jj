@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@/components/ui/modal';
 
 interface SendNotificationModalProps {
   isOpen: boolean;
@@ -9,55 +9,43 @@ interface SendNotificationModalProps {
   type: 'notification' | 'message';
 }
 
-export default function SendNotificationModal({ isOpen, onClose, type }: SendNotificationModalProps) {
+export default function SendNotificationModal({
+  isOpen,
+  onClose,
+  type,
+}: SendNotificationModalProps) {
   const [content, setContent] = useState('');
-
-  if (!isOpen) return null;
 
   const title = type === 'notification' ? '[알림] 보내기' : '[쪽지] 보내기';
 
   const handleSubmit = () => {
     // 전송 로직 구현
-    console.log('전송 내용:', content);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div
-        className="flex w-[520px] flex-col items-center rounded-xl bg-white relative"
-        style={{
-          boxShadow: '0 0 10px 0 rgba(146, 46, 0, 0.08)',
-          height: '506px',
-          padding: '44px',
-          gap: '46px'
-        }}
-      >
-        {/* 헤더 */}
-        <div className="flex flex-col items-start self-stretch" style={{ gap: '24px' }}>
-          <div className="flex justify-between items-start self-stretch">
-            <h2 className="text-xl font-semibold text-[#202224] font-pretendard">
-              {title}
-            </h2>
-            <button 
-              onClick={onClose}
-              className="w-6 h-6 flex items-center justify-center"
-            >
-              <X size={16} className="text-[#6D6D6D]" strokeWidth={1.6} />
-            </button>
-          </div>
+    <Modal open={isOpen} onClose={onClose}>
+      <ModalContent className="">
+        <ModalHeader onClose={onClose}>{title}</ModalHeader>
 
+        <ModalBody>
           {/* 정보 테이블 */}
           <div className="flex flex-col items-start self-stretch border border-gray-7">
             {/* 작성자 행 */}
             <div className="flex h-12 items-center self-stretch border-b border-gray-7">
-              <div className="flex w-40 px-6 py-2.5 items-center gap-2.5 self-stretch bg-gray-7">
-                <span className="text-base font-normal text-gray-2 font-pretendard" style={{ letterSpacing: '-0.32px' }}>
+              <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                <span
+                  className="font-pretendard text-base font-normal text-gray-2"
+                  style={{ letterSpacing: '-0.32px' }}
+                >
                   작성자
                 </span>
               </div>
-              <div className="flex px-6 py-2.5 items-center gap-2.5 flex-1">
-                <span className="text-base font-normal text-gray-1 font-pretendard" style={{ letterSpacing: '-0.32px' }}>
+              <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                <span
+                  className="font-pretendard text-base font-normal text-gray-1"
+                  style={{ letterSpacing: '-0.32px' }}
+                >
                   인스크립트 운영자
                 </span>
               </div>
@@ -65,13 +53,19 @@ export default function SendNotificationModal({ isOpen, onClose, type }: SendNot
 
             {/* 받는 사람 행 */}
             <div className="flex h-12 items-center self-stretch border-b border-gray-7">
-              <div className="flex w-40 px-6 py-2.5 items-center gap-2.5 self-stretch bg-gray-7">
-                <span className="text-base font-normal text-gray-2 font-pretendard" style={{ letterSpacing: '-0.32px' }}>
+              <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                <span
+                  className="font-pretendard text-base font-normal text-gray-2"
+                  style={{ letterSpacing: '-0.32px' }}
+                >
                   받는 사람
                 </span>
               </div>
-              <div className="flex px-6 py-2.5 items-center gap-2.5 flex-1">
-                <span className="text-base font-normal text-gray-1 font-pretendard" style={{ letterSpacing: '-0.32px' }}>
+              <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                <span
+                  className="font-pretendard text-base font-normal text-gray-1"
+                  style={{ letterSpacing: '-0.32px' }}
+                >
                   &lt;바이 하트&gt; 북토크 신청자
                 </span>
               </div>
@@ -80,22 +74,22 @@ export default function SendNotificationModal({ isOpen, onClose, type }: SendNot
 
           {/* 입력 영역 */}
           <div
-            className="flex flex-col items-end self-stretch rounded-lg border border-gray-6 relative"
+            className="relative flex flex-col items-end self-stretch rounded-lg border border-gray-6"
             style={{
               backgroundColor: '#FAF8F6',
               padding: '20px',
-              gap: '84px'
+              gap: '84px',
             }}
           >
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="보낼 내용을 입력해주세요"
-              className="w-full bg-transparent text-base font-normal text-gray-1 font-pretendard resize-none border-none outline-none"
+              className="w-full resize-none border-none bg-transparent font-pretendard text-base font-normal text-gray-1 outline-none"
               style={{
                 letterSpacing: '-0.32px',
                 lineHeight: '24px',
-                color: content ? '#2A2A2A' : '#CCBCAB'
+                color: content ? '#2A2A2A' : '#CCBCAB',
               }}
               rows={3}
             />
@@ -115,23 +109,27 @@ export default function SendNotificationModal({ isOpen, onClose, type }: SendNot
               </svg>
             </div>
           </div>
+        </ModalBody>
 
-          {/* 전송 버튼 */}
+        <ModalFooter>
           <button
             onClick={handleSubmit}
-            className="flex justify-center items-center self-stretch rounded bg-primary"
+            className="flex w-full items-center justify-center rounded bg-primary"
             style={{
               padding: '20px 55px',
               gap: '10px',
-              borderRadius: '4px'
+              borderRadius: '4px',
             }}
           >
-            <span className="font-pretendard font-semibold text-white" style={{ fontSize: '18px', lineHeight: '24px' }}>
+            <span
+              className="font-pretendard font-semibold text-white"
+              style={{ fontSize: '18px', lineHeight: '24px' }}
+            >
               전송
             </span>
           </button>
-        </div>
-      </div>
-    </div>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }

@@ -105,7 +105,7 @@ export default function DateEdit({
   return (
     <div
       className={cn(
-        'inline-flex w-96 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl bg-white py-3 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.12)] outline outline-[1.40px] outline-offset-[-1.40px] outline-stone-400',
+        'inline-flex w-96 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-[1.4px] border-[#C68D82] bg-white py-3',
         className,
       )}
     >

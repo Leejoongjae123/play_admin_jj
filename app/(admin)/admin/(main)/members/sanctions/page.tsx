@@ -319,7 +319,11 @@ export default function AdminMemberSanctionsPage() {
           {/* 상태 */}
           <div className="flex flex-1 items-center gap-2">
             <span className="text-base font-bold text-gray-2">상태</span>
-            <FilterDropdown value={status} options={['전체', '제재중', '해제됨']} onChange={setStatus} />
+            <FilterDropdown
+              value={status}
+              options={['전체', '제재중', '해제됨']}
+              onChange={setStatus}
+            />
           </div>
         </div>
 
@@ -336,7 +340,7 @@ export default function AdminMemberSanctionsPage() {
           <div className="flex items-center gap-2">
             <Button
               onClick={handleSearch}
-              className="flex h-12 w-[120px] h-[43px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3 hover:bg-primary/90"
+              className="flex h-12 h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3 hover:bg-primary/90"
             >
               <Search size={16} color="white" />
               <span className="text-base font-bold text-white">검색</span>
@@ -344,7 +348,7 @@ export default function AdminMemberSanctionsPage() {
             <Button
               onClick={handleReset}
               variant="outline"
-              className="flex h-12 w-[120px] h-[43px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3 hover:bg-[#FFF5F2]"
+              className="flex h-12 h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3 hover:bg-[#FFF5F2]"
             >
               <Refresh size={16} />
               <span className="text-base font-bold text-primary">초기화</span>
@@ -363,7 +367,7 @@ export default function AdminMemberSanctionsPage() {
           </div>
           <Button
             variant="outline"
-            className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5 hover:bg-white/90 h-[36px] w-[128px]"
+            className="flex h-[36px] w-[128px] items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5 hover:bg-white/90"
           >
             <Excel size={16} color="#4CA452" />
             <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-[#4CA452]">

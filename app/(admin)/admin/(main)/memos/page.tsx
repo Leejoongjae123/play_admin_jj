@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -162,6 +163,7 @@ const sampleData: MemoData[] = [
 ];
 
 export default function AdminMemosPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [exposureFilter, setExposureFilter] = useState('전체');
@@ -207,6 +209,10 @@ export default function AdminMemosPage() {
 
   const handlePlayRegister = () => {
     // 희곡 등록 로직 구현
+  };
+
+  const handleRowClick = (memoId: number) => {
+    router.push(`/admin/memos/${memoId}`);
   };
 
   // 외부 클릭 시 날짜 피커 닫기
@@ -370,7 +376,7 @@ export default function AdminMemosPage() {
               </button>
               <button
                 onClick={handlePlayRegister}
-                className="flex h-12 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-2.5"
+                className="flex h-9 w-[120px] items-center justify-center gap-[10px] rounded bg-primary px-0 py-2.5"
               >
                 <svg
                   width="16"
@@ -428,6 +434,7 @@ export default function AdminMemosPage() {
                 {sampleData.map((memo, index) => (
                   <tr
                     key={index}
+                    onClick={() => handleRowClick(memo.id)}
                     className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                   >
                     <td className="px-2.5 text-center text-xs font-medium text-[#686868]">

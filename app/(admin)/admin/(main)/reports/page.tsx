@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -139,6 +140,7 @@ const mockData: ReportData[] = [
 ];
 
 export default function AdminReportsPage() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [selectedStatus, setSelectedStatus] = useState('전체');
   const [searchBy, setSearchBy] = useState('작성자');
@@ -361,6 +363,7 @@ export default function AdminReportsPage() {
               {mockData.map((item, index) => (
                 <tr
                   key={index}
+                  onClick={() => router.push(`/admin/reports/${item.reportId}`)}
                   className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                 >
                   <td className="px-2.5 text-center text-xs font-medium text-[#686868]">

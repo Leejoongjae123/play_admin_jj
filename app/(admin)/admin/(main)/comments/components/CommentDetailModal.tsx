@@ -35,7 +35,7 @@ export default function CommentDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative flex h-[686px] w-[520px] flex-col items-center gap-[46px] rounded-xl bg-white p-11 shadow-[0_0_10px_0_rgba(146,46,0,0.08)]">
+      <div className="relative flex  flex-col items-center gap-[46px] rounded-xl bg-white p-11 shadow-[0_0_10px_0_rgba(146,46,0,0.08)]">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-start gap-6">
           <div className="flex w-full items-start justify-between">

@@ -225,7 +225,9 @@ export default function AdminPlaysPage() {
                   onClick={() => setShowStartDatePicker(!showStartDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-semibold text-primary">{formatDate(startDate)}</span>
+                  <span className="text-xs font-semibold text-primary">
+                    {formatDate(startDate)}
+                  </span>
                   <Calendar size={12} />
                 </button>
                 {showStartDatePicker && (
@@ -405,7 +407,9 @@ export default function AdminPlaysPage() {
                   key={index}
                   className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                 >
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">{row.no}</td>
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    {row.no}
+                  </td>
                   <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
                     {row.playId}
                   </td>

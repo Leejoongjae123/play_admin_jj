@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ModalDropdownProps {
   value: string;
@@ -8,6 +9,8 @@ interface ModalDropdownProps {
   options?: string[];
   placeholder?: string;
   label?: string;
+  className?: string;
+  dropdownClassName?: string;
 }
 
 export default function ModalDropdown({
@@ -16,6 +19,8 @@ export default function ModalDropdown({
   options = ['Y', 'N'],
   placeholder = '선택해주세요',
   label,
+  className,
+  dropdownClassName,
 }: ModalDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -47,7 +52,10 @@ export default function ModalDropdown({
       <div className="relative w-full" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex h-12 w-full items-center justify-between rounded border border-red-3 bg-orange-4 px-5 py-4"
+          className={cn(
+            'flex h-12 w-full items-center justify-between rounded border border-red-3 bg-orange-4 px-5 py-4',
+            className,
+          )}
         >
           <div className="flex flex-1 items-center justify-between">
             <span className="font-pretendard text-base font-normal leading-6 tracking-[-0.32px] text-orange-3">
@@ -71,7 +79,12 @@ export default function ModalDropdown({
 
         {/* 드롭다운 메뉴 */}
         {isOpen && (
-          <div className="absolute top-full z-10 mt-1 w-full rounded border border-red-3 bg-white shadow-lg">
+          <div
+            className={cn(
+              'absolute top-full z-10 mt-1 w-full rounded border border-red-3 bg-white shadow-lg',
+              dropdownClassName,
+            )}
+          >
             {options.map((option) => (
               <button
                 key={option}

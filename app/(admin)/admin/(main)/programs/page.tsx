@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -188,6 +189,7 @@ function StatisticCard({ title, count }: { title: string; count: string }) {
 }
 
 export default function AdminProgramsPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [exposureFilter, setExposureFilter] = useState('전체');
@@ -388,7 +390,10 @@ export default function AdminProgramsPage() {
                   엑셀 다운로드
                 </span>
               </button>
-              <button className="flex w-[120px] items-center justify-center rounded bg-primary py-2.5 text-sm font-semibold leading-4 tracking-tight text-white hover:bg-primary/90">
+              <button
+                onClick={() => router.push('/admin/programs/edit')}
+                className="flex w-[120px] items-center justify-center rounded bg-primary py-2.5 text-sm font-semibold leading-4 tracking-tight text-white hover:bg-primary/90"
+              >
                 프로그램 등록
               </button>
             </div>
@@ -419,6 +424,7 @@ export default function AdminProgramsPage() {
                 {mockPrograms.map((program, index) => (
                   <tr
                     key={index}
+                    onClick={() => router.push(`/admin/programs/${program.id}`)}
                     className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                   >
                     <td className="px-2.5 text-center text-xs font-medium text-[#686868]">

@@ -351,20 +351,20 @@ export default function AdminCommentsPage() {
               <span className="text-[#6D6D6D]">건</span>
             </div>
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white w-[127px] h-[36px] hover:bg-white/90"
+              <button
+                
+                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white w-[127px] h-9 hover:bg-white/90 justify-center"
               >
                 <Excel size={16} color="#4CA452" />
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-[#4CA452]">
                   엑셀 다운로드
                 </div>
-              </Button>
-              <Button className="flex h-12 w-[120px] items-center justify-center bg-primary w-[120px] h-[36px]">
+              </button>
+              <button className="flex h-9 w-[120px] items-center justify-center bg-primary w-[120px] h-9 rounded-[4px]">
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-white">
                   커뮤니티 등록
                 </div>
-              </Button>
+              </button>
             </div>
           </div>
         </div>

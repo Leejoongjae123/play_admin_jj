@@ -25,8 +25,8 @@ const menuItems: MenuItem[] = [
   },
   {
     title: '프로그램 관리',
-    // subItems: ['프로그램 목록', '프로그램 예약'],
-    subItems: ['프로그램 목록'],
+    subItems: ['프로그램 목록', '프로그램 예약'],
+    // subItems: ['프로그램 목록'],
   },
   {
     title: '게시판 관리',
@@ -60,8 +60,8 @@ export default function AdminSidebar() {
     '희곡 관리': '/admin/plays',
     '작가 관리': '/admin/writers',
     '프로그램 목록': '/admin/programs',
-    // '프로그램 예약': '/admin/program-reservations',
-    '커뮤니티 관리': '/admin/community',
+    '프로그램 예약': '/admin/program-reservations',
+    '커뮤니티 관리': '/admin/community2',
     '댓글 관리': '/admin/comments',
     '메모 관리': '/admin/memos',
     '신고 관리': '/admin/reports',

@@ -355,7 +355,7 @@ export default function AdminMembersPage() {
           </div>
           <Button
             variant="outline"
-            className="flex h-[36px] items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 hover:bg-white/90 w-[128px] h-[36px]"
+            className="flex h-[36px] w-[128px] items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 hover:bg-white/90"
           >
             <Excel size={16} />
             <span className="font-pretendard text-sm font-bold text-[#4CA452]">엑셀 다운로드</span>

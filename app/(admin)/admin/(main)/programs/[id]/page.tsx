@@ -1,61 +1,44 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Pagination from '@/components/ui/pagination';
 import SendNotificationModal from './components/SendNotificationModal';
+import Hamburger from '@/components/icons/Hamburger';
 
-interface Props {
+interface ProgramDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function ProgramDetailPage({ params }: Props) {
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean;
-    type: 'notification' | 'message' | null;
-  }>({
-    isOpen: false,
-    type: null,
-  });
+interface MemoData {
+  id: string;
+  author: string;
+  content: string;
+  likes: number;
+  comments: number;
+  reports: number;
+}
 
-  const handleOpenModal = (type: 'notification' | 'message') => {
-    setModalState({ isOpen: true, type });
-  };
+interface ApplicantData {
+  no: number;
+  applicationDate: string;
+  nickname: string;
+  name: string;
+  email: string;
+  phone: string;
+}
 
-  const handleCloseModal = () => {
-    setModalState({ isOpen: false, type: null });
-  };
+export default function ProgramDetailPage({ params }: ProgramDetailPageProps) {
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'notification' | 'message'>('notification');
 
-  // params는 Promise이므로 컴포넌트 내에서 처리
-  // 실제 구현에서는 useEffect나 다른 방법으로 처리해야 함
-  // 현재는 임시로 id를 하드코딩
-  const id = 'P0123';
-
-  // 더미 데이터 - 실제로는 API에서 가져올 데이터
-  const programData = {
-    programId: 'P0123',
-    applicationsCount: 32,
-    registrationDate: '2025-08-28',
-    viewCount: '1,245',
-    scrapCount: 32,
-    programName: '<바이하트> 북토크',
-    eventDateTime: '2025-09-20 18:00',
-    applicationPeriod: '2025-09-01 ~ 2025-09-18',
-    venue: '인스크립트홀',
-    capacity: '20명',
-    information: '선착순 20명 입장 가능',
-    keywords: ['북토크', '현대희곡', '현대극'],
-    description: `『바이 하트』는 2013년 초연 이후 꾸준히 사랑받아온 현대 희곡으로,
-영국 극작가 게리 오언(Gary Owen)의 작품입니다.
-이 작품은 소시민의 일상과 감정, 사회적 현실을 직설적이면서도 따뜻하게 풀어낸
-독특한 화법으로 잘 알려져 있습니다.`,
-    isVisible: '노출중',
-    status: '진행중',
-  };
-
-  const memoData = [
+  // 목록 데이터
+  const memoData: MemoData[] = [
     {
       id: 'M210',
       author: 'user_001',
@@ -74,189 +57,275 @@ export default function ProgramDetailPage({ params }: Props) {
     },
   ];
 
-  const applicantsData = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
+  const applicantData: ApplicantData[] = Array.from({ length: 10 }, (_, i) => ({
+    no: i + 1,
     applicationDate: '2025.07.01 18:00',
-    nickname: '홍길동',
-    userId: 'ghdrlfehd',
+    nickname: '홍길동 (ghdrlfehd)',
     name: '홍길동',
     email: 'ghdrlfehd@gmail.com',
     phone: '010-1234-5678',
   }));
 
+  const handleOpenModal = (type: 'notification' | 'message') => {
+    setModalType(type);
+    if (type === 'notification') {
+      setIsNotificationModalOpen(true);
+    } else {
+      setIsMessageModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsNotificationModalOpen(false);
+    setIsMessageModalOpen(false);
+  };
+
   return (
-    <div className="flex w-full max-w-[1180px] p-8 bg-white rounded-[5px]">
-      <div className="flex flex-col justify-center items-center gap-20 flex-1 p-11">
-        {/* ���로그램 관리 섹션 */}
-        <div className="flex flex-col items-start gap-10 self-stretch">
-          <div className="flex flex-col items-end gap-4 self-stretch">
-            <div className="flex justify-between items-center self-stretch">
-              <h1 className="text-2xl font-bold text-gray-1">프로그램 관리</h1>
+    <div className="flex w-full flex-col items-start gap-20 p-8">
+      <div className="flex w-full flex-col items-center justify-center gap-20 rounded-md bg-white p-11">
+        {/* 프로그램 관리 섹션 */}
+        <div className="flex w-full flex-col items-start gap-10">
+          <div className="flex w-full flex-col items-end gap-4">
+            <div className="flex w-full items-center justify-between">
+              <h1 className="text-2xl font-bold leading-8 text-gray-1">프로그램 관리</h1>
             </div>
-            <div className="flex flex-col items-start self-stretch border border-gray-7">
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">프로그램ID</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.programId}</span>
-                  </div>
+
+            {/* 기본 정보 테이블 */}
+            <div className="flex w-full flex-col items-start border border-gray-7">
+              {/* 첫 번째 줄 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    프로그램ID
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    P0123
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">신청수</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.applicationsCount}</span>
-                  </div>
+
+              {/* 두 번째 줄 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    신청수
+                  </span>
                 </div>
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">등록일</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.registrationDate}</span>
-                  </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    32
+                  </span>
+                </div>
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    등록일
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    2025-08-28
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">조회수</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.viewCount}</span>
-                  </div>
+
+              {/* 세 번째 줄 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    조회수
+                  </span>
                 </div>
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">스크랩수</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.scrapCount}</span>
-                  </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    1,245
+                  </span>
+                </div>
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    스크랩수
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    32
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* 프로그램 정보 섹션 */}
-          <div className="flex flex-col items-start gap-4 self-stretch">
-            <div className="flex justify-between items-center self-stretch">
-              <h2 className="text-xl font-bold text-gray-1">프로그램 정보</h2>
+          <div className="flex w-full flex-col items-start gap-4">
+            <div className="flex w-full items-center justify-between">
+              <h2 className="text-xl font-bold leading-6 text-gray-1">프로그램 정보</h2>
             </div>
-            <div className="flex flex-col items-start self-stretch border border-gray-7">
-              <div className="flex w-full h-12 items-center border-b border-gray-7">
-                <div className="flex w-40 p-3 px-6 items-center gap-2.5 flex-shrink-0 self-stretch bg-gray-7">
-                  <span className="text-base text-gray-2">프로그램명</span>
+
+            <div className="flex w-full flex-col items-start border border-gray-7">
+              {/* 프로그램명 */}
+              <div className="flex h-12 w-full items-center border-b border-gray-7">
+                <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    프로그램명
+                  </span>
                 </div>
-                <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                  <span className="text-base text-gray-1">{programData.programName}</span>
-                </div>
-              </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">행사일시</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.eventDateTime}</span>
-                  </div>
-                </div>
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">신청기간</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.applicationPeriod}</span>
-                  </div>
+                <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    &lt;바이하트&gt; 북토크
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">장소</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.venue}</span>
-                  </div>
+
+              {/* 행사일시, 신청기간 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    행사일시
+                  </span>
                 </div>
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">인원</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.capacity}</span>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    2025-09-20 18:00
+                  </span>
+                </div>
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    신청기간
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    2025-09-01 ~ 2025-09-18
+                  </span>
+                </div>
+              </div>
+
+              {/* 장소, 인원 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    장소
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    인스크립트홀
+                  </span>
+                </div>
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    인원
+                  </span>
+                </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    20명
+                  </span>
+                </div>
+              </div>
+
+              {/* 안내사항 */}
+              <div className="flex h-12 w-full items-center border-b border-gray-7">
+                <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    안내사항
+                  </span>
+                </div>
+                <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    선착순 20명 입장 가능
+                  </span>
+                </div>
+              </div>
+
+              {/* 키워드 */}
+              <div className="flex w-full items-center border-b border-gray-7">
+                <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    키워드
+                  </span>
+                </div>
+                <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                  <div className="flex items-start gap-1.5">
+                    <Badge
+                      variant="outline"
+                      size="md"
+                      className="border-primary text-primary"
+                    >
+                      북토크
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      size="md"
+                      className="border-primary text-primary"
+                    >
+                      현대희곡
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      size="md"
+                      className="border-primary text-primary"
+                    >
+                      현대극
+                    </Badge>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">안내사항</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.information}</span>
+
+              {/* 프로그램 소개 */}
+              <div className="flex w-full items-center border-b border-gray-7">
+                <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    프로그램 소개
+                  </span>
+                </div>
+                <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    『바이 하트』는 2013년 초연 이후 꾸준히 사랑받아온 현대 희곡으로, 
+                    영국 극작가 게리 오언(Gary Owen)의 작품입니다. 
+                    이 작품은 소시민의 일상과 감정, 사회적 현실을 직설적이면서도 따뜻하게 풀���낸 
+                    독특한 화법으로 잘 알려져 있습니다.
+                  </span>
+                </div>
+              </div>
+
+              {/* 대표 이미지 */}
+              <div className="flex w-full items-center border-b border-gray-7">
+                <div className="flex w-40 items-center gap-2.5 self-stretch bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    대표 이미지
+                  </span>
+                </div>
+                <div className="flex flex-1 items-center gap-2.5 px-6 py-2.5">
+                  <div className="flex h-[199px] w-[288px] items-center justify-center bg-[#D9D9D9]">
+                    <span className="text-[28px] font-medium leading-[150%] tracking-[-0.56px] text-primary">
+                      *프로그램 이미지
+                    </span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">키워드</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <div className="flex items-start gap-1.5">
-                      {programData.keywords.map((keyword, index) => (
-                        <div
-                          key={index}
-                          className="flex py-2 px-2.5 justify-center items-center gap-2.5 rounded border border-primary"
-                        >
-                          <span className="text-sm font-medium text-primary">{keyword}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+
+              {/* 노출 여부, 상태 */}
+              <div className="flex w-full items-center">
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    노출 여부
+                  </span>
                 </div>
-              </div>
-              <div className="flex items-center self-stretch border-b border-gray-7">
-                <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                  <span className="text-base text-gray-2">프로그램 소개</span>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    노출중
+                  </span>
                 </div>
-                <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                  <span className="text-base text-gray-1 whitespace-pre-line">{programData.description}</span>
+                <div className="flex h-12 w-40 items-center gap-2.5 border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <span className="text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    상태
+                  </span>
                 </div>
-              </div>
-              <div className="flex items-center self-stretch border-b border-gray-7">
-                <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                  <span className="text-base text-gray-2">대표 이미지</span>
-                </div>
-                <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                  <div className="flex w-72 h-[199px] justify-center items-center gap-2.5 bg-gray-5">
-                    <span className="text-3xl font-medium text-primary">*프로그램 이미지</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center self-stretch">
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">노출 여부</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <span className="text-base text-gray-1">{programData.isVisible}</span>
-                  </div>
-                </div>
-                <div className="flex h-12 items-center flex-1 border-b border-gray-7">
-                  <div className="flex w-40 p-3 px-6 items-center gap-2.5 self-stretch bg-gray-7">
-                    <span className="text-base text-gray-2">상태</span>
-                  </div>
-                  <div className="flex p-3 px-6 items-center gap-2.5 flex-1">
-                    <div className="flex py-1.5 px-3 justify-center items-center gap-2.5 rounded-full border border-[#B0D5F2] bg-[#F6FBFF]">
-                      <span className="text-sm font-medium text-[#2581F9]">{programData.status}</span>
-                    </div>
+                <div className="flex h-12 flex-1 items-center gap-2.5 border-b border-gray-7 px-6 py-2.5">
+                  <div className="flex items-center justify-center gap-2.5 rounded-full border border-[#B0D5F2] bg-[#F6FBFF] px-3 py-1.5">
+                    <span className="text-sm font-medium leading-4 text-[#2581F9]">진행중</span>
                   </div>
                 </div>
               </div>
@@ -264,163 +333,222 @@ export default function ProgramDetailPage({ params }: Props) {
           </div>
 
           {/* 메모 관리 섹션 */}
-          <div className="flex flex-col items-start gap-4 self-stretch">
-            <div className="flex justify-between items-center self-stretch">
-              <h2 className="text-xl font-bold text-gray-1">메모 관리</h2>
+          <div className="flex w-full flex-col items-start gap-4">
+            <div className="flex w-full items-center justify-between">
+              <h2 className="text-xl font-bold leading-6 text-gray-1">메모 관리</h2>
             </div>
-            <div className="flex flex-col items-start self-stretch bg-white">
-              <div className="flex py-2.5 px-6 justify-between items-center self-stretch border-b border-gray-7 bg-gray-7">
-                <span className="w-14 text-sm font-medium text-gray-4 text-center">메모ID</span>
-                <span className="w-[116px] text-sm font-medium text-gray-4 text-center">작성자</span>
-                <div className="flex w-[316px] max-w-[316px] justify-center items-center gap-10">
-                  <span className="max-w-[316px] flex-1 text-base text-gray-2 text-center">내용 (앞 50자)</span>
+
+            <div className="flex w-full flex-col items-start bg-white">
+              {/* 메모 테이블 헤더 */}
+              <div className="flex w-full items-center justify-between border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                <div className="w-[54px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                  메모ID
                 </div>
-                <span className="w-11 text-sm font-medium text-gray-4 text-center">좋아요</span>
-                <span className="w-11 text-base text-gray-2 text-center">댓글</span>
-                <span className="w-11 text-base text-gray-2 text-center">신고</span>
-                <span className="w-18 text-base text-gray-2 text-center opacity-75">상세</span>
+                <div className="w-[116px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                  작성자
+                </div>
+                <div className="flex w-[316px] max-w-[316px] items-center justify-center gap-10">
+                  <div className="flex flex-1 items-center justify-center gap-2.5">
+                    <span className="max-w-[316px] flex-1 text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                      내용 (앞 50자)
+                    </span>
+                  </div>
+                </div>
+                <div className="w-[44px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                  좋아요
+                </div>
+                <div className="w-[44px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                  댓글
+                </div>
+                <div className="w-[44px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                  신고
+                </div>
+                <div className="w-[72px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2 opacity-75">
+                  상세
+                </div>
               </div>
+
+              {/* 메모 리스트 */}
               {memoData.map((memo, index) => (
-                <div key={index} className="flex py-2.5 px-6 justify-between items-center self-stretch border-b border-gray-7">
-                  <span className="w-14 text-base text-gray-1 text-center">{memo.id}</span>
-                  <span className="w-[116px] text-sm font-medium text-gray-4 text-center">{memo.author}</span>
-                  <div className="flex w-[316px] max-w-[520px] justify-center items-center gap-10">
-                    <div className="flex justify-center items-center gap-2.5 flex-1">
-                      <span className="max-w-[316px] max-h-6 flex-1 text-base text-gray-1">{memo.content}</span>
+                <div
+                  key={index}
+                  className="flex w-full items-center justify-between border-b border-gray-7 px-6 py-2.5"
+                >
+                  <div className="w-[54px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                    {memo.id}
+                  </div>
+                  <div className="w-[116px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                    {memo.author}
+                  </div>
+                  <div className="flex w-[316px] max-w-[520px] items-center justify-center gap-10">
+                    <div className="flex flex-1 items-center justify-center gap-2.5">
+                      <span className="max-h-6 max-w-[316px] flex-1 text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                        {memo.content}
+                      </span>
                     </div>
                   </div>
-                  <span className="w-11 text-sm font-medium text-gray-4 text-center">{memo.likes}</span>
-                  <span className="w-11 text-sm font-medium text-gray-4 text-center">{memo.comments}</span>
-                  <span className="w-11 text-sm font-medium text-gray-4 text-center">{memo.reports}</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex py-2.5 px-3 justify-center items-center gap-1.5 rounded border border-primary bg-white"
-                  >
-                    <span className="text-sm font-bold text-primary">상세보기</span>
-                  </Button>
+                  <div className="w-[44px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                    {memo.likes}
+                  </div>
+                  <div className="w-[44px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                    {memo.comments}
+                  </div>
+                  <div className="w-[44px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                    {memo.reports}
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 rounded border border-primary bg-white px-3 py-2.5">
+                    <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-primary">
+                      상세보기
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* 신청자 목록 섹션 */}
-          <div className="flex flex-col items-center gap-6 self-stretch">
-            <div className="flex justify-between items-center self-stretch">
-              <h2 className="flex-1 text-xl font-bold text-gray-1">신청자 목록</h2>
+          <div className="flex w-full flex-col items-center gap-6">
+            <div className="flex w-full items-center justify-between">
+              <h2 className="flex-1 text-xl font-bold leading-6 text-gray-1">신청자 목록</h2>
             </div>
+
             <div className="flex items-start gap-4">
               <Button
-                variant="default"
                 size="sm"
-                className="flex w-[184px] h-[52px] py-2.5 px-14 justify-center items-center gap-2.5 rounded bg-primary"
+                className="w-[184px] h-[52px] bg-primary text-white"
                 onClick={() => handleOpenModal('notification')}
               >
-                <span className="text-lg font-bold text-white">알림 보내기</span>
+                알림 보내기
               </Button>
               <Button
-                variant="default"
                 size="sm"
-                className="flex w-[184px] h-[52px] py-2.5 px-14 justify-center items-center gap-2.5 rounded bg-primary"
+                className="w-[184px] h-[52px] bg-primary text-white"
                 onClick={() => handleOpenModal('message')}
               >
-                <span className="text-lg font-bold text-white">쪽지 보내기</span>
+                쪽지 보내기
               </Button>
-              <Button variant="default" size="sm" className="flex w-[184px] h-[52px] py-2.5 px-14 justify-center items-center gap-2.5 rounded bg-primary">
-                <span className="text-lg font-bold text-white">메일 보내기</span>
+              {/* <Button
+                size="sm"
+                className="w-[184px] h-[52px] bg-primary text-white"
+              >
+                메일 보내기
               </Button>
-              <Button variant="default" size="sm" className="flex w-[184px] h-[52px] py-2.5 px-14 justify-center items-center gap-2.5 rounded bg-primary">
-                <span className="text-lg font-bold text-white">문자 보내기</span>
-              </Button>
+              <Button
+                size="sm"
+                className="w-[184px] h-[52px] bg-primary text-white"
+              >
+                문자 보내기
+              </Button> */}
             </div>
-            <div className="flex flex-col items-center gap-6 self-stretch">
-              <div className="flex flex-col items-start self-stretch bg-white">
-                <div className="flex py-2.5 px-6 justify-between items-center self-stretch border-b border-gray-7 bg-gray-7">
-                  <span className="w-14 text-sm font-medium text-gray-4 text-center">순번</span>
-                  <span className="w-[214px] text-base text-gray-2 text-center">신청일시</span>
-                  <span className="w-[190px] text-base text-gray-2 text-center">닉네임(아이디)</span>
-                  <div className="flex w-[116px] max-w-[116px] justify-center items-center gap-10">
-                    <span className="w-[116px] max-w-[116px] text-base text-gray-2 text-center">이름</span>
+
+            <div className="flex w-full flex-col items-center gap-6">
+              <div className="flex w-full flex-col items-start bg-white">
+                {/* 신청자 테이블 헤더 */}
+                <div className="flex w-full items-center justify-between border-b border-gray-7 bg-gray-7 px-6 py-2.5">
+                  <div className="w-[54px] text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                    순번
                   </div>
-                  <div className="flex w-[180px] max-w-[180px] justify-center items-center gap-10">
-                    <span className="max-w-[520px] text-base text-gray-2 text-center">이메일</span>
+                  <div className="w-[214px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    신청일시
                   </div>
-                  <div className="flex w-[114px] max-w-[114px] justify-center items-center gap-10">
-                    <span className="max-w-[520px] text-base text-gray-2 text-center">휴대전화</span>
+                  <div className="w-[190px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                    닉네임(아이디)
+                  </div>
+                  <div className="flex w-[116px] max-w-[116px] items-center justify-center gap-10">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-[116px] max-w-[116px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                        이름
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex w-[180px] max-w-[180px] items-center justify-center gap-10">
+                    <div className="flex items-center gap-2.5">
+                      <span className="max-w-[520px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                        이메일
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex w-[114px] max-w-[114px] items-center justify-center gap-10">
+                    <div className="flex items-center gap-2.5">
+                      <span className="max-w-[520px] text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-2">
+                        휴대전화
+                      </span>
+                    </div>
                   </div>
                 </div>
-                {applicantsData.map((applicant, index) => (
-                  <div key={index} className="flex w-full py-2.5 px-6 justify-between items-center border-b border-gray-7">
-                    <span className="w-14 flex-shrink-0 text-base text-gray-1 text-center">{applicant.id}</span>
-                    <div className="flex w-[214px] max-w-[520px] justify-center items-center gap-10 flex-shrink-0">
-                      <div className="flex justify-center items-center gap-2.5">
-                        <span className="h-6 max-w-[200px] max-h-6 flex-1 overflow-hidden text-base text-gray-1 text-center text-ellipsis whitespace-nowrap">
+
+                {/* 신청자 리스트 */}
+                {applicantData.map((applicant, index) => (
+                  <div
+                    key={index}
+                    className="flex w-full items-center justify-between border-b border-gray-7 px-6 py-2.5"
+                  >
+                    <div className="w-[54px] flex-shrink-0 text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                      {applicant.no}
+                    </div>
+                    <div className="flex w-[214px] max-w-[520px] flex-shrink-0 items-center justify-center gap-10">
+                      <div className="flex items-center justify-center gap-2.5">
+                        <span className="h-6 max-h-6 max-w-[200px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
                           {applicant.applicationDate}
                         </span>
                       </div>
                     </div>
-                    <div className="flex w-[190px] items-center gap-1 flex-shrink-0">
-                      <div className="w-6 h-6 flex-shrink-0 aspect-square bg-gray-5 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-4 text-center">
-                        {applicant.nickname} ({applicant.userId})
+                    <div className="flex w-[190px] flex-shrink-0 items-center gap-1">
+                      <div className="h-6 w-6 flex-shrink-0 rounded-full bg-gray-5"></div>
+                      <span className="text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                        {applicant.nickname}
                       </span>
                     </div>
-                    <span className="w-[116px] flex-shrink-0 text-sm font-medium text-gray-4 text-center">{applicant.name}</span>
-                    <span className="w-[180px] max-w-[180px] flex-shrink-0 text-base text-gray-1 text-center">{applicant.email}</span>
-                    <span className="w-[114px] max-w-[114px] flex-shrink-0 text-base text-gray-1 text-center">{applicant.phone}</span>
+                    <div className="w-[116px] flex-shrink-0 text-center text-sm font-medium leading-4 text-[#6A6A6A]">
+                      {applicant.name}
+                    </div>
+                    <div className="w-[180px] max-w-[180px] flex-shrink-0 text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                      {applicant.email}
+                    </div>
+                    <div className="w-[114px] max-w-[114px] flex-shrink-0 text-center text-base font-normal leading-6 tracking-[-0.32px] text-gray-1">
+                      {applicant.phone}
+                    </div>
                   </div>
                 ))}
               </div>
+
               {/* 페이지네이션 */}
-              <div className="flex justify-center items-center gap-4 self-stretch">
-                <ArrowLeft className="w-6 h-6 text-gray-4" />
-                <div className="flex items-center gap-2">
-                  <div className="flex w-6 h-6 flex-col justify-center items-center gap-2.5 rounded-sm bg-primary">
-                    <span className="text-sm font-medium text-white">1</span>
-                  </div>
-                  <div className="flex w-6 h-6 flex-col justify-center items-center gap-2.5">
-                    <span className="text-sm font-medium text-orange-3">2</span>
-                  </div>
-                  <div className="flex w-6 h-6 flex-col justify-center items-center gap-2.5">
-                    <span className="text-sm font-medium text-orange-3">...</span>
-                  </div>
-                  <div className="flex w-6 h-6 flex-col justify-center items-center gap-2.5">
-                    <span className="text-sm font-medium text-orange-3">9</span>
-                  </div>
-                  <div className="flex w-6 h-6 flex-col justify-center items-center gap-2.5">
-                    <span className="text-sm font-medium text-orange-3">10</span>
-                  </div>
-                </div>
-                <ArrowRight className="w-6 h-6 text-primary" />
+              <div className="flex w-full items-center justify-center gap-4">
+                <Pagination currentPage={currentPage} totalPages={10} onPageChange={setCurrentPage} />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* 하단 버튼들 */}
-        <div className="flex w-full justify-between items-center">
-          <Button variant="outline" className="flex py-2.5 px-3 justify-center items-center gap-1.5 rounded border border-gray-4 bg-white">
-            <svg width="16" height="16" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.6875 4.89062H14.6875V6.22396H2.6875V4.89062ZM2.6875 8.22396H14.6875V9.55729H2.6875V8.22396ZM2.6875 11.5573H14.6875V12.8906H2.6875V11.5573Z" fill="#555555"/>
-            </svg>
-            <span className="text-sm font-bold text-gray-2">목록으로</span>
-          </Button>
-          <div className="flex items-center gap-2.5">
-            <Button variant="outline" className="flex py-2.5 px-3 justify-center items-center gap-1.5 rounded border border-primary bg-white">
-              <span className="text-sm font-bold text-primary">삭제</span>
-            </Button>
-            <Button variant="default" className="flex py-2.5 px-3 justify-center items-center gap-1.5 rounded bg-primary">
-              <span className="text-sm font-bold text-white">수정</span>
-            </Button>
+          {/* 하단 액션 버튼 */}
+          <div className="flex w-full items-center justify-between">
+            <button
+              onClick={() => router.push('/admin/programs')}
+              className="flex items-center gap-1.5 rounded border border-gray-4 bg-white px-3 py-2.5"
+            >
+              <Hamburger size={16} color="#555555" />
+              <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-gray-2">
+                목록으로
+              </span>
+            </button>
+            <div className="flex items-center gap-2.5">
+              <button className="flex items-center gap-1.5 rounded border border-primary bg-white w-12 h-9 justify-center">
+                <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-primary">
+                  삭제
+                </span>
+              </button>
+              <button className="flex items-center gap-1.5 rounded bg-primary w-12 h-9 justify-center">
+                <span className="text-sm font-bold leading-4 tracking-[-0.28px] text-white">수정</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* 모달 */}
       <SendNotificationModal
-        isOpen={modalState.isOpen}
+        isOpen={isNotificationModalOpen || isMessageModalOpen}
         onClose={handleCloseModal}
-        type={modalState.type || 'notification'}
+        type={modalType}
       />
     </div>
   );

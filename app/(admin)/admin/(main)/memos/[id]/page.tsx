@@ -37,7 +37,7 @@ export default async function MemoDetailPage({ params }: MemoDetailPageProps) {
 
   return (
     <div className="flex min-h-screen w-full items-start justify-center p-8">
-      <div className="flex w-full max-w-[1180px] flex-col items-center justify-center gap-20 rounded-[5px] bg-white p-11">
+      <div className="flex w-full flex-col items-center justify-center gap-20 rounded-[5px] bg-white p-11">
         <div className="flex w-full flex-col items-start gap-10">
           {/* 메모 정보 섹션 */}
           <div className="flex w-full flex-col items-end gap-4">
@@ -172,7 +172,7 @@ export default async function MemoDetailPage({ params }: MemoDetailPageProps) {
         <div className="flex w-full items-center justify-between">
           <Button
             variant="outline"
-            className="flex h-auto items-center gap-1.5 rounded border border-gray-4 bg-white px-3 py-2.5 text-sm font-semibold text-gray-2 hover:bg-gray-6"
+            className="flex h-auto items-center gap-1.5 rounded border border-gray-4 bg-white px-3 py-2.5 text-sm font-semibold text-gray-2 hover:bg-white/90 hover:text-gray-1"
           >
             <Hamburger size={16} color="#555555" />
             목록으로
@@ -181,11 +181,11 @@ export default async function MemoDetailPage({ params }: MemoDetailPageProps) {
           <div className="flex items-center gap-2.5">
             <Button
               variant="outline"
-              className="h-auto rounded border border-primary bg-white px-3 py-2.5 text-sm font-semibold text-primary hover:bg-red-3"
+              className="h-9 w-12 rounded border border-primary bg-white px-3 py-2.5 text-sm font-semibold text-primary hover:bg-red-3"
             >
               삭제
             </Button>
-            <Button className="h-auto rounded bg-primary px-3 py-2.5 text-sm font-semibold text-white hover:bg-primary/90">
+            <Button className="h-9 w-15 rounded bg-primary px-3 py-2.5 text-sm font-semibold text-white hover:bg-primary/90">
               비공개
             </Button>
           </div>

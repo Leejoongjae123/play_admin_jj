@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -9,6 +10,7 @@ import Calendar from '@/components/icons/Calendar';
 import Search from '@/components/icons/Search';
 import Refresh from '@/components/icons/Refresh';
 import Excel from '@/components/icons/Excel';
+import { Button } from '@/components/ui/button';
 
 interface CommunityPost {
   id: number;
@@ -73,6 +75,7 @@ const mockData: CommunityPost[] = [
 ] as CommunityPost[];
 
 export default function AdminCommunityPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [category, setCategory] = useState('전체');
@@ -250,13 +253,13 @@ export default function AdminCommunityPage() {
 
           {/* 검색/초기화 버튼 */}
           <div className="flex items-center gap-2">
-            <button className="flex w-[120px] h-[43px] items-center justify-center gap-2.5 rounded bg-primary py-3 text-white hover:bg-primary/90">
+            <button className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-primary py-3 text-white hover:bg-primary/90">
               <Search size={16} color="white" />
               <span className="text-base font-bold">검색</span>
             </button>
             <button
               onClick={handleReset}
-              className="flex w-[120px] h-[43px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white py-3 text-primary hover:bg-[#FFF5F2]"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white py-3 text-primary hover:bg-[#FFF5F2]"
             >
               <Refresh size={16} color="#911A00" />
               <span className="text-base font-bold text-primary">초기화</span>
@@ -274,11 +277,14 @@ export default function AdminCommunityPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white px-3 py-2.5">
+            <button className="flex h-9 w-[127px] items-center justify-center gap-3 rounded rounded-[4px] border-[1.6px] border-[#4CA452] bg-white">
               <Excel size={16} color="#4CA452" />
               <span className="text-sm font-bold text-[#4CA452]">엑셀 다운로드</span>
             </button>
-            <button className="flex w-[120px] items-center justify-center rounded bg-primary py-2.5 text-white">
+            <button
+              onClick={() => router.push('/admin/community2/edit')}
+              className="flex h-9 w-[120px] items-center justify-center rounded bg-primary text-white"
+            >
               <span className="text-sm font-bold">게시글 등록</span>
             </button>
           </div>
@@ -308,6 +314,7 @@ export default function AdminCommunityPage() {
               {mockData.map((post, index) => (
                 <tr
                   key={index}
+                  onClick={() => router.push(`/admin/community2/${post.id}`)}
                   className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                 >
                   <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
