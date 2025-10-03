@@ -46,7 +46,7 @@ export default function WriterEditPage() {
   };
 
   return (
-    <div className="flex w-full max-w-[1180px] items-start gap-2.5 p-8">
+    <div className="flex w-full items-start gap-2.5 p-8">
       <div className="flex flex-1 flex-col items-center justify-center gap-20 rounded-[5px] bg-white p-11">
         {/* 헤더 */}
         <div className="flex w-full flex-col items-start gap-4">

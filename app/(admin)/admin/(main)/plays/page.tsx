@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -10,9 +11,16 @@ import Calendar from '@/components/icons/Calendar';
 import Search from '@/components/icons/Search';
 import Refresh from '@/components/icons/Refresh';
 import Excel from '@/components/icons/Excel';
+import PlayApprovalModal from './components/PlayApprovalModal';
 
 // 상태 뱃지 컴포넌트
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({
+  status,
+  onClick,
+}: {
+  status: string;
+  onClick?: (e: React.MouseEvent) => void;
+}) {
   const statusConfig = {
     노출중: {
       className: 'border border-[#B0D5F2] bg-[#F6FBFF] text-[#2581F9]',
@@ -21,7 +29,8 @@ function StatusBadge({ status }: { status: string }) {
       className: 'bg-gray-5',
     },
     승인대기: {
-      className: 'border border-[#D7825E] bg-[#FBEEE8] text-[#D44F34]',
+      className:
+        'border border-[#D7825E] bg-[#FBEEE8] text-[#D44F34] cursor-pointer hover:bg-[#F0DDD0]',
     },
     반려: {
       className: 'bg-red text-white',
@@ -33,6 +42,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <div
       className={`flex items-center justify-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium ${config.className}`}
+      onClick={status === '승인대기' ? onClick : undefined}
     >
       {status}
     </div>
@@ -147,6 +157,7 @@ const sampleData: PlayData[] = [
 ];
 
 export default function AdminPlaysPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [tagCategory, setTagCategory] = useState('전체');
@@ -157,6 +168,8 @@ export default function AdminPlaysPage() {
   const [itemsPerPage, setItemsPerPage] = useState('10개씩 보기');
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [selectedPlay, setSelectedPlay] = useState<PlayData | null>(null);
 
   const startDateRef = useRef<HTMLDivElement>(null);
   const endDateRef = useRef<HTMLDivElement>(null);
@@ -186,6 +199,39 @@ export default function AdminPlaysPage() {
     setCurrentPage(1);
   };
 
+  const handleRowClick = (playId: string) => {
+    router.push(`/admin/plays/${playId}`);
+  };
+
+  const handleApprovalClick = (play: PlayData, e: React.MouseEvent) => {
+    e.stopPropagation(); // row 클릭 이벤트 전파 방지
+    setSelectedPlay(play);
+    setIsApprovalModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsApprovalModalOpen(false);
+    setSelectedPlay(null);
+  };
+
+  const handleApprove = () => {
+    if (selectedPlay) {
+      // 승인 로직 구현
+      console.log('승인:', selectedPlay.playId);
+      alert('희곡이 승인되었습니다.');
+    }
+    handleCloseModal();
+  };
+
+  const handleReject = (reason: string) => {
+    if (selectedPlay) {
+      // 반려 로직 구현
+      console.log('반려:', selectedPlay.playId, '사유:', reason);
+      alert(`희곡이 반려되었습니다. 사유: ${reason}`);
+    }
+    handleCloseModal();
+  };
+
   // 외부 클릭 시 날짜 피커 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -211,7 +257,7 @@ export default function AdminPlaysPage() {
       {/* 페이지 제목 */}
       <h1 className="self-stretch text-2xl font-semibold leading-8 text-gray-1">희곡 관리</h1>
 
-      {/* 필터 섹션 */}
+      {/* 필터 섹��� */}
       <div className="flex flex-col gap-4 self-stretch rounded-lg bg-background p-8">
         {/* 첫 번째 행: 등록일자, 태그분류, 상태 */}
         <div className="flex items-start gap-6 self-stretch">
@@ -307,7 +353,7 @@ export default function AdminPlaysPage() {
           <div className="flex items-center gap-2">
             <Button
               onClick={handleSearch}
-              className="flex h-auto w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-3"
             >
               <Search size={16} color="white" />
               <span className="text-base font-semibold text-white">검색</span>
@@ -315,7 +361,7 @@ export default function AdminPlaysPage() {
             <Button
               onClick={handleReset}
               variant="outline"
-              className="flex h-auto w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3"
+              className="flex h-[43px] w-[120px] items-center justify-center gap-2.5 rounded border-[1.3px] border-primary bg-white px-0 py-3"
             >
               <Refresh size={16} />
               <span className="text-base font-semibold text-primary">초기화</span>
@@ -373,7 +419,10 @@ export default function AdminPlaysPage() {
                 엑셀 다운로드
               </span>
             </Button>
-            <Button className="h-auto w-[120px] rounded bg-primary px-0 py-2.5">
+            <Button
+              onClick={() => router.push('/admin/plays/edit')}
+              className="h-auto w-[120px] rounded bg-primary px-0 py-2.5"
+            >
               <span className="text-sm font-semibold leading-4 tracking-[-0.28px] text-white">
                 희곡 등록
               </span>
@@ -405,6 +454,7 @@ export default function AdminPlaysPage() {
               {sampleData.map((row, index) => (
                 <tr
                   key={index}
+                  onClick={() => handleRowClick(row.playId)}
                   className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                 >
                   <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
@@ -424,7 +474,10 @@ export default function AdminPlaysPage() {
                   </td>
                   <td className="px-2.5 text-center">
                     <div className="flex justify-center">
-                      <StatusBadge status={row.status} />
+                      <StatusBadge
+                        status={row.status}
+                        onClick={(e) => handleApprovalClick(row, e)}
+                      />
                     </div>
                   </td>
                   <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
@@ -461,6 +514,24 @@ export default function AdminPlaysPage() {
           />
         </div>
       </div>
+
+      {/* 희곡 승인/반려 모달 */}
+      {selectedPlay && (
+        <PlayApprovalModal
+          isOpen={isApprovalModalOpen}
+          onClose={handleCloseModal}
+          playData={{
+            playId: selectedPlay.playId,
+            userId: 'userB874',
+            applicationDate: selectedPlay.registrationDate,
+            title: selectedPlay.title,
+            author: selectedPlay.author,
+            dialogue: '그래, 대체 이게 뭐지? 내가 베라를 질투하는 건가? 내가…',
+          }}
+          onApprove={handleApprove}
+          onReject={handleReject}
+        />
+      )}
     </div>
   );
 }

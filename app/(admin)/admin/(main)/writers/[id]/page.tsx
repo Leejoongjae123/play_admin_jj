@@ -66,7 +66,7 @@ const mockMemoData: MemoData[] = [
 
 export default function WriterDetailPage({ params }: WriterDetailPageProps) {
   return (
-    <div className="flex w-full max-w-[1180px] flex-col gap-20 rounded bg-white p-11">
+    <div className="flex w-full flex-col gap-20 rounded bg-white p-11">
       {/* 작가 관리 섹션 */}
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-4">
@@ -345,23 +345,22 @@ export default function WriterDetailPage({ params }: WriterDetailPageProps) {
 
       {/* 하단 버튼들 */}
       <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          className="flex items-center gap-1.5 rounded border border-gray-4 bg-white px-3 py-2.5 hover:bg-gray-6"
+        <button
+          
+          className="flex items-center gap-1.5 rounded border border-gray-4 bg-white hover:bg-gray-6 w-[94px] h-9 justify-center"
         >
           <Hamburger size={16} color="#555555" />
           <span className="font-pretendard text-sm font-bold text-gray-2">목록으로</span>
-        </Button>
+        </button>
         <div className="flex items-center gap-2.5">
-          <Button
-            variant="outline"
-            className="rounded border border-primary bg-white px-3 py-2.5 hover:bg-gray-6"
+          <button
+            className="rounded border border-primary bg-white hover:bg-gray-6 w-12 h-9"
           >
             <span className="font-pretendard text-sm font-bold text-primary">삭제</span>
-          </Button>
-          <Button className="rounded bg-primary px-3 py-2.5 hover:bg-primary/90">
+          </button>
+          <button className="rounded bg-primary hover:bg-primary/90 w-12 h-9">
             <span className="font-pretendard text-sm font-bold text-white">수정</span>
-          </Button>
+          </button>
         </div>
       </div>
     </div>

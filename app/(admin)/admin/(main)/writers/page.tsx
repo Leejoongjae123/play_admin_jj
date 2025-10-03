@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -148,6 +149,7 @@ const mockWriters: Writer[] = [
 ];
 
 export default function AdminWritersPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [statusFilter, setStatusFilter] = useState('전체');
@@ -356,7 +358,10 @@ export default function AdminWritersPage() {
                 </div>
               </button>
               {/* 희곡 등록 */}
-              <button className="flex w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-2.5 hover:bg-primary/90">
+              <button 
+                onClick={() => router.push('/admin/writers/edit')}
+                className="flex w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-2.5 hover:bg-primary/90"
+              >
                 <div className="text-sm font-semibold leading-4 tracking-tight text-white">
                   작가 등록
                 </div>
@@ -388,6 +393,7 @@ export default function AdminWritersPage() {
                 {mockWriters.map((writer, index) => (
                   <tr
                     key={`${writer.id}-${index}`}
+                    onClick={() => router.push(`/admin/writers/${writer.id}`)}
                     className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                   >
                     <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
