@@ -284,7 +284,13 @@ export default function AdminMemberSanctionsPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-bold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} color="#727272" />
