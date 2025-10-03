@@ -164,7 +164,7 @@ export default function BannerCard({
       {/* Toggle */}
       <Toggle
         checked={isPublished}
-        onChange={onPublishToggle}
+        onChange={onPublishToggle || (() => {})}
         label={isPublished ? '게시' : '미게시'}
       />
     </div>

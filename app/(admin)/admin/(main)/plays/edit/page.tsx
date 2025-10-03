@@ -142,7 +142,7 @@ export default function PlayEditPage() {
                     placeholder="작가 이름을 입력해주세요"
                     className="h-14 w-full cursor-pointer rounded border border-red-3 bg-orange-4 px-5 py-4 font-pretendard text-base leading-6 text-gray-1 placeholder:text-orange-3 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <Search size={24} color="#911A00" className="absolute right-5 cursor-pointer" onClick={() => setIsWriterModalOpen(true)} />
+                  <Search size={24} color="#911A00" className="absolute right-5 pointer-events-none" />
                 </div>
               </div>
             </div>

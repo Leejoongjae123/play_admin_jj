@@ -8,7 +8,6 @@ import Pagination from '@/components/ui/pagination';
 import SuspensionModal from './components/SuspensionModal';
 import BlacklistModal from './components/BlacklistModal';
 import RejectWriterModal from './components/RejectWriterModal';
-import { Divide } from 'lucide-react';
 
 interface MemberDetailData {
   memberId: string;

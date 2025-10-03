@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,7 +30,8 @@ export default function MemberTrendChart() {
   const chartRef = useRef<ChartJS<'line'>>(null);
 
   // 차트 준비 완료 시 그라데이션 생성
-  const handleChartRef = (chart: ChartJS<'line'> | null) => {
+  useEffect(() => {
+    const chart = chartRef.current;
     if (chart && chart.ctx) {
       const ctx = chart.ctx;
 
@@ -45,7 +46,7 @@ export default function MemberTrendChart() {
         chart.update();
       }
     }
-  };
+  }, []);
 
   // 차트 데이터
   const data = {
@@ -157,7 +158,7 @@ export default function MemberTrendChart() {
   return (
     <div className="flex flex-1 flex-col items-start self-stretch">
       <div className="flex h-[300px] w-full items-center justify-center">
-        <Line ref={handleChartRef} data={data} options={options} />
+        <Line ref={chartRef} data={data} options={options} />
       </div>
       <div className="flex items-start self-stretch pt-2">
         {['1월', '2월', '3월', '4월', '5월', '6월'].map((month) => (
