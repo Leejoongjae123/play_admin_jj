@@ -66,6 +66,7 @@ const mockMemoData: MemoData[] = [
 
 export default function WriterDetailPage({ params }: WriterDetailPageProps) {
   return (
+    <div className='bg-transparent p-8'>
     <div className="flex w-full flex-col gap-20 rounded bg-white p-11">
       {/* 작가 관리 섹션 */}
       <div className="flex flex-col gap-10">
@@ -363,6 +364,7 @@ export default function WriterDetailPage({ params }: WriterDetailPageProps) {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

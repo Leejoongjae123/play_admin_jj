@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DateEdit from '@/components/ui/date-edit';
 import FilterDropdown from '@/components/ui/filter-dropdown';
 import SearchInputWithFilter from '@/components/ui/search-input-with-filter';
@@ -140,6 +141,7 @@ const mockMembers: Member[] = [
 ];
 
 export default function AdminMembersPage() {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 7, 8));
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [writerFilter, setWriterFilter] = useState('writer');
@@ -385,6 +387,7 @@ export default function AdminMembersPage() {
               {mockMembers.map((member, index) => (
                 <tr
                   key={member.id}
+                  onClick={() => router.push(`/admin/members/${member.id}`)}
                   className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
                 >
                   <td className="px-2 text-center text-xs font-medium text-[#686868]">

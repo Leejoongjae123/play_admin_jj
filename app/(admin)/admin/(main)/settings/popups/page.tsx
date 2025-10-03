@@ -354,7 +354,7 @@ export default function AdminPopupsPage() {
             {mockPopups.map((popup) => (
               <div
                 key={popup.id}
-                className="group flex h-[50px] w-full cursor-pointer items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
+                className="group flex h-[50px] w-full cursor-pointer items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF] bg-white"
               >
                 <div className="flex w-10 items-center justify-center p-2">
                   <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">

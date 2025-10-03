@@ -285,7 +285,7 @@ export default function AdminNotificationsSendPage() {
             {mockData.map((item, index) => (
               <div
                 key={index}
-                className="flex h-[50px] items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
+                className="flex h-[50px] items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF] bg-white"
               >
                 <div className="flex w-10 justify-center">
                   <span className="text-xs font-normal text-[#686868]">{item.no}</span>

@@ -75,6 +75,7 @@ export default async function PlayDetailPage({ params }: PageParams) {
   ];
 
   return (
+    <div className='bg-transparent p-8'>
     <div className="flex w-full flex-col gap-20 rounded-[5px] bg-white p-11">
       {/* 희곡 관리 섹션 */}
       <div className="flex flex-col gap-10">
@@ -389,6 +390,7 @@ export default async function PlayDetailPage({ params }: PageParams) {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

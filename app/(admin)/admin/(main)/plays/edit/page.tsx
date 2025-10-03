@@ -8,6 +8,7 @@ import CustomRadio from '@/components/ui/CustomRadio';
 import Search from '@/components/icons/Search';
 import Close from '@/components/icons/Close';
 import PlayFormInput from './components/PlayFormInput';
+import WriterSelectionModal from './components/WriterSelectionModal';
 
 interface PlayFormData {
   title: string;
@@ -36,6 +37,8 @@ export default function PlayEditPage() {
     '등장인물4',
   ]);
   const [newKeyword, setNewKeyword] = useState('키워드3');
+  const [isWriterModalOpen, setIsWriterModalOpen] = useState(false);
+  const [selectedWriter, setSelectedWriter] = useState('');
 
   const form = useForm<PlayFormData>({
     defaultValues: {
@@ -133,10 +136,13 @@ export default function PlayEditPage() {
                 <div className="relative flex items-center">
                   <input
                     type="text"
+                    value={selectedWriter}
+                    onClick={() => setIsWriterModalOpen(true)}
+                    readOnly
                     placeholder="작가 이름을 입력해주세요"
-                    className="h-14 w-full rounded border border-red-3 bg-orange-4 px-5 py-4 font-pretendard text-base leading-6 text-gray-1 placeholder:text-orange-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-14 w-full cursor-pointer rounded border border-red-3 bg-orange-4 px-5 py-4 font-pretendard text-base leading-6 text-gray-1 placeholder:text-orange-3 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <Search size={24} color="#911A00" className="absolute right-5" />
+                  <Search size={24} color="#911A00" className="absolute right-5 cursor-pointer" onClick={() => setIsWriterModalOpen(true)} />
                 </div>
               </div>
             </div>
@@ -359,13 +365,13 @@ export default function PlayEditPage() {
           <div className="flex items-center gap-2.5">
             <button
               
-              className="flex items-center gap-1.5 rounded border border-primary bg-white px-3 py-2.5"
+              className="flex items-center gap-1.5 rounded border border-primary bg-white w-12 h-9 justify-center"
             >
               <span className="font-pretendard text-sm font-semibold leading-4 text-primary">
                 취소
               </span>
             </button>
-            <button className="flex items-center gap-1.5 rounded bg-primary px-3 py-2.5">
+            <button className="flex items-center gap-1.5 rounded bg-primary w-12 h-9 justify-center">
               <span className="font-pretendard text-sm font-semibold leading-4 text-white">
                 저장
               </span>
@@ -373,6 +379,16 @@ export default function PlayEditPage() {
           </div>
         </div>
       </form>
+
+      {/* 작가 선택 모달 */}
+      <WriterSelectionModal
+        isOpen={isWriterModalOpen}
+        onClose={() => setIsWriterModalOpen(false)}
+        onSelect={(writer) => {
+          setSelectedWriter(writer.name);
+          form.setValue('writer', writer.name);
+        }}
+      />
     </div>
   );
 }

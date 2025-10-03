@@ -49,7 +49,7 @@ export default function ReportDetailClient({ reportDetail }: ReportDetailClientP
 
   return (
     <div className="flex w-full justify-center p-8">
-      <div className="flex w-full max-w-[1180px] flex-col items-center gap-20 rounded-[5px] bg-white p-11">
+      <div className="flex w-full flex-col items-center gap-20 rounded-[5px] bg-white p-11">
         {/* 신고 관리 섹션 */}
         <div className="flex w-full flex-col items-start gap-10">
           <div className="flex w-full flex-col items-end gap-4">

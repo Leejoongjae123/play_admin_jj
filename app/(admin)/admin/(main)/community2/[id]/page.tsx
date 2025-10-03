@@ -54,7 +54,7 @@ export default function CommunityDetailPage({ params }: CommunityDetailPageProps
   ];
 
   return (
-    <div className="flex h-auto w-[1180px] items-start gap-2.5 p-8">
+    <div className="flex h-auto w-full items-start gap-2.5 p-8">
       <div className="flex flex-1 flex-col items-center justify-center gap-20 rounded-[5px] bg-white p-11">
         {/* 게시물 메인 컨테이너 */}
         <div className="flex flex-col items-start self-stretch rounded-[4px] bg-background">

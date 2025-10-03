@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Mail from '@/components/icons/Mail';
 import Hamburger from '@/components/icons/Hamburger';
-import Arrow from '@/components/icons/Arrow';
+import Pagination from '@/components/ui/pagination';
 import SuspensionModal from './components/SuspensionModal';
 import BlacklistModal from './components/BlacklistModal';
+import RejectWriterModal from './components/RejectWriterModal';
+import { Divide } from 'lucide-react';
 
 interface MemberDetailData {
   memberId: string;
@@ -102,15 +104,22 @@ export default function MemberDetailPage() {
   const [memo, setMemo] = useState('');
   const [isSuspensionModalOpen, setIsSuspensionModalOpen] = useState(false);
   const [isBlacklistModalOpen, setIsBlacklistModalOpen] = useState(false);
+  const [isRejectWriterModalOpen, setIsRejectWriterModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 페이지네이션 설정
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(mockActivityLogs.length / itemsPerPage);
 
   return (
-    <div className="flex w-full max-w-[1180px] flex-col gap-10 rounded bg-white p-11">
+    <div className='bg-transparent p-8'>
+    <div className="flex w-full flex-col gap-10 rounded bg-white p-11">
       {/* 헤더 */}
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h1 className="font-pretendard text-2xl font-bold leading-8 text-gray-1">회원 관리</h1>
-            <Button className="flex items-center gap-1.5 rounded border border-primary bg-white px-3 py-2.5 hover:bg-gray-6">
+            <Button className="flex h-9 w-24 items-center justify-center gap-1.5 rounded border border-primary bg-white hover:bg-gray-6">
               <Mail size={16} color="#911A00" />
               <span className="font-pretendard text-sm font-bold text-primary">쪽지 보내기</span>
             </Button>
@@ -158,7 +167,7 @@ export default function MemberDetailPage() {
               </div>
             </div>
 
-            {/* 세 번째 행 */}
+            {/* 세 ��째 행 */}
             <div className="flex">
               <div className="flex w-40 items-center bg-gray-7 px-6 py-2.5">
                 <span className="font-pretendard text-base font-normal text-gray-2">가입방식</span>
@@ -242,28 +251,12 @@ export default function MemberDetailPage() {
           </div>
 
           {/* 페이지네이션 */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Arrow direction="left" size={24} color="#A0A0A0" />
-              <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-primary">
-                  <span className="font-pretendard text-sm font-medium text-white">1</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">2</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">...</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">9</span>
-                </div>
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="font-pretendard text-sm font-medium text-orange-3">10</span>
-                </div>
-              </div>
-              <Arrow direction="right" size={24} color="#911A00" />
-            </div>
+          <div className="flex items-center justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
 
@@ -386,23 +379,33 @@ export default function MemberDetailPage() {
 
       {/* 하단 버튼들 */}
       <div className="flex items-center justify-between">
-        <Button className="flex items-center gap-1.5 rounded border border-gray-4 bg-white px-3 py-2.5 hover:bg-gray-6">
+        <Button className="flex h-9 w-[84px] items-center justify-center gap-1.5 rounded border border-gray-4 bg-white hover:bg-gray-6">
           <Hamburger size={16} color="#555555" />
           <span className="font-pretendard text-sm font-bold text-gray-2">목록으로</span>
         </Button>
         <div className="flex items-center gap-2.5">
           <Button
-            onClick={() => setIsBlacklistModalOpen(true)}
-            className="rounded bg-gray-1 px-3 py-2.5 hover:bg-gray-2"
+            onClick={() => setIsRejectWriterModalOpen(true)}
+            className="h-9 w-[84px] justify-center rounded bg-gray-4 hover:bg-gray-3"
           >
-            <span className="font-pretendard text-sm font-bold text-white">블랙리스트</span>
+            <span className="font-pretendard text-sm font-bold text-white">작가 반려</span>
+          </Button>
+          <Button className="h-9 w-[84px] justify-center rounded bg-primary hover:bg-primary/90">
+            <span className="font-pretendard text-sm font-bold text-white">작가 승인</span>
           </Button>
           <Button
             onClick={() => setIsSuspensionModalOpen(true)}
-            className="rounded bg-primary px-3 py-2.5 hover:bg-primary/90"
+            className="h-9 w-[84px] justify-center rounded border border-primary bg-white hover:bg-gray-6"
           >
-            <span className="font-pretendard text-sm font-bold text-white">활동정지</span>
+            <span className="font-pretendard text-sm font-bold text-primary">활동정지</span>
           </Button>
+          <Button
+            onClick={() => setIsBlacklistModalOpen(true)}
+            className="h-9 w-[84px] justify-center rounded bg-gray-1 hover:bg-gray-2"
+          >
+            <span className="font-pretendard text-sm font-bold text-white">블랙리스트</span>
+          </Button>
+          
         </div>
       </div>
 
@@ -419,6 +422,14 @@ export default function MemberDetailPage() {
         onClose={() => setIsBlacklistModalOpen(false)}
         memberId={mockMemberData.memberId}
       />
+
+      {/* 작가 반려 모달 */}
+      <RejectWriterModal
+        isOpen={isRejectWriterModalOpen}
+        onClose={() => setIsRejectWriterModalOpen(false)}
+        memberId={mockMemberData.memberId}
+      />
+    </div>
     </div>
   );
 }
