@@ -354,25 +354,25 @@ export default function AdminPopupsPage() {
             {mockPopups.map((popup) => (
               <div
                 key={popup.id}
-                className="group flex h-[50px] w-full cursor-pointer items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF] bg-white"
+                className="group flex h-[50px] w-full cursor-pointer items-center justify-between bg-white px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
               >
                 <div className="flex w-10 items-center justify-center p-2">
-                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-[#911A00]">
                     {popup.id}
                   </span>
                 </div>
                 <div className="flex w-[100px] items-center justify-center p-2">
-                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-[#911A00]">
                     {popup.popupId}
                   </span>
                 </div>
                 <div className="flex w-[318px] max-w-[318px] items-center justify-center p-2">
-                  <span className="max-h-4 text-center font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
+                  <span className="max-h-4 text-center font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-[#911A00]">
                     {popup.title}
                   </span>
                 </div>
                 <div className="flex w-[180px] max-w-[180px] items-center justify-center p-2">
-                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-[#911A00]">
                     {popup.startDate} ~ {popup.endDate}
                   </span>
                 </div>
@@ -380,7 +380,7 @@ export default function AdminPopupsPage() {
                   <PopupStatusBadge status={popup.status} />
                 </div>
                 <div className="flex w-[124px] items-center justify-center p-2">
-                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-primary">
+                  <span className="font-pretendard text-xs font-medium text-[#686868] transition-colors group-hover:text-[#911A00]">
                     {popup.createdAt}
                   </span>
                 </div>

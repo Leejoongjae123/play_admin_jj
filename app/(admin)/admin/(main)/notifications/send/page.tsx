@@ -285,22 +285,32 @@ export default function AdminNotificationsSendPage() {
             {mockData.map((item, index) => (
               <div
                 key={index}
-                className="flex h-[50px] items-center justify-between px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF] bg-white"
+                className="group flex h-[50px] items-center justify-between bg-white px-4 transition-colors hover:rounded-sm hover:bg-[#EBE1DF]"
               >
                 <div className="flex w-10 justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.no}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.no}
+                  </span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.id}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.id}
+                  </span>
                 </div>
                 <div className="flex w-[100px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.type}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.type}
+                  </span>
                 </div>
                 <div className="flex w-[240px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.content}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.content}
+                  </span>
                 </div>
                 <div className="flex w-[88px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.sender}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.sender}
+                  </span>
                 </div>
                 <div className="flex w-[100px] justify-center">
                   <Badge className="rounded-full border border-[#B0D5F2] bg-[#F6FBFF] px-3 py-[6px] text-sm font-normal text-[#2581F9]">
@@ -308,13 +318,19 @@ export default function AdminNotificationsSendPage() {
                   </Badge>
                 </div>
                 <div className="flex w-[114px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.createdAt}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.createdAt}
+                  </span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.state}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.state}
+                  </span>
                 </div>
                 <div className="flex w-[60px] justify-center">
-                  <span className="text-xs font-normal text-[#686868]">{item.successFail}</span>
+                  <span className="text-xs font-normal text-[#686868] group-hover:text-[#911A00]">
+                    {item.successFail}
+                  </span>
                 </div>
               </div>
             ))}

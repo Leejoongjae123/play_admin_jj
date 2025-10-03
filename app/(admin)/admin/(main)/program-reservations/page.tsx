@@ -22,7 +22,6 @@ interface ProgramReservation {
   phone: string;
   status: 'completed' | 'cancelled' | 'ended';
   registrationDate: string;
-  isHighlighted?: boolean;
   memberNickname?: string;
 }
 
@@ -49,7 +48,6 @@ const mockReservations: ProgramReservation[] = [
     phone: '010-3456-7890',
     status: 'cancelled',
     registrationDate: '2025-09-03 14:30',
-    isHighlighted: true,
     memberNickname: '번역가',
   },
   {
@@ -293,7 +291,13 @@ export default function AdminProgramReservationsPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-semibold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} color="#727272" />
@@ -393,31 +397,31 @@ export default function AdminProgramReservationsPage() {
             {/* 테이블 헤더 */}
             <thead>
               <tr className="h-[50px] bg-[#EEE]">
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-10 text-center">NO</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[60px] max-w-[60px] text-center">예약ID</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[100px] text-center">프로그램명</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[124px] text-center">회원ID</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[88px] max-w-[88px] text-center">이름</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[120px] text-center">이메일</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[114px] text-center">휴대폰번호</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[100px] text-center">상태</div>
                 </th>
-                <th className="px-4 py-4 text-xs font-bold text-[#515151]">
+                <th className="px-4 text-xs font-bold text-[#515151]">
                   <div className="w-[114px] max-w-[114px] text-center">등록/신청일</div>
                 </th>
               </tr>
@@ -429,82 +433,50 @@ export default function AdminProgramReservationsPage() {
                 <tr
                   key={index}
                   onClick={() => handleRowClick(reservation)}
-                  className={`h-[50px] cursor-pointer transition-colors ${
-                    reservation.isHighlighted
-                      ? 'bg-[#EBE1DF]'
-                      : 'bg-white hover:bg-[#FFF5F2]'
-                  }`}
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-4 py-4">
-                    <div className="w-10 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-10 items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.id}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[60px] max-w-[60px] text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[60px] max-w-[60px] items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.reservationId}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[100px] max-w-[100px] max-h-4 overflow-hidden text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[100px] max-w-[100px] items-center justify-center overflow-hidden text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.programName}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[124px] text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[124px] items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.memberId}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[88px] max-w-[88px] max-h-4 overflow-hidden text-center text-ellipsis whitespace-nowrap text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[88px] max-w-[88px] items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.name}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[120px] max-w-[120px] text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[120px] max-w-[120px] items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.email}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[114px] text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[114px] items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.phone}
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div className="flex w-[100px] items-center justify-center">
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[100px] items-center justify-center">
                       <StatusBadge status={reservation.status} />
                     </div>
                   </td>
-                  <td className="px-4 py-4">
-                    <div
-                      className={`w-[114px] max-w-[114px] text-center text-xs font-medium ${
-                        reservation.isHighlighted ? 'text-primary' : 'text-[#686868]'
-                      }`}
-                    >
+                  <td className="px-4 py-0">
+                    <div className="flex h-[50px] w-[114px] max-w-[114px] items-center justify-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {reservation.registrationDate}
                     </div>
                   </td>

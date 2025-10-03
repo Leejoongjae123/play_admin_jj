@@ -254,7 +254,13 @@ export default function AdminWritersPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 hover:bg-[#FFF5F2]"
                 >
-                  <div className="text-xs font-medium text-[#727272]">
+                  <div
+                    className={
+                      endDate
+                        ? 'text-xs font-semibold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </div>
                   <Calendar size={12} color="#727272" />
@@ -358,7 +364,7 @@ export default function AdminWritersPage() {
                 </div>
               </button>
               {/* 희곡 등록 */}
-              <button 
+              <button
                 onClick={() => router.push('/admin/writers/edit')}
                 className="flex w-[120px] items-center justify-center gap-2.5 rounded bg-primary px-0 py-2.5 hover:bg-primary/90"
               >
@@ -394,21 +400,21 @@ export default function AdminWritersPage() {
                   <tr
                     key={`${writer.id}-${index}`}
                     onClick={() => router.push(`/admin/writers/${writer.id}`)}
-                    className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                    className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                   >
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.id}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.writerId}
                     </td>
-                    <td className="max-w-[100px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="max-w-[100px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.name}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.email}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.representative}
                     </td>
                     <td className="px-2.5 text-center">
@@ -416,16 +422,16 @@ export default function AdminWritersPage() {
                         <WriterStatusBadge status={writer.status} />
                       </div>
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.registeredAt}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.worksCount || '-'}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.memosCount || '-'}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {writer.scrapsCount || '-'}
                     </td>
                   </tr>

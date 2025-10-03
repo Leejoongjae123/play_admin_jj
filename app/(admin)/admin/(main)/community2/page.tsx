@@ -189,7 +189,13 @@ export default function AdminCommunityPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-bold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} color="#727272" />
@@ -315,21 +321,21 @@ export default function AdminCommunityPage() {
                 <tr
                   key={index}
                   onClick={() => router.push(`/admin/community2/${post.id}`)}
-                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.id}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.postId}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.category}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.title}
                   </td>
-                  <td className="max-w-[120px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[120px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.author}
                   </td>
                   <td className="px-2.5 text-center">
@@ -337,16 +343,16 @@ export default function AdminCommunityPage() {
                       <StatusBadge status={post.status} />
                     </div>
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.likes}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.comments}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.reports}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {post.createdAt}
                   </td>
                 </tr>

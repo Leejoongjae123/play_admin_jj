@@ -294,7 +294,13 @@ export default function AdminProgramsPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-semibold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} color="#727272" />
@@ -425,24 +431,24 @@ export default function AdminProgramsPage() {
                   <tr
                     key={index}
                     onClick={() => router.push(`/admin/programs/${program.id}`)}
-                    className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                    className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                   >
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.id}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.programId}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.programName}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.eventDateTime}
                     </td>
-                    <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.eventLocation}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.applicationPeriod}
                     </td>
                     <td className="px-2.5 text-center">
@@ -450,16 +456,16 @@ export default function AdminProgramsPage() {
                         <StatusBadge status={program.status} />
                       </div>
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.registrationDate}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.worksCount}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.memoCount}
                     </td>
-                    <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                    <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                       {program.scrapCount}
                     </td>
                   </tr>

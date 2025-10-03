@@ -249,7 +249,13 @@ export default function AdminMembersPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="font-pretendard text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'font-pretendard text-xs font-bold text-[#911A00]'
+                        : 'font-pretendard text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} />
@@ -388,24 +394,24 @@ export default function AdminMembersPage() {
                 <tr
                   key={member.id}
                   onClick={() => router.push(`/admin/members/${member.id}`)}
-                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.id}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.memberId}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.nickname}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.email}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.signupMethod}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.isWriter ? 'Y' : 'N'}
                   </td>
                   <td className="px-2 text-center">
@@ -413,10 +419,10 @@ export default function AdminMembersPage() {
                       <MemberStatusBadge status={member.status} />
                     </div>
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.lastLogin}
                   </td>
-                  <td className="px-2 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {member.joinDate}
                   </td>
                 </tr>

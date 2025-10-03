@@ -142,7 +142,11 @@ export default function PlayEditPage() {
                     placeholder="작가 이름을 입력해주세요"
                     className="h-14 w-full cursor-pointer rounded border border-red-3 bg-orange-4 px-5 py-4 font-pretendard text-base leading-6 text-gray-1 placeholder:text-orange-3 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <Search size={24} color="#911A00" className="absolute right-5 pointer-events-none" />
+                  <Search
+                    size={24}
+                    color="#911A00"
+                    className="pointer-events-none absolute right-5"
+                  />
                 </div>
               </div>
             </div>
@@ -355,7 +359,7 @@ export default function PlayEditPage() {
 
         {/* Bottom Buttons */}
         <div className="flex w-full items-center justify-between">
-          <button className="flex items-center gap-1.5 rounded border border-gray-4 bg-white w-[94px] h-9 justify-center">
+          <button className="flex h-9 w-[94px] items-center justify-center gap-1.5 rounded border border-gray-4 bg-white">
             <Search size={16} color="#555555" />
             <span className="font-pretendard text-sm font-semibold leading-4 text-gray-2">
               미리보기
@@ -363,15 +367,12 @@ export default function PlayEditPage() {
           </button>
 
           <div className="flex items-center gap-2.5">
-            <button
-              
-              className="flex items-center gap-1.5 rounded border border-primary bg-white w-12 h-9 justify-center"
-            >
+            <button className="flex h-9 w-12 items-center justify-center gap-1.5 rounded border border-primary bg-white">
               <span className="font-pretendard text-sm font-semibold leading-4 text-primary">
                 취소
               </span>
             </button>
-            <button className="flex items-center gap-1.5 rounded bg-primary w-12 h-9 justify-center">
+            <button className="flex h-9 w-12 items-center justify-center gap-1.5 rounded bg-primary">
               <span className="font-pretendard text-sm font-semibold leading-4 text-white">
                 저장
               </span>

@@ -227,13 +227,13 @@ export default function AdminNotificationTemplatesPage() {
                     onMouseEnter={() => setHoveredRow(index)}
                     onMouseLeave={() => setHoveredRow(null)}
                     className={`flex h-[50px] w-full items-center justify-between px-4 transition-colors ${
-                      hoveredRow === index ? 'bg-red-3' : 'bg-white'
+                      hoveredRow === index ? 'bg-[#EBE1DF]' : 'bg-white'
                     }`}
                   >
                     <div className="flex w-[60px] max-w-[60px] items-center justify-center px-2.5 py-4">
                       <span
                         className={`font-pretendard text-xs font-medium ${
-                          hoveredRow === index ? 'text-primary' : 'text-gray-500'
+                          hoveredRow === index ? 'text-[#911A00]' : 'text-gray-500'
                         }`}
                       >
                         {template.id}
@@ -242,7 +242,7 @@ export default function AdminNotificationTemplatesPage() {
                     <div className="flex w-[100px] items-center justify-center px-2.5 py-4">
                       <span
                         className={`font-pretendard text-xs font-medium ${
-                          hoveredRow === index ? 'text-primary' : 'text-gray-500'
+                          hoveredRow === index ? 'text-[#911A00]' : 'text-gray-500'
                         }`}
                       >
                         {template.type}
@@ -251,7 +251,7 @@ export default function AdminNotificationTemplatesPage() {
                     <div className="flex w-[240px] max-w-[240px] items-center justify-center px-2.5 py-4">
                       <span
                         className={`font-pretendard text-xs font-medium ${
-                          hoveredRow === index ? 'text-primary' : 'text-gray-500'
+                          hoveredRow === index ? 'text-[#911A00]' : 'text-gray-500'
                         }`}
                       >
                         {template.content}
@@ -260,7 +260,7 @@ export default function AdminNotificationTemplatesPage() {
                     <div className="flex w-[88px] max-w-[88px] items-center justify-center px-2.5 py-4">
                       <span
                         className={`overflow-hidden text-ellipsis whitespace-nowrap font-pretendard text-xs font-medium ${
-                          hoveredRow === index ? 'text-primary' : 'text-gray-500'
+                          hoveredRow === index ? 'text-[#911A00]' : 'text-gray-500'
                         }`}
                       >
                         {template.sender}
@@ -283,7 +283,7 @@ export default function AdminNotificationTemplatesPage() {
                     <div className="flex w-[114px] items-center justify-center px-2.5 py-4">
                       <span
                         className={`font-pretendard text-xs font-medium ${
-                          hoveredRow === index ? 'text-primary' : 'text-gray-500'
+                          hoveredRow === index ? 'text-[#911A00]' : 'text-gray-500'
                         }`}
                       >
                         {template.lastModified}

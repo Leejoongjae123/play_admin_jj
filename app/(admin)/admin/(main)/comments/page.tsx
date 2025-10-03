@@ -269,7 +269,13 @@ export default function AdminCommentsPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-[#727272]">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-bold text-primary'
+                        : 'text-xs font-medium text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} color="#727272" />
@@ -351,16 +357,13 @@ export default function AdminCommentsPage() {
               <span className="text-[#6D6D6D]">건</span>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                
-                className="flex items-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white w-[127px] h-9 hover:bg-white/90 justify-center"
-              >
+              <button className="flex h-9 w-[127px] items-center justify-center gap-3 rounded border-[1.6px] border-[#4CA452] bg-white hover:bg-white/90">
                 <Excel size={16} color="#4CA452" />
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-[#4CA452]">
                   엑셀 다운로드
                 </div>
               </button>
-              <button className="flex h-9 w-[120px] items-center justify-center bg-primary w-[120px] h-9 rounded-[4px]">
+              <button className="flex h-9 w-[120px] items-center justify-center rounded-[4px] bg-primary">
                 <div className="font-pretendard text-sm font-semibold leading-4 tracking-[-0.28px] text-white">
                   커뮤니티 등록
                 </div>
@@ -394,24 +397,24 @@ export default function AdminCommentsPage() {
                 <tr
                   key={index}
                   onClick={() => handleRowClick(comment)}
-                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.id}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.commentId}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.category}
                   </td>
-                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.originalText}
                   </td>
-                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[160px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.content}
                   </td>
-                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.author}
                   </td>
                   <td className="px-2.5 text-center">
@@ -435,13 +438,13 @@ export default function AdminCommentsPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.likes}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.reports}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {comment.createdAt}
                   </td>
                 </tr>

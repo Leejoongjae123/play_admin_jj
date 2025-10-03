@@ -243,7 +243,13 @@ export default function AdminReportsPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white p-3 hover:bg-[#FFF5F2]"
                 >
-                  <div className="text-xs font-medium leading-normal text-[#727272]">
+                  <div
+                    className={
+                      endDate
+                        ? 'text-xs font-bold leading-normal text-[#911A00]'
+                        : 'text-xs font-medium leading-normal text-[#727272]'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </div>
                   <Calendar size={12} color="#727272" />
@@ -364,27 +370,27 @@ export default function AdminReportsPage() {
                 <tr
                   key={index}
                   onClick={() => router.push(`/admin/reports/${item.reportId}`)}
-                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.id}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.reportId}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.category}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.targetId}
                   </td>
-                  <td className="max-w-[260px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[260px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.preview}
                   </td>
-                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.reporter}
                   </td>
-                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[88px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.reportType}
                   </td>
                   <td className="px-2.5 text-center">
@@ -392,7 +398,7 @@ export default function AdminReportsPage() {
                       <ReportStatusBadge status={item.status} />
                     </div>
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {item.date}
                   </td>
                 </tr>

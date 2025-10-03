@@ -297,7 +297,13 @@ export default function AdminPlaysPage() {
                   onClick={() => setShowEndDatePicker(!showEndDatePicker)}
                   className="flex w-[140px] items-center justify-between rounded-md border border-[#EBEBEB] bg-white px-3 py-3 hover:bg-[#FFF5F2]"
                 >
-                  <span className="text-xs font-medium text-gray-4">
+                  <span
+                    className={
+                      endDate
+                        ? 'text-xs font-semibold text-primary'
+                        : 'text-xs font-medium text-gray-4'
+                    }
+                  >
                     {formatDate(endDate) || '날짜 입력'}
                   </span>
                   <Calendar size={12} />
@@ -455,21 +461,21 @@ export default function AdminPlaysPage() {
                 <tr
                   key={index}
                   onClick={() => handleRowClick(row.playId)}
-                  className="h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#FFF5F2]"
+                  className="group h-[50px] cursor-pointer bg-white transition-colors hover:bg-[#EBE1DF]"
                 >
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.no}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.playId}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.title}
                   </td>
-                  <td className="max-w-[100px] truncate px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="max-w-[100px] truncate px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.author}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.registrationDate}
                   </td>
                   <td className="px-2.5 text-center">
@@ -480,16 +486,16 @@ export default function AdminPlaysPage() {
                       />
                     </div>
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.tags}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.views || '-'}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.memos || '-'}
                   </td>
-                  <td className="px-2.5 text-center text-xs font-medium text-[#686868]">
+                  <td className="px-2.5 text-center text-xs font-medium text-[#686868] group-hover:text-[#911A00]">
                     {row.scraps || '-'}
                   </td>
                 </tr>
